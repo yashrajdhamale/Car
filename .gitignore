@@ -5,11 +5,23 @@ node_modules/
 # Environment files and secrets
 .env
 .env.*
+*.env
+*.env.*
 !.env.example
 **/.env
 **/.env.*
+**/.env.local
+**/.env.development.local
+**/.env.production.local
+**/.env.test.local
 **/serviceAccountKey.json
 **/gmail-credentials.js
+**/*.pem
+**/*.key
+**/*.p12
+**/*.pfx
+**/*.crt
+**/*credentials*
 
 # Build / output artifacts
 dist/
