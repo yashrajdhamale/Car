@@ -3,8 +3,12 @@ import { onDocumentCreated } from "firebase-functions/v2/firestore";
 import { onSchedule } from "firebase-functions/v2/scheduler";
 import admin from "firebase-admin";
 import { getFirestore } from "firebase-admin/firestore";
+import dotenv from "dotenv";
+import path from "path";
 import checkExpiredBookings from "./checkExpiredBookings.js";
 import { reverseGeocode } from "./src/reverseGeocode.js";
+
+dotenv.config({ path: path.resolve(process.cwd(), "..", ".env") });
 
 /* ======================
    FIREBASE INIT
