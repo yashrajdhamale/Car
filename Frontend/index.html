@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/logo.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Cross-Origin-Opener-Policy" content="same-origin" />
+    <title>Travelog | Holidays</title>
+
+    <audio preload="auto" id="notification-sound" src="/audio/notification.mp3"></audio>
+
+    <script
+      src="https://apis.mapmyindia.com/advancedmaps/v1/5daf36ad6713382dc933efe4f514708e/map_load?v=1.5"
+      defer
+    ></script>
+
+    <style>
+      /* Hide all Google Translate UI chrome */
+      #google_translate_element,
+      .goog-te-banner-frame,
+      .goog-te-balloon-frame,
+      .skiptranslate,
+      body > .skiptranslate {
+        display: none !important;
+        visibility: hidden !important;
+      }
+      body {
+        top: 0 !important;
+        position: static !important;
+      }
+      .goog-logo-link,
+      .goog-te-gadget span {
+        display: none !important;
+      }
+      .translated-ltr,
+      .translated-rtl {
+        margin-top: 0 !important;
+      }
+    </style>
+  </head>
+
+  <body>
+
+    <!-- Google Translate Element -->
+    <div id="google_translate_element"></div>
+
+<style>
+  /* Default: website desktop */
+  #google_translate_element {
+    position: fixed;
+    top: 68px;
+    right: 16px;
+    z-index: 999;
+    font-size: 12px;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 4px 8px;
+    border-radius: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    max-width: 110px;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  /* Mobile browser */
+  @media (max-width: 768px) {
+    #google_translate_element {
+      top: auto !important;
+      bottom: 16px !important;
+      right: 16px !important;
+    }
+  }
+
+  /* App: hidden by default, JS will handle it */
+  body.is-native-app #google_translate_element {
+    display: none !important;
+  }
+</style>
+
+    <!-- React Root -->
+    <!-- Hidden Google Translate mount point -->
+    <!-- <div
+      id="google_translate_element"
+      style="
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+        opacity: 0;
+        pointer-events: none;
+        width: 0;
+        height: 0;
+        overflow: hidden;
+      "
+    ></div> -->
+
+    <!--
+      ✅ NO translate="no" here — Google Translate must be able to read #root
+      to apply translations from the googtrans cookie.
+      React crash prevention is handled in LanguageSelector via
+      MutationObserver that adds translate="no" only to dynamically
+      inserted script/style nodes, not static text nodes.
+    -->
+    <div id="root"></div>
+
+    <!-- MapmyIndia — DO NOT TOUCH -->
+    <div id="mapmyindia-root" translate="no">
+      <div id="confirm-pickup-map" style="height:100vh;width:100vw"></div>
+    </div>
+
+<script>
+  const isNativeApp =
+    window.Capacitor?.isNativePlatform?.() ||
+    window.location.protocol === "capacitor:" ||
+    document.URL.startsWith("capacitor://") ||
+    (document.URL.startsWith("http://localhost") &&
+      window.navigator.userAgent.includes("wv"));
+
+  if (isNativeApp) {
+    document.body.classList.add("is-native-app");
+  }
+
+  if (!isNativeApp && !window.googleTranslateInitialized) {
+    window.googleTranslateInitialized = true;
+
+    window.googleTranslateElementInit = function () {
+      if (window.google && window.google.translate) {
+        new google.translate.TranslateElement(
+          {
+            pageLanguage: "en",
+            includedLanguages:
+              "en,hi,mr,bn,ta,te,kn,ml,gu,pa,fr,de,es,it,ru,zh-CN,ja,ar,ko,pt",
+            autoDisplay: false,
+          },
+          "google_translate_element"
+        );
+      }
+    };
+
+    const script = document.createElement("script");
+    script.src =
+      "//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
+    script.async = true;
+    document.body.appendChild(script);
+  }
+</script>
+
+
+    <script>
+      // Keep body.top at 0 and hide GT banner
+      var gtLockInterval = setInterval(function () {
+        if (document.body.style.top && document.body.style.top !== '0px') {
+          document.body.style.top = '0px';
+        }
+        var banner = document.querySelector('.goog-te-banner-frame');
+        if (banner) {
+          banner.style.display    = 'none';
+          banner.style.visibility = 'hidden';
+        }
+      }, 300);
+      setTimeout(function () { clearInterval(gtLockInterval); }, 10000);
+    </script>
+
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Check Holiday Routes</title>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script>
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyAee-TmtHeEI0jOJGUUqLyMMP7nvRUYzMA",
+            authDomain: "carzi-holidays-f4be3.firebaseapp.com",
+            projectId: "carzi-holidays-f4be3",
+            storageBucket: "carzi-holidays-f4be3.appspot.com",
+            messagingSenderId: "938487746105",
+            appId: "1:938487746105:web:e6294b4e83a2d4cd1387e8"
+        };
+
+        // Initialize Firebase
+        const app = firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        async function checkHolidayRoutes() {
+            try {
+                console.log('🔍 Checking holiday routes in Firestore...');
+                
+                const querySnapshot = await db.collection('holidayRoutes').get();
+                
+                if (querySnapshot.empty) {
+                    console.log('❌ No holiday routes found in the database.');
+                    return;
+                }
+                
+                console.log(`✅ Found ${querySnapshot.size} holiday routes:`);
+                
+                querySnapshot.forEach(doc => {
+                    const data = doc.data();
+                    console.log(`\n📄 Document ID: ${doc.id}`);
+                    console.log('📋 Route Details:', {
+                        'Driver ID': data.driverId || 'N/A',
+                        'State': data.state || 'N/A',
+                        'Active': data.isActive !== false ? '✅ Yes' : '❌ No',
+                        'Route Name': data.routeName || 'Unnamed Route',
+                        'Vehicle Type': data.vehicleType || 'Not specified',
+                        'Start Date': data.startDate ? data.startDate.toDate().toLocaleDateString() : 'Not set',
+                        'End Date': data.endDate ? data.endDate.toDate().toLocaleDateString() : 'Not set',
+                        'Created': data.createdAt ? data.createdAt.toDate().toLocaleString() : 'N/A',
+                        'Last Updated': data.updatedAt ? data.updatedAt.toDate().toLocaleString() : 'N/A'
+                    });
+                    
+                    // Display waypoints if they exist
+                    if (data.waypoints && data.waypoints.length > 0) {
+                        console.log('📍 Waypoints:');
+                        data.waypoints.forEach((waypoint, index) => {
+                            console.log(`   ${index + 1}. ${waypoint.name || 'Unnamed waypoint'}`);
+                            console.log(`      Location: ${waypoint.location.latitude}, ${waypoint.location.longitude}`);
+                            if (waypoint.address) console.log(`      Address: ${waypoint.address}`);
+                            if (waypoint.arrivalTime) console.log(`      Arrival: ${waypoint.arrivalTime}`);
+                        });
+                    }
+                });
+                
+            } catch (error) {
+                console.error('❌ Error checking holiday routes:', error);
+            }
+        }
+
+        // Run the check when the page loads
+        window.onload = checkHolidayRoutes;
+    </script>
+</head>
+<body>
+    <h1>Check Holiday Routes</h1>
+    <p>Open the browser console to see the results (F12 or right-click > Inspect > Console)</p>
+    <button onclick="checkHolidayRoutes()">Check Again</button>
+</body>
+</html>

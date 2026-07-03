@@ -1,0 +1,67 @@
+/**
+ * Web-Only Theme Styles
+ * These styles apply only to the web version of the application.
+ * They won't affect the native mobile app version.
+ */
+
+:root {
+  /* Web-specific theme variables */
+  --web-primary: #2563eb;
+  --web-background: #ffffff;
+  --web-text: #1f2937;
+  --web-border-radius: 8px;
+}
+
+/* Web-specific overrides */
+body.web-mode {
+  /* Add any web-specific styles here */
+  background-color: var(--web-background);
+  color: var(--web-text);
+}
+
+/* Example web-specific component overrides */
+body.web-mode .header {
+  background-color: var(--web-primary);
+  color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Web form elements */
+body.web-mode input,
+body.web-mode select,
+body.web-mode textarea {
+  border-radius: var(--web-border-radius);
+  padding: 8px 12px;
+  border: 1px solid #d1d5db;
+}
+
+/* Web cards */
+body.web-mode .card {
+  border-radius: var(--web-border-radius);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  background: white;
+}
+
+/* Web navigation */
+body.web-mode .nav-tabs {
+  border-bottom: 1px solid #e5e7eb;
+}
+
+/* Responsive adjustments for web */
+@media (max-width: 1024px) {
+  body.web-mode {
+    font-size: 15px;
+  }
+}
+
+/* Print styles for web */
+@media print {
+  body.web-mode {
+    background: white;
+    color: black;
+  }
+  
+  body.web-mode .no-print {
+    display: none;
+  }
+}

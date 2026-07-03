@@ -1,0 +1,23 @@
+#PackageSlectedSpan {
+    display: none;
+}
+
+.PackageSlected:hover #PackageSlectedSpan {
+    display: block;
+}
+
+#GuestCountSpan {
+    display: none;
+}
+
+.GuestCount:hover #GuestCountSpan {
+    display: block;
+}
+
+#DropOffLocationSpan {
+    display: none;
+}
+
+.DropOffLocation:hover #DropOffLocationSpan {
+    display: block;
+}

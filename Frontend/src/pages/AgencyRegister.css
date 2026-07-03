@@ -1,0 +1,520 @@
+:root {
+  --agency-bg: #f5f3ff;
+  --agency-surface: #ffffff;
+  --agency-header: #e8e9fb;
+  --agency-primary: #2d3f92;
+  --agency-primary-dark: #223171;
+  --agency-text: #171717;
+  --agency-muted: #666a73;
+  --agency-border: #e6e7ec;
+  --agency-border-strong: #1d1d1d;
+  --agency-success: #167c45;
+  --agency-error: #cf334d;
+  --agency-shadow: 0 10px 30px rgba(55, 65, 81, 0.08);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.agency-register {
+  min-height: 100vh;
+  padding: 32px 16px 64px;
+  background:
+    linear-gradient(90deg, #40159b 0, #5d33b0 6%, transparent 6%, transparent 94%, #b589e2 94%, #9168d9 100%),
+    #fafafa;
+}
+
+.agency-register__shell {
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+.agency-register__hero {
+  margin-bottom: 18px;
+  padding: 8px 8px 0;
+}
+
+.agency-register__eyebrow {
+  margin: 0 0 8px;
+  color: var(--agency-primary);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.agency-register__hero h1 {
+  margin: 0 0 8px;
+  color: #26358c;
+  font-size: 34px;
+  font-weight: 800;
+}
+
+.agency-register__hero p {
+  margin: 0;
+  max-width: 760px;
+  color: #5d6470;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.agency-register__form {
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
+}
+
+.agency-register__alert {
+  border-radius: 14px;
+  padding: 14px 16px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.agency-register__alert.is-success {
+  color: #0d6c3f;
+  background: #eaf8ef;
+  border: 1px solid #bde7ca;
+}
+
+.agency-register__alert.is-error {
+  color: #a11f37;
+  background: #fff1f3;
+  border: 1px solid #fecdd6;
+}
+
+.agency-section {
+  overflow: hidden;
+  border: 1px solid var(--agency-border);
+  border-radius: 24px;
+  background: var(--agency-surface);
+  box-shadow: var(--agency-shadow);
+}
+
+.agency-section__header {
+  padding: 18px 22px;
+  background: var(--agency-header);
+  color: #2a378b;
+  font-size: 22px;
+  font-weight: 800;
+}
+
+.agency-section__body {
+  padding: 22px;
+}
+
+.agency-grid {
+  display: grid;
+  gap: 20px 22px;
+}
+
+.agency-grid--2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.agency-grid--3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.agency-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.agency-field {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+.agency-field--span-2 {
+  grid-column: span 2;
+}
+
+.agency-field label {
+  color: var(--agency-text);
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.agency-field small {
+  color: var(--agency-muted);
+  font-size: 12px;
+  margin-top: -2px;
+}
+
+.agency-field input,
+.agency-field select,
+.agency-field textarea {
+  width: 100%;
+  min-height: 54px;
+  border: 1px solid var(--agency-border);
+  border-radius: 16px;
+  outline: none;
+  background: #fff;
+  color: var(--agency-text);
+  padding: 0 18px;
+  font-size: 16px;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+}
+
+.agency-field textarea {
+  min-height: 96px;
+  padding: 14px 18px;
+  resize: vertical;
+}
+
+.agency-field input:focus,
+.agency-field select:focus,
+.agency-field textarea:focus {
+  border-color: #2d3f92;
+  box-shadow: 0 0 0 4px rgba(45, 63, 146, 0.08);
+}
+
+.agency-inline-phone {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.agency-inline-phone input {
+  flex: 1;
+}
+
+.agency-chip-button,
+.agency-remove-button,
+.agency-primary-btn,
+.agency-secondary-btn {
+  border: none;
+  cursor: pointer;
+  transition: transform 0.16s ease, opacity 0.16s ease, background 0.16s ease, color 0.16s ease;
+}
+
+.agency-chip-button:hover,
+.agency-remove-button:hover,
+.agency-primary-btn:hover,
+.agency-secondary-btn:hover {
+  transform: translateY(-1px);
+}
+
+.agency-chip-button {
+  align-self: flex-start;
+  margin-top: 6px;
+  padding: 12px 18px;
+  border: 1px solid #bac3eb;
+  border-radius: 16px;
+  background: #fff;
+  color: #304298;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.agency-remove-button {
+  min-width: 104px;
+  height: 54px;
+  border: 1px solid #f0c1c6;
+  border-radius: 16px;
+  background: #fff;
+  color: #c34c59;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.agency-radio-group {
+  display: flex;
+  gap: 14px;
+  align-items: stretch;
+  flex-wrap: wrap;
+  min-height: 54px;
+}
+
+.agency-radio-group--cards {
+  margin-top: 2px;
+}
+
+.agency-radio-card {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 170px;
+  min-height: 54px;
+  padding: 0 18px;
+  border: 1.5px solid #d8ddf2;
+  border-radius: 16px;
+  background: #fff;
+  color: #26303f;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: border-color 0.18s ease, background 0.18s ease, box-shadow 0.18s ease;
+}
+
+.agency-radio-card input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.agency-radio-card.is-active {
+  border-color: #2d3f92;
+  background: #eef2ff;
+  box-shadow: 0 0 0 4px rgba(45, 63, 146, 0.08);
+}
+
+.agency-password-card,
+.agency-status-card {
+  height: 100%;
+  border: 1px solid var(--agency-border);
+  border-radius: 22px;
+  background: #fff;
+  padding: 24px;
+}
+
+.agency-password-card h3 {
+  margin: 0 0 14px;
+  color: #121212;
+  font-size: 22px;
+  font-weight: 800;
+}
+
+.agency-password-card ul {
+  margin: 0;
+  padding-left: 22px;
+  display: grid;
+  gap: 12px;
+  color: #20242c;
+  font-size: 16px;
+}
+
+.agency-register__password-rule {
+  color: #444;
+}
+
+.agency-register__password-rule.is-valid {
+  color: var(--agency-success);
+  font-weight: 700;
+}
+
+.agency-upload-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 220px;
+  border: 2px dashed #8fa0d6;
+  border-radius: 20px;
+  background: #fff;
+  padding: 18px;
+  text-align: center;
+  color: #343a46;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+}
+.agency-camera-box {
+  min-height: 260px;
+  border: 2px dashed #8fa0d6;
+  border-radius: 20px;
+  background: #fff;
+  padding: 18px;
+}
+
+.agency-camera-live,
+.agency-camera-preview-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.agency-camera-video,
+.agency-camera-preview {
+  width: 100%;
+  height: 280px;
+  object-fit: cover;
+  border-radius: 18px;
+  border: 1px solid #e3e7f6;
+  background: #111;
+}
+
+.agency-camera-empty {
+  min-height: 220px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: #404757;
+}
+
+.agency-camera-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.agency-camera-action-btn {
+  min-height: 48px;
+  padding: 0 18px;
+}
+
+.agency-camera-error {
+  margin: 0 0 10px;
+  color: #c5384f;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.agency-upload-preview-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
+.agency-upload-preview-wrap span {
+  color: #343a46;
+  font-size: 14px;
+  font-weight: 600;
+  word-break: break-word;
+}
+
+
+
+.agency-status-card p {
+  margin: 0 0 10px;
+  color: #3c4250;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.agency-status-card p:last-child {
+  margin-bottom: 0;
+}
+
+.agency-register__actions {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 4px;
+}
+
+.agency-followup {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.agency-primary-btn {
+  min-height: 56px;
+  border-radius: 18px;
+  background: linear-gradient(180deg, #4056be 0%, #2a3b90 100%);
+  color: #fff;
+  font-size: 16px;
+  font-weight: 800;
+  box-shadow: 0 14px 26px rgba(45, 63, 146, 0.24);
+  padding: 0 22px;
+}
+
+.agency-primary-btn:disabled,
+.agency-secondary-btn:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.agency-secondary-btn {
+  min-height: 50px;
+  padding: 0 18px;
+  border-radius: 16px;
+  background: #fff;
+  border: 1px solid #bfc8f0;
+  color: #314395;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.agency-login-link {
+  margin: 4px 0 0;
+  color: #59606d;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.agency-login-link span {
+  color: #2e4194;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+@media (max-width: 1024px) {
+  .agency-grid--3 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .agency-field--span-2 {
+    grid-column: span 2;
+  }
+}
+
+@media (max-width: 768px) {
+  .agency-register {
+    padding: 20px 12px 44px;
+    background: #f3f2ff;
+  }
+
+  .agency-register__hero h1 {
+    font-size: 28px;
+  }
+
+  .agency-section__header {
+    font-size: 20px;
+    padding: 16px 18px;
+  }
+
+  .agency-section__body {
+    padding: 18px;
+  }
+
+  .agency-grid--2,
+  .agency-grid--3 {
+    grid-template-columns: 1fr;
+  }
+
+  .agency-field--span-2 {
+    grid-column: span 1;
+  }
+
+  .agency-inline-phone {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .agency-remove-button {
+    width: 100%;
+  }
+
+  .agency-followup {
+    flex-direction: column;
+  }
+
+  .agency-primary-btn,
+  .agency-secondary-btn {
+    width: 100%;
+  }
+
+  .agency-radio-card {
+  width: 100%;
+}
+
+.agency-camera-actions {
+  flex-direction: column;
+}
+
+.agency-camera-action-btn,
+.agency-camera-trigger {
+  width: 100%;
+}
+}

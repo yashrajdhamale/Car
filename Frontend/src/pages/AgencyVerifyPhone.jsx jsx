@@ -1,0 +1,166 @@
+import { useEffect, useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import {
+  getAgencyProfile,
+  refreshAgencyVerificationFlags,
+  sendAgencyPhoneOtp,
+  verifyAgencyPhoneOtp,
+} from "../services/agencyAuthService";
+
+export default function AgencyVerifyPhone() {
+  const navigate = useNavigate();
+  const [params] = useSearchParams();
+  const uid = params.get("uid");
+
+  const [profile, setProfile] = useState(null);
+  const [otp, setOtp] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    const init = async () => {
+      if (!uid) return;
+      const data = await getAgencyProfile(uid);
+      setProfile(data);
+    };
+    init();
+  }, [uid]);
+
+  const handleRefreshEmail = async () => {
+    try {
+      setLoading(true);
+      const data = await refreshAgencyVerificationFlags(uid);
+      if (!data?.profile?.emailVerified) {
+        setError("Email is still not verified. Please click the verification link in your office email.");
+        return;
+      }
+      setProfile(data.profile);
+      setMessage("Email verified successfully. Now verify phone.");
+    } catch (err) {
+      setError(err.message || "Failed to refresh verification.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSendOtp = async () => {
+    try {
+      setError("");
+      setMessage("");
+      if (!profile?.emailVerified) {
+        setError("Please verify email first.");
+        return;
+      }
+      setLoading(true);
+      await sendAgencyPhoneOtp(profile.phone);
+      setMessage("Phone OTP sent successfully.");
+    } catch (err) {
+      setError(err.message || "Failed to send phone OTP.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleVerifyOtp = async () => {
+    try {
+      setError("");
+      setMessage("");
+      setLoading(true);
+      await verifyAgencyPhoneOtp(uid, otp);
+      setMessage("Phone verified successfully. You can now login.");
+      setTimeout(() => navigate("/agency-login"), 1200);
+    } catch (err) {
+      setError(err.message || "Invalid OTP.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div style={styles.page}>
+      <div style={styles.card}>
+        <h2>Verify Agency</h2>
+
+        {profile ? (
+          <>
+            <p style={styles.meta}>Email: {profile.officeEmail}</p>
+            <p style={styles.meta}>Phone: {profile.phone}</p>
+            <p style={styles.meta}>Email Verified: {profile.emailVerified ? "Yes" : "No"}</p>
+            <p style={styles.meta}>Phone Verified: {profile.phoneVerified ? "Yes" : "No"}</p>
+          </>
+        ) : (
+          <p style={styles.meta}>Loading profile...</p>
+        )}
+
+        {message ? <p style={styles.success}>{message}</p> : null}
+        {error ? <p style={styles.error}>{error}</p> : null}
+
+        <button style={styles.button} onClick={handleRefreshEmail} disabled={loading}>
+          I Have Verified My Email
+        </button>
+
+        <div id="recaptcha-container" style={{ marginTop: 12 }} />
+
+        <button style={styles.button} onClick={handleSendOtp} disabled={loading || !profile?.emailVerified}>
+          Send Phone OTP
+        </button>
+
+        <input
+          type="text"
+          placeholder="Enter OTP"
+          value={otp}
+          onChange={(e) => setOtp(e.target.value)}
+          style={styles.input}
+        />
+
+        <button style={styles.button} onClick={handleVerifyOtp} disabled={loading || !otp}>
+          Verify OTP
+        </button>
+      </div>
+    </div>
+  );
+}
+
+const styles = {
+  page: {
+    minHeight: "100vh",
+    background: "#0b1220",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 16,
+  },
+  card: {
+    width: "100%",
+    maxWidth: 420,
+    background: "#111a2e",
+    border: "1px solid #223252",
+    borderRadius: 16,
+    padding: 24,
+    color: "#fff",
+    display: "flex",
+    flexDirection: "column",
+    gap: 12,
+  },
+  input: {
+    height: 46,
+    borderRadius: 10,
+    border: "1px solid #2d446f",
+    background: "#0f1728",
+    color: "#fff",
+    padding: "0 12px",
+  },
+  button: {
+    height: 46,
+    border: "none",
+    borderRadius: 10,
+    background: "#4f8cff",
+    color: "#fff",
+    fontWeight: 700,
+    cursor: "pointer",
+  },
+  meta: { color: "#dbe5ff", fontSize: 14, margin: 0 },
+  success: { color: "#7CFC98", fontSize: 14 },
+  error: { color: "#ff8c8c", fontSize: 14 },
+};

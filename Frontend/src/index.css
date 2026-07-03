@@ -1,0 +1,79 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Map Container Styles */
+#mapmyindia-root {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+
+@layer base {
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+}
+
+body {
+    font-family: "Poppins", sans-serif;
+    font-optical-sizing: auto;
+}
+#mapmyindia-root {
+  position: fixed;
+  top: 60px;          /* header height */
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 0;
+}
+
+/* Map container styles */
+.map-container {
+    width: 100%;
+    height: 400px;
+    border-radius: 0.75rem;
+    overflow: hidden;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+/* Ensure the map fills its container */
+.map-container > div {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+.active-border {
+  @apply  border border-yellow-900 p-4 rounded-xl bg-yellow-100 shadow-lg transition ease-in-out duration-500;
+}
+
+.header-button {
+    @apply bg-green-400 lg:mr-10 text-white lg:text-xl flex items-center gap-2 px-3 py-2 rounded-lg transition-transform 
+    duration-200 hover:-translate-x-1 hover:-translate-y-1 hover:shadow-md
+}
+
+.minor-button {
+    @apply bg-black text-white flex items-center gap-2 px-3 py-2 rounded-lg  transition-transform duration-200 hover:-translate-x-1 
+    hover:-translate-y-1 hover:shadow-md
+}
+
+/* Safe area for iPhone notch / home indicator */
+.safe-area-bottom {
+  padding-bottom: env(safe-area-inset-bottom, 8px);
+}
+.safe-area-top {
+  padding-top: env(safe-area-inset-top, 12px);
+}
+
+/* Hide scrollbars on horizontal scroll */
+.scrollbar-hide::-webkit-scrollbar { display: none; }
+.scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }

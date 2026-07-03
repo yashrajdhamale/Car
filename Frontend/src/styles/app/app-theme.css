@@ -1,0 +1,29 @@
+/* app-only theme (put after debug rule removal) */
+body.app-mode .app-hero {
+  min-height: 60vh;
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+}
+
+body.app-mode .app-hero h1 {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 800;
+  color: #fff;
+}
+
+body.app-mode .app-search {
+  border-radius: 28px !important;
+  box-shadow: 0 12px 30px rgba(16, 24, 40, 0.2) !important;
+  padding: 0.25rem !important;
+}
+
+body.app-mode .app-grid .group {
+  border-radius: 18px;
+  background: rgba(255,255,255,0.85);
+  box-shadow: 0 12px 30px rgba(16, 24, 40, 0.08);
+  transition: transform .25s ease, box-shadow .25s ease;
+}
+body.app-mode .app-grid .group:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 18px 40px rgba(16, 24, 40, 0.12);
+}

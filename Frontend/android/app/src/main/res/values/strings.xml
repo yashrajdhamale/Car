@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Carzi Holidays</string>
+    <string name="title_activity_main">Carzi Holidays</string>
+    <string name="package_name">com.carzi.holidays</string>
+    <string name="custom_url_scheme">com.carzi.holidays</string>
+</resources>

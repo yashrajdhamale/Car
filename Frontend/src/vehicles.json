@@ -1,0 +1,10 @@
+[
+  { "id": 1, "name": "A/C Swift Dzire / Etios", "capacity": 4 },
+  { "id": 2, "name": "Innova Crysta", "capacity": 6 },
+  { "id": 3, "name": "SUV(ertiga)", "capacity": 4 },
+  { "id": 4, "name": "A/C 12-Seater Tempo Traveler", "capacity": 12 },
+  { "id": 5, "name": "Force Urbania 13 seater van", "capacity": 13 },
+  { "id": 6, "name": "A/C 17-Seater Tempo Traveler", "capacity": 17 },
+  { "id": 7, "name": "A/C 25-Seater Tempo Traveler", "capacity": 25 },
+  { "id": 8, "name": "A/C 45-Seater Tempo Traveler", "capacity": 45 }
+]

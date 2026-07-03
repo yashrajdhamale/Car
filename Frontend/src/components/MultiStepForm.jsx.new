@@ -1,0 +1,132 @@
+import React, { useEffect, useState, useRef } from 'react';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
+import html2pdf from 'html2pdf.js';
+import { CalendarDays, UserRound, Baby, Sigma } from 'lucide-react';
+import { Card, CardHeader, CardBody, CardFooter, Typography, Input, Checkbox, Button, Stepper, Step } from "@material-tailwind/react";
+import { CogIcon, UserIcon, BuildingLibraryIcon } from "@heroicons/react/24/outline";
+import { db, storage } from '@config/firebase';
+import { collection, doc, addDoc } from 'firebase/firestore';
+import { PDFDownloadLink } from "@react-pdf/renderer";
+import { GuestCountInput } from '../components';
+import { Popover, PopoverHandler, PopoverContent } from "@material-tailwind/react";
+import { addDays, format } from "date-fns";
+import { DayPicker } from "react-day-picker";
+import { ChevronRightIcon, ChevronLeftIcon } from "@heroicons/react/24/outline";
+import Invoice from '../holiday/Invoice';
+import 'react-day-picker/dist/style.css';
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { BellIcon, ArchiveBoxIcon, MinusCircleIcon, CurrencyDollarIcon, ClockIcon, WalletIcon, CircleStackIcon, BookOpenIcon, ForwardIcon, ClipboardDocumentListIcon } from "@heroicons/react/24/solid";
+import { Dialog, DialogHeader, DialogBody, DialogFooter, Timeline, TimelineItem, TimelineIcon, TimelineHeader } from "@material-tailwind/react";
+import { sassNull } from 'sass';
+import './multistep.css';
+
+const MultiStepForm = (selectLocationData) => {
+    console.log('data', selectLocationData.selectLocationData);
+
+    const todayDate = new Date();
+    const [date, setDate] = useState(null);
+    const [datePick, setDatePick] = useState(null);
+    const [dateDrop, setDateDrop] = useState(null);
+    const [isPackageValid, setIsPackageValid] = useState(true);
+    const [packageData, setPackageData] = useState();
+    const [activeStep, setActiveStep] = useState(0);
+    const [isLastStep, setIsLastStep] = useState(false);
+    const [isFirstStep, setIsFirstStep] = useState(false);
+    const [userData, setUserData] = useState({ userUPIID: '', transactionId: '' });
+    const [FileUploadUrl, setFileUploadUrl] = useState(null);
+
+    const handleChangeDate = (newDate, pickup, dropup) => {
+        setDate(newDate);
+        setDatePick(pickup);
+        setDateDrop(dropup);
+    };
+
+    const handleInputChange = (values) => {
+        setUserData(values);
+    };
+
+    const generateRandomName = () => {
+        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        let randomName = '';
+        for (let i = 0; i < 10; i++) {
+            randomName += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+        return randomName;
+    };
+
+    // ... rest of your component code ...
+
+    return (
+        <div className="container mx-auto p-4">
+            {/* Your form content */}
+            <Card className="mt-6 w-full">
+                <CardHeader color="blue-gray" className="relative h-16 flex items-center justify-center">
+                    <Stepper activeStep={activeStep} isLastStep={(value) => setIsLastStep(value)} isFirstStep={(value) => setIsFirstStep(value)}>
+                        <Step onClick={() => setActiveStep(0)}>
+                            <UserIcon className="h-5 w-5" />
+                            <div className="absolute -bottom-10 w-max text-center">
+                                <Typography variant="h6" color={activeStep >= 0 ? "blue-gray" : "gray"} className="font-normal hidden lg:block">
+                                    Personal Info
+                                </Typography>
+                            </div>
+                        </Step>
+                        <Step onClick={() => setActiveStep(1)}>
+                            <CogIcon className="h-5 w-5" />
+                            <div className="absolute -bottom-10 w-max text-center">
+                                <Typography variant="h6" color={activeStep >= 1 ? "blue-gray" : "gray"} className="font-normal hidden lg:block">
+                                    Payment
+                                </Typography>
+                            </div>
+                        </Step>
+                        <Step onClick={() => setActiveStep(2)}>
+                            <BuildingLibraryIcon className="h-5 w-5" />
+                            <div className="absolute -bottom-10 w-max text-center">
+                                <Typography variant="h6" color={activeStep >= 2 ? "blue-gray" : "gray"} className="font-normal hidden lg:block">
+                                    Confirm details
+                                </Typography>
+                            </div>
+                        </Step>
+                    </Stepper>
+                </CardHeader>
+                <CardBody className="px-0 lg:p-6 flex flex-col gap-4">
+                    {activeStep === 0 && (
+                        <div>
+                            <div className='text-2xl mb-6 text-center'>Instructions</div>
+                            <div className='flex justify-center'>
+                                <ul className='list-disc mx-5'>
+                                    <li className='mb-2'>We will verify and send you the final confirmation at the earliest.</li>
+                                    <li className='mb-2'>
+                                        If the package is delayed for activation you can contact our support team.
+                                    </li>
+                                    <li className='mb-2'>Your satisfaction is our priority. If you have any questions, feel free to reach out.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    )}
+                    {activeStep === 1 && (
+                        <div>Payment Step</div>
+                    )}
+                    {activeStep === 2 && (
+                        <div>Confirmation Step</div>
+                    )}
+                </CardBody>
+                <CardFooter className="flex justify-between">
+                    <Button onClick={() => setActiveStep(prev => Math.max(0, prev - 1))} disabled={activeStep === 0}>
+                        Prev
+                    </Button>
+                    {activeStep === 2 ? (
+                        <Button color="green">
+                            Submit
+                        </Button>
+                    ) : (
+                        <Button onClick={() => setActiveStep(prev => Math.min(2, prev + 1))}>
+                            Next
+                        </Button>
+                    )}
+                </CardFooter>
+            </Card>
+        </div>
+    );
+};
+
+export default MultiStepForm;

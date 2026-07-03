@@ -1,0 +1,84 @@
+{
+  "carCategories": [
+    {
+      "id": "any",
+      "name": "ANY",
+      "icon": "🚗",
+      "imageUrl": "https://imgd.aeplcdn.com/370x208/n/cw/ec/46045/marutisuzuki-dzire-exterior0.jpeg?wm=1&q=80",
+      "description": "Any available tourist vehicle",
+      "marketCars": [
+        "Any Mini",
+        "Any Sedan",
+        "Any SUV",
+        "Any 7-Seater"
+      ],
+      "pricing": {
+        "baseFare": 0,
+        "perKmRate": 20
+      }
+    },
+    {
+      "id": "mini",
+      "name": "MINI",
+      "icon": "🚗",
+      "imageUrl": "https://imgd.aeplcdn.com/370x208/n/cw/ec/46045/marutisuzuki-dzire-exterior0.jpeg?wm=1&q=80",
+      "description": "Tourist compact vehicles",
+      "marketCars": [
+        "Any Maruti Swift",
+        "Any Maruti Dzire",
+        "Any Toyota Etios"
+      ],
+      "pricing": {
+        "baseFare": 50,
+        "perKmRate": 20
+      }
+    },
+    {
+      "id": "prime-sedan",
+      "name": "PRIME SEDAN",
+      "icon": "🚘",
+      "imageUrl": "https://images.91wheels.com/assets/b_images/main/models/profile/profile1746428398.jpg?w=300&q=50",
+      "description": "Comfortable tourist sedans",
+      "marketCars": [
+        "Any Honda City",
+        "Any Hyundai Verna"
+      ],
+      "pricing": {
+        "baseFare": 80,
+        "perKmRate": 20
+      }
+    },
+    {
+      "id": "prime-suv",
+      "name": "SUV",
+      "icon": "🚙",
+      "imageUrl": "https://imgd.aeplcdn.com/370x208/n/9xhdmua_1553529.jpg?q=80",
+      "description": "Tourist family vehicles",
+      "marketCars": [
+        "Any Maruti Ertiga",
+        "Any Tata Marazzo",
+        "Any Maruti Wagon R"
+      ],
+      "pricing": {
+        "baseFare": 100,
+        "perKmRate": 20
+      }
+    },
+    {
+      "id": "prime-plus",
+      "name": "PRIME PLUS",
+      "icon": "🚐",
+      "imageUrl": "https://imgd.aeplcdn.com/664x374/n/cw/ec/140809/innova-crysta-exterior-right-front-three-quarter-3.png?isig=0&q=80",
+      "description": "Premium tourist 6 & 7 seaters",
+      "marketCars": [
+        "Any Toyota Innova",
+        "Any Innova Crysta",
+        "Any Mahindra XUV700"
+      ],
+      "pricing": {
+        "baseFare": 120,
+        "perKmRate": 22
+      }
+    }
+  ]
+}

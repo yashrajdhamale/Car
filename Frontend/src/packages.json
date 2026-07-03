@@ -1,0 +1,1659 @@
+{
+  "Kerala": {
+    "keywords": ["kerala", "kochi", "munnar"],
+    "bgImage": "https://www.authenticindiatours.com/app/uploads/2022/05/10-reasons-to-visit-Kerala-Kumarakom-Back-Waters-Boat-House-1400x550-c-default.jpg",
+    "packages": [
+      {
+        "name": "Munnar Weekend Break",
+        "duration": "3 Days / 2 Nights",
+        "itinerary": [
+          {
+            "day": "Day 01: Arrival @ Kochi – Transfer to Munnar",
+            "details": "On arrival at Kochi Airport/Railway Station, our representative will receive you and transfer you to Munnar (approx. 4–5 hours drive). On the way, enjoy the scenic beauty of Kerala's lush landscapes with cheerful streams, small waterfalls, tea plantations, and spice gardens.\n\nEn-route, visit:\n- Cheeyappara & Valara Waterfalls – cascading falls amidst thick forests.\n- Tea Plantations Viewpoints – capture breathtaking photos.\n\nOn reaching Munnar, check-in at the hotel. Rest of the day is at leisure. In the evening, take a stroll at Munnar town local market or enjoy the serene atmosphere. Overnight stay at Munnar."
+          },
+          {
+            "day": "Day 02: Munnar Sightseeing",
+            "details": "After breakfast, proceed for a full-day sightseeing tour of Munnar. Explore the famous attractions:\n\n- Eravikulam National Park (Rajamalai) – home to the endangered Nilgiri Tahr, rolling hills, and tea estates.\n- Mattupetty Dam & Lake – famous for its storage masonry dam, speed boating, and lush surroundings.\n- Echo Point – a scenic place where your voice echoes back.\n- Kundala Lake – known for pedal boating and serene landscapes.\n- Tea Museum (TATA Tea Museum) – learn about the history and process of tea-making.\n\nIn the evening, return to the hotel and relax. Dinner & overnight stay at Munnar."
+          },
+          {
+            "day": "Day 03: Munnar – Kochi Departure",
+            "details": "After breakfast, check out from the hotel and drive back to Kochi. Depending on your departure time, enjoy sightseeing in Kochi \n\n  Fort Kochi & St. Francis Church – one of the oldest European churches in India. \n  Chinese Fishing Nets – iconic view along the Fort Kochi beachside.\n Mattancherry Palace (Dutch Palace) – famous for Kerala murals and history.\n Jew Town & Synagogue – explore antique shops and heritage streets.\n  Later transfer to Kochi Airport/Railway Station for onward journey. Tour ends."
+          }
+        ],
+        "kiloLimits": [120, 60, 150],
+        "kmLimit": "300 km per day",
+        "rates": [
+          { "vehicle": "A/C Swift Dzire / Etios", "price": 12600 },
+          { "vehicle": "Innova Crysta", "price": 16200 },
+          { "vehicle": "SUV(ertiga)", "price": 14500 },
+          { "vehicle": "A/C 12-Seater Tempo Traveler", "price": 22000 },
+          { "vehicle": "Force Urbania 13 seater van", "price": 24000 },
+          { "vehicle": "A/C 17-Seater Tempo Traveler", "price": 28000 },
+          { "vehicle": "A/C 25-Seater Tempo Traveler", "price": 36000 },
+          { "vehicle": "A/C 45-Seater Tempo Traveler", "price": 58000 }
+        ]
+      },
+      {
+        "name": "2 Nights Munnar + 1 Night Alleppey",
+        "duration": "4 Days / 3 Nights",
+        "itinerary": [
+          "Day 1: Arrival in Kochi, sightseeing and local cuisine.",
+          "Day 2: Munnar tea gardens and Mattupetty Dam.",
+          "Day 3: Thekkady wildlife sanctuary and spice plantations.",
+          "Day 4: Alleppey houseboat cruise.",
+          "Day 5: Departure from Kochi."
+        ],
+        "kiloLimits": [120, 60, 150],
+        "kmLimit": "300 km per day",
+        "rates": [
+          { "vehicle": "A/C Swift Dzire / Etios", "price": 14500 },
+          { "vehicle": "Innova Crysta", "price": 18500 },
+          { "vehicle": "SUV(ertiga)", "price": 16500 },
+          { "vehicle": "A/C 12-Seater Tempo Traveler", "price": 26000 },
+          { "vehicle": "Force Urbania 13 seater van", "price": 28000 },
+          { "vehicle": "A/C 17-Seater Tempo Traveler", "price": 32000 },
+          { "vehicle": "A/C 25-Seater Tempo Traveler", "price": 42000 },
+          { "vehicle": "A/C 45-Seater Tempo Traveler", "price": 66000 }
+        ]
+      }
+    ]
+  },
+
+  "Odisha": {
+    "keywords": ["odisha", "puri", "konark", "bhubaneswar"],
+    "bgImage": "https://upload.wikimedia.org/wikipedia/commons/6/63/Konark_Sun_Temple_entrance.jpg",
+    "packages": [
+      {
+        "name": "Puri & Konark Short Escape",
+        "duration": "3 Days / 2 Nights",
+        "itinerary": [
+          { "day": "Day 01: Arrival Bhubaneswar – Transfer to Puri", "details": "Arrive Bhubaneswar, drive to Puri (approx. 1.5–2 hours). Visit Puri Beach, Jagannath Temple (view from outside for non-pilgrims), and local market. Evening leisure at beach. Overnight at Puri." },
+          { "day": "Day 02: Konark & Chilika Excursion", "details": "After breakfast drive to Konark (approx. 1 hour) to visit the Sun Temple (UNESCO), then proceed to Chilika Lake (Satapada) for possible dolphin-spotting boat cruise. Return to Puri. Overnight stay." },
+          { "day": "Day 03: Puri – Bhubaneswar Departure", "details": "After breakfast, check-out and drive to Bhubaneswar. Quick city tour: Lingaraj Temple (view), Udayagiri & Khandagiri caves. Transfer to station/airport for onward journey." }
+        ],
+        "kiloLimits": [120, 60, 150],
+        "kmLimit": "300 km per day",
+        "rates": [
+          { "vehicle": "A/C Swift Dzire / Etios", "price": 12600 },
+          { "vehicle": "Innova Crysta", "price": 16200 },
+          { "vehicle": "SUV(ertiga)", "price": 14500 },
+          { "vehicle": "A/C 12-Seater Tempo Traveler", "price": 22000 },
+          { "vehicle": "Force Urbania 13 seater van", "price": 24000 },
+          { "vehicle": "A/C 17-Seater Tempo Traveler", "price": 28000 },
+          { "vehicle": "A/C 25-Seater Tempo Traveler", "price": 36000 },
+          { "vehicle": "A/C 45-Seater Tempo Traveler", "price": 58000 }
+        ]
+      },
+      {
+        "name": "Heritage & Coastal Odisha",
+        "duration": "4 Days / 3 Nights",
+        "itinerary": [
+          { "day": "Day 01: Bhubaneswar Arrival & Temple Trail", "details": "Arrival in Bhubaneswar. Visit Lingaraj Temple, Mukteshwar Temple, and Khandagiri & Udayagiri caves. Overnight at Bhubaneswar." },
+          { "day": "Day 02: Bhubaneswar – Konark – Puri", "details": "Drive to Konark (Sun Temple) and then to Puri. Evening at Puri Beach. Overnight at Puri." },
+          { "day": "Day 03: Puri – Chilika Lake (Satapada)", "details": "Full-day Chilika Lake trip with boat ride to see Irrawaddy dolphins and birdlife. Return to Puri for overnight stay." },
+          { "day": "Day 04: Local Markets & Departure", "details": "Morning at leisure, shop at Puri market, then transfer to Bhubaneswar for departure." }
+        ],
+        "kiloLimits": [120, 60, 150],
+        "kmLimit": "300 km per day",
+        "rates": [
+          { "vehicle": "A/C Swift Dzire / Etios", "price": 14500 },
+          { "vehicle": "Innova Crysta", "price": 18500 },
+          { "vehicle": "SUV(ertiga)", "price": 16500 },
+          { "vehicle": "A/C 12-Seater Tempo Traveler", "price": 26000 },
+          { "vehicle": "Force Urbania 13 seater van", "price": 28000 },
+          { "vehicle": "A/C 17-Seater Tempo Traveler", "price": 32000 },
+          { "vehicle": "A/C 25-Seater Tempo Traveler", "price": 42000 },
+          { "vehicle": "A/C 45-Seater Tempo Traveler", "price": 66000 }
+        ]
+      }
+    ]
+  },
+
+  "Himachal": {
+    "keywords": ["himachal", "shimla", "manali"],
+    "bgImage": "https://www.holidify.com/images/bgImages/MANALI.jpg",
+    "packages": [
+      {
+        "name": "Shimla & Manali Retreat",
+        "duration": "5 Days / 4 Nights",
+        "itinerary": [
+          { "day": "Day 01: Delhi – Chandigarh", "details": "Arrival @ Chandigarh On arrival at Chandigarh airport, we will transfer you to Chandigarh hotel. Visit Rock Garden, Rose Garden, Panchakula Lake, Sukhana Lake etc." },
+          { "day": "Day 02: Mandi sightseeing + Travel to Manali", "details": "In the morning, check out from hotel and visit to Prashar Lake, Barot Valley, Panchvaktra Temple, Dehnasar Lake, Shikhari Devi Temple etc. Later drive to Manali (Approximately 4 hours ).\n After completing sightseeing in Mandi, we will drive to Manali. Enjoy the beautiful views of Beas river and Kullu valley. Upon reaching, check-in at the hotel and take some rest. In the evening, you can either explore its numerous places of interest or take a stroll on the popular Mall Road.\n This street is dotted with numerous eateries, cafes, local handicraft shops and retail brand outlets where tourists can not only go on a shopping spree, but can also relish mouth-watering local dishes. Later, return to the hotel for dinner and an overnight stay." },
+          { "day": "Day 03: Manali", "details": "In the morning after breakfast, we will start the sightseeing. We will go to Lahaul via Atal Tunnel.\n Enjoy the beautiful Sissu valley, Baralacha Pass, Chandra Taal etc. enjoy skiing. Later back to Manali hotel for overnight stay." },
+          { "day": "Day 04: Manali Sightseeing", "details": "In the morning after breakfast, we will start the sightseeing. We will go to Lahaul via Atal Tunnel. \n A land of wide contrasts on the Manali-Leh route, Lahaul is a bouquet of scenic mountain villages and fascinating Buddhist art and culture. As the better half of Spiti that lies across the high Kunzum Pass, Lahaul is marked by high mountains, massive glaciers, rivers and high passes. On the way also enjoy the beautiful journey through Atal tunnel.\n Enjoy the beautiful Sissu valley, Baralacha Pass, Chandra Taal etc. enjoy skiing. Later back to Manali hotel for overnight stay." },
+          { "day": "Day 05: Manali To Kasol", "details": "In the morning, check out from hotel and drive to Kasol . It serves as the gateway to some of Himachal Pradesh's most scenic treks, including the famous Kheerganga trek, where pathways lined with lush foliage lead to sulphur hot springs—a perfect reward after a vigorous hike. For the more seasoned adventurers, the challenges of the Pin Parvati Pass await. On arrival at Kasol, visit to Manikaran Hot Spring. \n Believed to have healing and curative properties, the Manikaran Hot Springs alongside the Gurudwara Shri Manikaran Sahib is visited by many pilgrims who come to bathe here.\n Later back to hotel for overnight stay. \n Later drive to Delhi Airport for homeward journey. Tour End." }
+        ],
+        "kiloLimits": [350, 100, 280, 80, 350],
+        "kmLimit": "350 km per day",
+        "rates": [
+          { "vehicle": "A/C Swift Dzire / Etios", "price": 18500 },
+          { "vehicle": "Innova Crysta", "price": 24000 },
+          { "vehicle": "SUV(ertiga)", "price": 21000 },
+          { "vehicle": "A/C 12-Seater Tempo Traveler", "price": 34000 },
+          { "vehicle": "Force Urbania 13 seater van", "price": 37000 },
+          { "vehicle": "A/C 17-Seater Tempo Traveler", "price": 44000 },
+          { "vehicle": "A/C 25-Seater Tempo Traveler", "price": 58000 },
+          { "vehicle": "A/C 45-Seater Tempo Traveler", "price": 90000 }
+        ]
+      },
+      {
+        "name": "Weekend Manali Escape",
+        "duration": "3 Days / 2 Nights",
+        "itinerary": [
+          { "day": "Day 01: Arrival at Manali & Local Sightseeing", "details": "On arrival at Manali (Airport/Bus stand), check-in at the hotel. After freshening up, start exploring local attractions of Manali:\n Hadimba Devi Temple – ancient wooden temple dedicated to Goddess Hidimba, surrounded by cedar forests.\n Manu Temple – dedicated to Sage Manu, believed to be the creator of the world according to Hindu mythology.\n Vashisht Village & Hot Springs – famous for natural hot water springs with medicinal properties.\n  Nehru Kund – a natural spring named after Pt. Jawaharlal Nehru \n Club House – enjoy indoor & outdoor activities like billiards, skating, and boating.Later, return to the hotel for dinner & overnight stay." },
+          { "day": "Day 02: Solang Valley / Atal Tunnel Excursion", "details": " After breakfast, proceed for a full-day excursion to Solang Valley and Atal Tunnel (Lahaul side):\n  Solang Valley – famous for adventure sports like paragliding, zorbing, ropeway, horse riding, and skiing (in winters). \n Atal Tunnel – drive through one of the longest high-altitude tunnels in the world and visit Sissu Village & waterfalls on the Lahaul side.\n Enjoy breathtaking views of snow-capped mountains, glaciers, and valleys \n \n Return to Manali in the evening. Overnight stay at hotel." },
+          { "day": "Day 03: Manali – Naggar / Departure", "details": "After breakfast, check out from hotel. Visit:\n  Naggar Castle – a heritage structure offering stunning views of the Kullu Valley. \n \n Roerich Art Gallery – displays paintings of Russian artist Nicholas Roerich.\n Jagatsukh Temple – an ancient Shiva temple with scenic surroundings. \n " }
+        ],
+        "kiloLimits": [60, 80, 40],
+        "kmLimit": "200 km per day",
+        "rates": [
+          { "vehicle": "A/C Swift Dzire / Etios", "price": 12600 },
+          { "vehicle": "Innova Crysta", "price": 18000 },
+          { "vehicle": "SUV(ertiga)", "price": 14500 },
+          { "vehicle": "A/C 12-Seater Tempo Traveler", "price": 28000 },
+          { "vehicle": "Force Urbania 13 seater van", "price": 30000 },
+          { "vehicle": "A/C 17-Seater Tempo Traveler", "price": 36000 },
+          { "vehicle": "A/C 25-Seater Tempo Traveler", "price": 48000 },
+          { "vehicle": "A/C 45-Seater Tempo Traveler", "price": 75000 }
+        ]
+      }
+    ]
+  },
+
+  "Jharkhand": {
+    "keywords": ["jharkhand", "ranchi", "dhanbad", "jim corbett?"],
+    "bgImage": "https://media1.thrillophilia.com/filestore/b03q8ku36po31n2dg2kmamf2065h_1589282960_Tagore_Hill.jpg?w=753&h=450&dpr=2.0",
+    "packages": [
+      {
+        "name": "Ranchi & Waterfalls Weekend",
+        "duration": "3 Days / 2 Nights",
+        "itinerary": [
+          { "day": "Day 01: Ranchi Arrival – City & Waterfalls", "details": "Arrive at Ranchi. Visit Jagannath Temple, Ranchi Lake, then drive to Jonha Falls/Gandhi Nagar for scenic views. Overnight at Ranchi." },
+          { "day": "Day 02: Hundru & Dassam Falls", "details": "Full-day excursion to Hundru Falls and Dassam Falls. Picnic and nature walk. Return to Ranchi for overnight." },
+          { "day": "Day 03: Local Markets & Departure", "details": "Morning local market visit, Rock Garden (if time). Transfer to station/airport for onward journey." }
+        ],
+        "kiloLimits": [100, 60, 120],
+        "kmLimit": "300 km per day",
+        "rates": [
+          { "vehicle": "A/C Swift Dzire / Etios", "price": 11800 },
+          { "vehicle": "Innova Crysta", "price": 15500 },
+          { "vehicle": "SUV(ertiga)", "price": 13500 },
+          { "vehicle": "A/C 12-Seater Tempo Traveler", "price": 21000 },
+          { "vehicle": "Force Urbania 13 seater van", "price": 23000 },
+          { "vehicle": "A/C 17-Seater Tempo Traveler", "price": 27000 },
+          { "vehicle": "A/C 25-Seater Tempo Traveler", "price": 35000 },
+          { "vehicle": "A/C 45-Seater Tempo Traveler", "price": 56000 }
+        ]
+      },
+      {
+        "name": "Heritage & Tribal Trails (Ranchi – Netarhat)",
+        "duration": "4 Days / 3 Nights",
+        "itinerary": [
+          { "day": "Day 01: Ranchi Arrival & Local Sightseeing", "details": "Arrive Ranchi; visit local city spots and evening at Ranchi Hill viewpoints. Overnight stay." },
+          { "day": "Day 02: Ranchi – Netarhat", "details": "Drive to Netarhat (approx. 4–5 hours). Sunset at Netarhat Sun Viewpoint. Overnight at Netarhat." },
+          { "day": "Day 03: Netarhat Sightseeing – Waterfalls & Forests", "details": "Explore Magnolia Point, Upper Ghaghri Falls, and local forest trails. Overnight at Netarhat." },
+          { "day": "Day 04: Return to Ranchi & Departure", "details": "Drive back to Ranchi and transfer to onward journey." }
+        ],
+        "kiloLimits": [100, 60, 150],
+        "kmLimit": "300 km per day",
+        "rates": [
+          { "vehicle": "A/C Swift Dzire / Etios", "price": 12600 },
+          { "vehicle": "Innova Crysta", "price": 16200 },
+          { "vehicle": "SUV(ertiga)", "price": 14500 },
+          { "vehicle": "A/C 12-Seater Tempo Traveler", "price": 24000 },
+          { "vehicle": "Force Urbania 13 seater van", "price": 26000 },
+          { "vehicle": "A/C 17-Seater Tempo Traveler", "price": 30000 },
+          { "vehicle": "A/C 25-Seater Tempo Traveler", "price": 40000 },
+          { "vehicle": "A/C 45-Seater Tempo Traveler", "price": 62000 }
+        ]
+      }
+    ]
+  },
+
+  "Assam": {
+    "keywords": ["assam", "guwahati", "kaziranga", "majuli", "sivasagar"],
+    "bgImage": "https://www.holidify.com/images/bgImages/KAZIRANGA-NATIONAL-PARK.jpg",
+    "packages": [
+      {
+        "name": "Kaziranga Wildlife & Guwahati Tour",
+        "duration": "4 Days / 3 Nights",
+        "itinerary": [
+          { "day": "Day 01: Arrival at Guwahati – Transfer to Kaziranga", "details": "Arrive at Guwahati Airport and drive to Kaziranga (approx. 5 hrs). Check-in and enjoy the lush greenery. Evening free. Overnight stay at Kaziranga." },
+          { "day": "Day 02: Kaziranga Jungle Safari", "details": "Early morning elephant safari and later a jeep safari in the Central Range. Evening cultural show or local village visit. Overnight stay at Kaziranga." },
+          { "day": "Day 03: Kaziranga – Guwahati", "details": "Drive back to Guwahati. Visit Kamakhya Temple, Brahmaputra river cruise. Overnight stay at Guwahati." },
+          { "day": "Day 04: Departure", "details": "After breakfast, transfer to Guwahati Airport/Railway Station. Tour ends." }
+        ],
+        "rates": [
+          { "vehicle": "A/C Swift Dzire / Etios", "price": 14500 },
+          { "vehicle": "Innova Crysta", "price": 18500 },
+          { "vehicle": "SUV(ertiga)", "price": 16500 },
+          { "vehicle": "A/C 12-Seater Tempo Traveler", "price": 26000 },
+          { "vehicle": "Force Urbania 13 seater van", "price": 28000 },
+          { "vehicle": "A/C 17-Seater Tempo Traveler", "price": 32000 },
+          { "vehicle": "A/C 25-Seater Tempo Traveler", "price": 42000 },
+          { "vehicle": "A/C 45-Seater Tempo Traveler", "price": 66000 }
+        ]
+      },
+      {
+        "name": "Majuli Island & Tea Trail Experience",
+        "duration": "5 Days / 4 Nights",
+        "itinerary": [
+          { "day": "Day 01: Arrival at Jorhat", "details": "Arrive at Jorhat, visit local tea estates and Tocklai Tea Research Centre. Overnight at Jorhat." },
+          { "day": "Day 02: Jorhat – Majuli Island", "details": "Drive to Neemati Ghat and cross over to Majuli Island by ferry. Visit Satras (Vaishnavite monasteries) and enjoy Assamese culture. Overnight stay at Majuli." },
+          { "day": "Day 03: Majuli Sightseeing", "details": "Explore pottery villages, mask-making artisans, and interact with locals. Overnight stay at Majuli." },
+          { "day": "Day 04: Majuli – Sivasagar – Jorhat", "details": "Return to Jorhat, visit Sivasagar Ahom monuments and temples. Overnight at Jorhat." },
+          { "day": "Day 05: Departure", "details": "Transfer to Jorhat Airport for onward journey." }
+        ],
+        "rates": [
+          { "vehicle": "A/C Swift Dzire / Etios", "price": 17000 },
+          { "vehicle": "Innova Crysta", "price": 22000 },
+          { "vehicle": "SUV(ertiga)", "price": 19500 },
+          { "vehicle": "A/C 12-Seater Tempo Traveler", "price": 31000 },
+          { "vehicle": "Force Urbania 13 seater van", "price": 34000 },
+          { "vehicle": "A/C 17-Seater Tempo Traveler", "price": 40000 },
+          { "vehicle": "A/C 25-Seater Tempo Traveler", "price": 52000 },
+          { "vehicle": "A/C 45-Seater Tempo Traveler", "price": 80000 }
+        ]
+      },
+      {
+        "name": "Spiritual Assam Tour – Temples & Heritage",
+        "duration": "3 Days / 2 Nights",
+        "itinerary": [
+          { "day": "Day 01: Arrival at Guwahati", "details": "Meet our representative and transfer to hotel. Visit Kamakhya Temple and local markets. Overnight stay in Guwahati." },
+          { "day": "Day 02: Guwahati – Sualkuchi – Hajo Excursion", "details": "After breakfast, drive to Sualkuchi (Silk Village) and Hajo – known for Hindu, Muslim & Buddhist shrines. Return and stay overnight in Guwahati." },
+          { "day": "Day 03: Departure", "details": "After breakfast, visit Umananda Temple (Peacock Island) and transfer to airport/railway station." }
+        ],
+        "rates": [
+          { "vehicle": "A/C Swift Dzire / Etios", "price": 12600 },
+          { "vehicle": "Innova Crysta", "price": 16200 },
+          { "vehicle": "SUV(ertiga)", "price": 14500 },
+          { "vehicle": "A/C 12-Seater Tempo Traveler", "price": 22000 },
+          { "vehicle": "Force Urbania 13 seater van", "price": 24000 },
+          { "vehicle": "A/C 17-Seater Tempo Traveler", "price": 28000 },
+          { "vehicle": "A/C 25-Seater Tempo Traveler", "price": 36000 },
+          { "vehicle": "A/C 45-Seater Tempo Traveler", "price": 58000 }
+        ]
+      }
+    ]
+  },
+
+  "Bihar": {
+    "keywords": ["bihar", "patna", "bodh gaya", "nalanda"],
+    "bgImage": "https://upload.wikimedia.org/wikipedia/commons/1/10/Mahabodhi_Temple_Bodh_Gaya.jpg",
+    "packages": [
+      {
+        "name": "Patna & Nalanda Short Heritage Trip",
+        "duration": "3 Days / 2 Nights",
+        "itinerary": [
+          { "day": "Day 01: Arrival Patna – City Tour", "details": "Arrive Patna. Visit Golghar, Patna Sahib Gurudwara, and Patna Museum. Evening at Gandhi Maidan. Overnight at Patna." },
+          { "day": "Day 02: Nalanda Ruins & Rajgir", "details": "Drive to Nalanda (approx. 2 hours) to visit the Nalanda University ruins and Nalanda Archaeological Museum. Proceed to Rajgir to see hot springs and Vishwa Shanti Stupa. Overnight near Rajgir." },
+          { "day": "Day 03: Rajgir – Bodh Gaya – Departure", "details": "Early drive to Bodh Gaya to visit Mahabodhi Temple complex. Return to Patna for onward travel." }
+        ],
+        "kiloLimits": [120, 60, 150],
+        "kmLimit": "300 km per day",
+        "rates": [
+          { "vehicle": "A/C Swift Dzire / Etios", "price": 12600 },
+          { "vehicle": "Innova Crysta", "price": 16200 },
+          { "vehicle": "SUV(ertiga)", "price": 14500 },
+          { "vehicle": "A/C 12-Seater Tempo Traveler", "price": 22000 },
+          { "vehicle": "Force Urbania 13 seater van", "price": 24000 },
+          { "vehicle": "A/C 17-Seater Tempo Traveler", "price": 28000 },
+          { "vehicle": "A/C 25-Seater Tempo Traveler", "price": 36000 },
+          { "vehicle": "A/C 45-Seater Tempo Traveler", "price": 58000 }
+        ]
+      },
+      {
+        "name": "Buddhist Circuit Extended",
+        "duration": "5 Days / 4 Nights",
+        "itinerary": [
+          { "day": "Day 01: Patna Arrival & Local", "details": "Arrive Patna. Light city tour and overnight." },
+          { "day": "Day 02: Patna – Nalanda – Rajgir", "details": "Explore Nalanda ruins, archaeological museum and then Rajgir attractions. Overnight at Rajgir." },
+          { "day": "Day 03: Rajgir – Bodh Gaya", "details": "Drive to Bodh Gaya; visit Mahabodhi Temple, Bodhi Tree, Tibetan monasteries. Overnight in Bodh Gaya." },
+          { "day": "Day 04: Bodh Gaya – Vaishali", "details": "Visit Vaishali (ancient Buddhist site and stupa); return to Patna area. Overnight." },
+          { "day": "Day 05: Patna Departure", "details": "Transfer to airport/railway for onward journey." }
+        ],
+        "kiloLimits": [120, 60, 150],
+        "kmLimit": "300 km per day",
+        "rates": [
+          { "vehicle": "A/C Swift Dzire / Etios", "price": 17000 },
+          { "vehicle": "Innova Crysta", "price": 22000 },
+          { "vehicle": "SUV(ertiga)", "price": 19500 },
+          { "vehicle": "A/C 12-Seater Tempo Traveler", "price": 31000 },
+          { "vehicle": "Force Urbania 13 seater van", "price": 34000 },
+          { "vehicle": "A/C 17-Seater Tempo Traveler", "price": 40000 },
+          { "vehicle": "A/C 25-Seater Tempo Traveler", "price": 52000 },
+          { "vehicle": "A/C 45-Seater Tempo Traveler", "price": 80000 }
+        ]
+      }
+    ]
+  },
+
+  "Meghalaya": {
+    "keywords": ["meghalaya", "shillong", "cherrapunjee", "dawki", "mawlynnong"],
+    "bgImage": "https://www.makemytraveling.com/Images/1/Dawki-27fbd.webp",
+    "packages": [
+      {
+        "name": "Shillong & Cherrapunjee Getaway",
+        "duration": "4 Days / 3 Nights",
+        "itinerary": [
+          { "day": "Day 01: Arrival at Guwahati – Transfer to Shillong", "details": "Arrive at Guwahati Airport and transfer to Shillong (approx. 3–4 hrs). En route, stop at Umiam Lake for boating and scenic views. Evening free to explore Police Bazaar. Overnight stay at Shillong." },
+          { "day": "Day 02: Shillong – Cherrapunjee Excursion", "details": "Drive to Cherrapunjee (54 km – 2 hrs). Visit Nohkalikai Falls, Mawsmai Cave, Eco Park, and Seven Sisters Falls. Return to Shillong by evening. Overnight stay at Shillong." },
+          { "day": "Day 03: Mawlynnong & Dawki Tour", "details": "Full-day excursion to Asia's cleanest village – Mawlynnong, and Dawki for crystal-clear Umngot River boating. Return to Shillong. Overnight stay." },
+          { "day": "Day 04: Shillong – Guwahati Departure", "details": "After breakfast, transfer to Guwahati for departure. En route visit Don Bosco Museum if time permits." }
+        ],
+        "rates": [
+          { "vehicle": "A/C Swift Dzire / Etios", "price": 14500 },
+          { "vehicle": "Innova Crysta", "price": 18500 },
+          { "vehicle": "SUV(ertiga)", "price": 16500 },
+          { "vehicle": "A/C 12-Seater Tempo Traveler", "price": 26000 },
+          { "vehicle": "Force Urbania 13 seater van", "price": 28000 },
+          { "vehicle": "A/C 17-Seater Tempo Traveler", "price": 32000 },
+          { "vehicle": "A/C 25-Seater Tempo Traveler", "price": 42000 },
+          { "vehicle": "A/C 45-Seater Tempo Traveler", "price": 66000 }
+        ]
+      },
+      {
+        "name": "Enchanting Meghalaya Adventure",
+        "duration": "5 Days / 4 Nights",
+        "itinerary": [
+          { "day": "Day 01: Guwahati – Shillong", "details": "Arrive at Guwahati and transfer to Shillong. Stop at Umiam Lake. Overnight stay at Shillong." },
+          { "day": "Day 02: Shillong Sightseeing", "details": "Explore Ward's Lake, Shillong Peak, Elephant Falls, and Cathedral of Mary. Overnight stay at Shillong." },
+          { "day": "Day 03: Cherrapunjee Sightseeing", "details": "Drive to Cherrapunjee; visit Nohkalikai Falls, Mawsmai Caves, and Dainthlen Falls. Stay overnight in Cherrapunjee." },
+          { "day": "Day 04: Cherrapunjee – Mawlynnong – Dawki", "details": "Drive to Dawki for boating on Umngot River, then visit Mawlynnong Village. Overnight stay at Shillong." },
+          { "day": "Day 05: Departure", "details": "After breakfast, drive to Guwahati for onward journey." }
+        ],
+        "rates": [
+          { "vehicle": "A/C Swift Dzire / Etios", "price": 17000 },
+          { "vehicle": "Innova Crysta", "price": 22000 },
+          { "vehicle": "SUV(ertiga)", "price": 19500 },
+          { "vehicle": "A/C 12-Seater Tempo Traveler", "price": 31000 },
+          { "vehicle": "Force Urbania 13 seater van", "price": 34000 },
+          { "vehicle": "A/C 17-Seater Tempo Traveler", "price": 40000 },
+          { "vehicle": "A/C 25-Seater Tempo Traveler", "price": 52000 },
+          { "vehicle": "A/C 45-Seater Tempo Traveler", "price": 80000 }
+        ]
+      },
+      {
+        "name": "Nature & Caves of Meghalaya",
+        "duration": "3 Days / 2 Nights",
+        "itinerary": [
+          { "day": "Day 01: Arrival at Shillong", "details": "Reach Shillong and check in to your hotel. Visit Umiam Lake and local cafes. Overnight stay at Shillong." },
+          { "day": "Day 02: Cherrapunjee Caving & Waterfalls", "details": "Full-day visit to Mawsmai, Arwah, and Garden of Caves. Explore Dainthlen Falls. Overnight stay in Shillong." },
+          { "day": "Day 03: Departure", "details": "After breakfast, transfer to Guwahati Airport/Railway Station." }
+        ],
+        "rates": [
+          { "vehicle": "A/C Swift Dzire / Etios", "price": 12600 },
+          { "vehicle": "Innova Crysta", "price": 16200 },
+          { "vehicle": "SUV(ertiga)", "price": 14500 },
+          { "vehicle": "A/C 12-Seater Tempo Traveler", "price": 22000 },
+          { "vehicle": "Force Urbania 13 seater van", "price": 24000 },
+          { "vehicle": "A/C 17-Seater Tempo Traveler", "price": 28000 },
+          { "vehicle": "A/C 25-Seater Tempo Traveler", "price": 36000 },
+          { "vehicle": "A/C 45-Seater Tempo Traveler", "price": 58000 }
+        ]
+      },
+      {
+        "name": "Living Root Bridge & Eco-Trail",
+        "duration": "4 Days / 3 Nights",
+        "itinerary": [
+          { "day": "Day 01: Shillong Arrival", "details": "Arrive at Shillong, visit Ward's Lake and Don Bosco Museum. Overnight stay." },
+          { "day": "Day 02: Trek to Double Decker Living Root Bridge (Nongriat)", "details": "Drive to Tyrna village and trek to the famous Double Decker Living Root Bridge. Return and stay overnight in Cherrapunjee." },
+          { "day": "Day 03: Cherrapunjee Local Tour", "details": "Visit Nohkalikai Falls, Mawsmai Caves, and Eco Park. Return to Shillong. Overnight stay." },
+          { "day": "Day 04: Departure", "details": "After breakfast, transfer to Guwahati for onward journey." }
+        ],
+        "rates": [
+          { "vehicle": "A/C Swift Dzire / Etios", "price": 14500 },
+          { "vehicle": "Innova Crysta", "price": 18500 },
+          { "vehicle": "SUV(ertiga)", "price": 16500 },
+          { "vehicle": "A/C 12-Seater Tempo Traveler", "price": 26000 },
+          { "vehicle": "Force Urbania 13 seater van", "price": 28000 },
+          { "vehicle": "A/C 17-Seater Tempo Traveler", "price": 32000 },
+          { "vehicle": "A/C 25-Seater Tempo Traveler", "price": 42000 },
+          { "vehicle": "A/C 45-Seater Tempo Traveler", "price": 66000 }
+        ]
+      }
+    ]
+  },
+
+  "ArunachalPradesh": {
+    "keywords": ["arunachal pradesh", "tawang", "bomdila", "dirang", "ziro"],
+    "bgImage": "https://www.holidify.com/images/bgImages/TAWANG.jpg",
+    "packages": [
+      {
+        "name": "Tawang Monastery & Scenic Arunachal",
+        "duration": "5 Days / 4 Nights",
+        "itinerary": [
+          { "day": "Day 01: Arrival at Guwahati – Transfer to Bhalukpong", "details": "Arrive at Guwahati Airport and transfer to Bhalukpong (approx. 6 hrs). En route enjoy views of the Brahmaputra valley. Check-in and overnight stay." },
+          { "day": "Day 02: Bhalukpong – Dirang", "details": "After breakfast, drive to Dirang (5 hrs). Visit Tipi Orchid Centre and Dirang Dzong. Overnight stay at Dirang." },
+          { "day": "Day 03: Dirang – Tawang", "details": "Drive through scenic Sela Pass (13,700 ft) and visit Jaswant Garh War Memorial. Arrive at Tawang. Overnight stay." },
+          { "day": "Day 04: Tawang Sightseeing", "details": "Explore Tawang Monastery, Urgelling Monastery, Tawang War Memorial, and local markets. Overnight stay." },
+          { "day": "Day 05: Tawang – Bomdila – Departure", "details": "Drive back to Bomdila and continue towards Tezpur/Guwahati for onward journey." }
+        ],
+        "rates": [
+          { "vehicle": "A/C Swift Dzire / Etios", "price": 19500 },
+          { "vehicle": "Innova Crysta", "price": 25000 },
+          { "vehicle": "SUV(ertiga)", "price": 22000 },
+          { "vehicle": "A/C 12-Seater Tempo Traveler", "price": 36000 },
+          { "vehicle": "Force Urbania 13 seater van", "price": 39000 },
+          { "vehicle": "A/C 17-Seater Tempo Traveler", "price": 46000 },
+          { "vehicle": "A/C 25-Seater Tempo Traveler", "price": 60000 },
+          { "vehicle": "A/C 45-Seater Tempo Traveler", "price": 94000 }
+        ]
+      },
+      {
+        "name": "Dirang Valley & Sela Pass Explorer",
+        "duration": "4 Days / 3 Nights",
+        "itinerary": [
+          { "day": "Day 01: Arrival at Tezpur – Transfer to Dirang", "details": "Meet at Tezpur and drive through lush valleys to Dirang. Visit local monasteries and Dirang Dzong. Overnight stay." },
+          { "day": "Day 02: Dirang – Sela Pass – Tawang", "details": "Drive up to Sela Pass (snow point in winter). Visit Jaswant Garh War Memorial. Return to Dirang. Overnight stay." },
+          { "day": "Day 03: Dirang – Bomdila", "details": "After breakfast, drive to Bomdila. Visit Bomdila Monastery and local markets. Overnight stay." },
+          { "day": "Day 04: Departure", "details": "After breakfast, transfer back to Tezpur/Guwahati." }
+        ],
+        "rates": [
+          { "vehicle": "A/C Swift Dzire / Etios", "price": 15500 },
+          { "vehicle": "Innova Crysta", "price": 20000 },
+          { "vehicle": "SUV(ertiga)", "price": 17500 },
+          { "vehicle": "A/C 12-Seater Tempo Traveler", "price": 28000 },
+          { "vehicle": "Force Urbania 13 seater van", "price": 30000 },
+          { "vehicle": "A/C 17-Seater Tempo Traveler", "price": 36000 },
+          { "vehicle": "A/C 25-Seater Tempo Traveler", "price": 48000 },
+          { "vehicle": "A/C 45-Seater Tempo Traveler", "price": 75000 }
+        ]
+      },
+      {
+        "name": "Ziro Valley Cultural Escape",
+        "duration": "4 Days / 3 Nights",
+        "itinerary": [
+          { "day": "Day 01: Arrival at Itanagar – Transfer to Ziro", "details": "Arrive at Itanagar and drive to Ziro (approx. 6 hrs). Check-in and relax. Overnight stay." },
+          { "day": "Day 02: Ziro Sightseeing", "details": "Explore Apatani tribal villages, local markets, and Ziro Music Festival grounds. Overnight stay." },
+          { "day": "Day 03: Ziro – Itanagar", "details": "Drive back to Itanagar. Visit Ganga Lake and Ita Fort. Overnight stay." },
+          { "day": "Day 04: Departure", "details": "After breakfast, transfer to Guwahati Airport/Railway Station." }
+        ],
+        "rates": [
+          { "vehicle": "A/C Swift Dzire / Etios", "price": 15500 },
+          { "vehicle": "Innova Crysta", "price": 20000 },
+          { "vehicle": "SUV(ertiga)", "price": 17500 },
+          { "vehicle": "A/C 12-Seater Tempo Traveler", "price": 28000 },
+          { "vehicle": "Force Urbania 13 seater van", "price": 30000 },
+          { "vehicle": "A/C 17-Seater Tempo Traveler", "price": 36000 },
+          { "vehicle": "A/C 25-Seater Tempo Traveler", "price": 48000 },
+          { "vehicle": "A/C 45-Seater Tempo Traveler", "price": 75000 }
+        ]
+      },
+      {
+        "name": "Monasteries & Mountain Adventure",
+        "duration": "5 Days / 4 Nights",
+        "itinerary": [
+          { "day": "Day 01: Arrival at Guwahati – Transfer to Bomdila", "details": "Arrive at Guwahati and drive to Bomdila (8 hrs). Visit Bomdila Monastery. Overnight stay." },
+          { "day": "Day 02: Bomdila – Dirang – Tawang", "details": "Drive via Dirang, stop for sightseeing and lunch. Arrive at Tawang. Overnight stay." },
+          { "day": "Day 03: Tawang Local Tour", "details": "Visit Tawang Monastery, War Memorial, and craft centers. Overnight stay." },
+          { "day": "Day 04: Tawang – Sela Pass – Dirang", "details": "Return to Dirang with scenic stops. Overnight stay." },
+          { "day": "Day 05: Dirang – Tezpur – Departure", "details": "Drive back to Tezpur and drop at airport/station." }
+        ],
+        "rates": [
+          { "vehicle": "A/C Swift Dzire / Etios", "price": 19500 },
+          { "vehicle": "Innova Crysta", "price": 25000 },
+          { "vehicle": "SUV(ertiga)", "price": 22000 },
+          { "vehicle": "A/C 12-Seater Tempo Traveler", "price": 36000 },
+          { "vehicle": "Force Urbania 13 seater van", "price": 39000 },
+          { "vehicle": "A/C 17-Seater Tempo Traveler", "price": 46000 },
+          { "vehicle": "A/C 25-Seater Tempo Traveler", "price": 60000 },
+          { "vehicle": "A/C 45-Seater Tempo Traveler", "price": 94000 }
+        ]
+      }
+    ]
+  },
+
+  "Nagaland": {
+    "keywords": ["nagaland", "kohima", "dimapur", "mokokchung", "hornbill festival"],
+    "bgImage": "https://sikkim.ch/wp-content/uploads/2023/11/nagaland-25_w800.jpg",
+    "packages": [
+      {
+        "name": "Kohima Heritage & Hornbill Festival Tour",
+        "duration": "5 Days / 4 Nights",
+        "itinerary": [
+          { "day": "Day 01: Arrival at Dimapur – Transfer to Kohima", "details": "Arrive at Dimapur Airport and drive to Kohima (approx. 3 hrs). Check-in at hotel and relax. Evening free to explore local market. Overnight stay." },
+          { "day": "Day 02: Kohima Sightseeing", "details": "Visit Kohima War Cemetery, State Museum, and local Naga heritage villages. Evening leisure. Overnight stay at Kohima." },
+          { "day": "Day 03: Hornbill Festival Experience (Dec Season)", "details": "Enjoy full-day at Kisama Heritage Village for Hornbill Festival — dance, tribal music, and handicrafts. Overnight stay at Kohima." },
+          { "day": "Day 04: Kohima – Khonoma Village Tour", "details": "Excursion to Khonoma (first green village of India). Learn about Angami tribe traditions. Return to Kohima for overnight stay." },
+          { "day": "Day 05: Kohima – Dimapur Departure", "details": "After breakfast, transfer back to Dimapur Airport for onward journey." }
+        ],
+        "rates": [
+          { "vehicle": "A/C Swift Dzire / Etios", "price": 17000 },
+          { "vehicle": "Innova Crysta", "price": 22000 },
+          { "vehicle": "SUV(ertiga)", "price": 19500 },
+          { "vehicle": "A/C 12-Seater Tempo Traveler", "price": 31000 },
+          { "vehicle": "Force Urbania 13 seater van", "price": 34000 },
+          { "vehicle": "A/C 17-Seater Tempo Traveler", "price": 40000 },
+          { "vehicle": "A/C 25-Seater Tempo Traveler", "price": 52000 },
+          { "vehicle": "A/C 45-Seater Tempo Traveler", "price": 80000 }
+        ]
+      },
+      {
+        "name": "Dimapur & Tribal Village Discovery",
+        "duration": "4 Days / 3 Nights",
+        "itinerary": [
+          { "day": "Day 01: Arrival at Dimapur", "details": "Meet at Dimapur Airport and transfer to hotel. Visit Triple Falls and Kachari Ruins. Overnight stay." },
+          { "day": "Day 02: Dimapur – Touphema Village", "details": "Drive to Touphema Heritage Village, showcasing Naga culture and cuisine. Enjoy traditional dance performance. Overnight stay." },
+          { "day": "Day 03: Touphema – Kohima Excursion", "details": "Visit Kohima War Cemetery, State Museum, and local markets. Return to Touphema. Overnight stay." },
+          { "day": "Day 04: Departure", "details": "Transfer to Dimapur Airport for onward journey." }
+        ],
+        "rates": [
+          { "vehicle": "A/C Swift Dzire / Etios", "price": 14500 },
+          { "vehicle": "Innova Crysta", "price": 18500 },
+          { "vehicle": "SUV(ertiga)", "price": 16500 },
+          { "vehicle": "A/C 12-Seater Tempo Traveler", "price": 26000 },
+          { "vehicle": "Force Urbania 13 seater van", "price": 28000 },
+          { "vehicle": "A/C 17-Seater Tempo Traveler", "price": 32000 },
+          { "vehicle": "A/C 25-Seater Tempo Traveler", "price": 42000 },
+          { "vehicle": "A/C 45-Seater Tempo Traveler", "price": 66000 }
+        ]
+      },
+      {
+        "name": "Wokha & Mokokchung Tribal Heartland",
+        "duration": "5 Days / 4 Nights",
+        "itinerary": [
+          { "day": "Day 01: Dimapur – Wokha", "details": "Arrive at Dimapur and drive to Wokha (approx. 5 hrs). Explore Lotha tribal villages. Overnight stay." },
+          { "day": "Day 02: Wokha – Mokokchung", "details": "Drive to Mokokchung (4 hrs). Visit Longkhum and Ungma villages – centers of Ao culture. Overnight stay." },
+          { "day": "Day 03: Mokokchung Sightseeing", "details": "Visit District Museum, local markets, and meet local artisans. Overnight stay." },
+          { "day": "Day 04: Mokokchung – Kohima", "details": "Drive to Kohima with en-route scenic halts. Evening leisure. Overnight stay." },
+          { "day": "Day 05: Kohima – Dimapur Departure", "details": "After breakfast, transfer to Dimapur for onward journey." }
+        ],
+        "rates": [
+          { "vehicle": "A/C Swift Dzire / Etios", "price": 17000 },
+          { "vehicle": "Innova Crysta", "price": 22000 },
+          { "vehicle": "SUV(ertiga)", "price": 19500 },
+          { "vehicle": "A/C 12-Seater Tempo Traveler", "price": 31000 },
+          { "vehicle": "Force Urbania 13 seater van", "price": 34000 },
+          { "vehicle": "A/C 17-Seater Tempo Traveler", "price": 40000 },
+          { "vehicle": "A/C 25-Seater Tempo Traveler", "price": 52000 },
+          { "vehicle": "A/C 45-Seater Tempo Traveler", "price": 80000 }
+        ]
+      },
+      {
+        "name": "Nagaland Highlights – Culture & Nature",
+        "duration": "3 Days / 2 Nights",
+        "itinerary": [
+          { "day": "Day 01: Arrival at Dimapur – Kohima", "details": "Arrive at Dimapur and transfer to Kohima. Visit War Cemetery and State Museum. Overnight stay." },
+          { "day": "Day 02: Khonoma Eco Village Visit", "details": "After breakfast, visit Khonoma Village – known for its sustainable lifestyle and Naga traditions. Return to Kohima. Overnight stay." },
+          { "day": "Day 03: Departure", "details": "Drive back to Dimapur for onward journey." }
+        ],
+        "rates": [
+          { "vehicle": "A/C Swift Dzire / Etios", "price": 12600 },
+          { "vehicle": "Innova Crysta", "price": 16200 },
+          { "vehicle": "SUV(ertiga)", "price": 14500 },
+          { "vehicle": "A/C 12-Seater Tempo Traveler", "price": 22000 },
+          { "vehicle": "Force Urbania 13 seater van", "price": 24000 },
+          { "vehicle": "A/C 17-Seater Tempo Traveler", "price": 28000 },
+          { "vehicle": "A/C 25-Seater Tempo Traveler", "price": 36000 },
+          { "vehicle": "A/C 45-Seater Tempo Traveler", "price": 58000 }
+        ]
+      }
+    ]
+  },
+
+  "Manipur": {
+    "keywords": ["manipur", "imphal", "loktak lake", "bishnupur", "ukhrul"],
+    "bgImage": "https://www.holidify.com/images/bgImages/IMPHAL.jpg",
+    "packages": [
+      {
+        "name": "Imphal Heritage & Loktak Lake Tour",
+        "duration": "4 Days / 3 Nights",
+        "itinerary": [
+          { "day": "Day 01: Arrival at Imphal", "details": "Arrive at Imphal Airport. Check in to the hotel and relax. Later visit Ima Keithel (women's market) and Kangla Fort. Overnight stay." },
+          { "day": "Day 02: Imphal – Loktak Lake Excursion", "details": "After breakfast, drive to Loktak Lake (48 km). Visit Sendra Island and Keibul Lamjao National Park (home of Sangai deer). Return to Imphal. Overnight stay." },
+          { "day": "Day 03: Bishnupur & Moirang Visit", "details": "Explore INA Memorial at Moirang and Vishnu Temple at Bishnupur. Enjoy local Manipuri dance performance in the evening. Overnight stay." },
+          { "day": "Day 04: Departure", "details": "After breakfast, transfer to Imphal Airport for onward journey." }
+        ],
+        "rates": [
+          { "vehicle": "A/C Swift Dzire / Etios", "price": 14500 },
+          { "vehicle": "Innova Crysta", "price": 18500 },
+          { "vehicle": "SUV(ertiga)", "price": 16500 },
+          { "vehicle": "A/C 12-Seater Tempo Traveler", "price": 26000 },
+          { "vehicle": "Force Urbania 13 seater van", "price": 28000 },
+          { "vehicle": "A/C 17-Seater Tempo Traveler", "price": 32000 },
+          { "vehicle": "A/C 25-Seater Tempo Traveler", "price": 42000 },
+          { "vehicle": "A/C 45-Seater Tempo Traveler", "price": 66000 }
+        ]
+      },
+      {
+        "name": "Ukhrul Hills & Tribal Village Adventure",
+        "duration": "5 Days / 4 Nights",
+        "itinerary": [
+          { "day": "Day 01: Imphal – Ukhrul", "details": "Drive to Ukhrul (approx. 5 hrs). En route enjoy scenic views of Shirui Hills. Check in and rest." },
+          { "day": "Day 02: Shirui Lily Trek & Khangkhui Caves", "details": "Trek to Shirui Peak to see the rare Shirui Lily (seasonal). Later visit Khangkhui limestone caves. Overnight stay at Ukhrul." },
+          { "day": "Day 03: Ukhrul – Imphal", "details": "Return to Imphal and visit Kangla Fort, Govindajee Temple, and local markets. Overnight stay." },
+          { "day": "Day 04: Loktak Lake Visit", "details": "Drive to Loktak Lake for boating among floating islands. Return to Imphal for overnight stay." },
+          { "day": "Day 05: Departure", "details": "Transfer to Imphal Airport after breakfast. Tour ends." }
+        ],
+        "rates": [
+          { "vehicle": "A/C Swift Dzire / Etios", "price": 17000 },
+          { "vehicle": "Innova Crysta", "price": 22000 },
+          { "vehicle": "SUV(ertiga)", "price": 19500 },
+          { "vehicle": "A/C 12-Seater Tempo Traveler", "price": 31000 },
+          { "vehicle": "Force Urbania 13 seater van", "price": 34000 },
+          { "vehicle": "A/C 17-Seater Tempo Traveler", "price": 40000 },
+          { "vehicle": "A/C 25-Seater Tempo Traveler", "price": 52000 },
+          { "vehicle": "A/C 45-Seater Tempo Traveler", "price": 80000 }
+        ]
+      },
+      {
+        "name": "Manipur Heritage & Handicraft Tour",
+        "duration": "3 Days / 2 Nights",
+        "itinerary": [
+          { "day": "Day 01: Arrival at Imphal", "details": "Arrive and explore Kangla Fort, Manipur State Museum, and RKCS Art Gallery. Overnight stay." },
+          { "day": "Day 02: Andro Village Craft Tour", "details": "Visit Andro Village – known for pottery and handicrafts. Meet local artisans and explore cultural museum. Overnight stay at Imphal." },
+          { "day": "Day 03: Departure", "details": "Morning free time. Later, drop at Imphal Airport." }
+        ],
+        "rates": [
+          { "vehicle": "A/C Swift Dzire / Etios", "price": 12600 },
+          { "vehicle": "Innova Crysta", "price": 16200 },
+          { "vehicle": "SUV(ertiga)", "price": 14500 },
+          { "vehicle": "A/C 12-Seater Tempo Traveler", "price": 22000 },
+          { "vehicle": "Force Urbania 13 seater van", "price": 24000 },
+          { "vehicle": "A/C 17-Seater Tempo Traveler", "price": 28000 },
+          { "vehicle": "A/C 25-Seater Tempo Traveler", "price": 36000 },
+          { "vehicle": "A/C 45-Seater Tempo Traveler", "price": 58000 }
+        ]
+      },
+      {
+        "name": "Manipur Nature & Culture Escape",
+        "duration": "5 Days / 4 Nights",
+        "itinerary": [
+          { "day": "Day 01: Arrival in Imphal", "details": "Arrival at Imphal. Evening free to explore local streets. Overnight stay." },
+          { "day": "Day 02: Imphal Sightseeing", "details": "Visit War Cemetery, Kangla Fort, and Ima Keithel. Overnight stay at Imphal." },
+          { "day": "Day 03: Loktak Lake Tour", "details": "Drive to Loktak Lake, visit Sendra Island and Keibul Lamjao National Park. Overnight at Imphal." },
+          { "day": "Day 04: Andro Village & Cultural Evening", "details": "Half-day tour to Andro Village followed by a Manipuri dance show. Overnight stay." },
+          { "day": "Day 05: Departure", "details": "Transfer to Imphal Airport for onward journey." }
+        ],
+        "rates": [
+          { "vehicle": "A/C Swift Dzire / Etios", "price": 17000 },
+          { "vehicle": "Innova Crysta", "price": 22000 },
+          { "vehicle": "SUV(ertiga)", "price": 19500 },
+          { "vehicle": "A/C 12-Seater Tempo Traveler", "price": 31000 },
+          { "vehicle": "Force Urbania 13 seater van", "price": 34000 },
+          { "vehicle": "A/C 17-Seater Tempo Traveler", "price": 40000 },
+          { "vehicle": "A/C 25-Seater Tempo Traveler", "price": 52000 },
+          { "vehicle": "A/C 45-Seater Tempo Traveler", "price": 80000 }
+        ]
+      }
+    ]
+  },
+
+  "Mizoram": {
+    "keywords": ["mizoram", "aizawl", "serchhip", "lengpui", "tamdil lake"],
+    "bgImage": "https://www.holidify.com/images/bgImages/AIZAWL.jpg",
+    "packages": [
+      {
+        "name": "Aizawl City & Surroundings Tour",
+        "duration": "3 Days / 2 Nights",
+        "itinerary": [
+          { "day": "Day 01: Arrival at Aizawl", "details": "Arrive at Aizawl Airport and transfer to hotel. Visit Durtlang Hills for panoramic city views, Solomon's Temple, and local markets. Overnight stay at Aizawl." },
+          { "day": "Day 02: Aizawl Sightseeing", "details": "Visit Mizoram State Museum, Reiek Heritage Village, and nearby villages to experience local Mizo culture. Evening free. Overnight stay." },
+          { "day": "Day 03: Departure", "details": "After breakfast, transfer to Aizawl Airport for onward journey." }
+        ],
+        "rates": [
+          { "vehicle": "A/C Swift Dzire / Etios", "price": 12600 },
+          { "vehicle": "Innova Crysta", "price": 16200 },
+          { "vehicle": "SUV(ertiga)", "price": 14500 },
+          { "vehicle": "A/C 12-Seater Tempo Traveler", "price": 22000 },
+          { "vehicle": "Force Urbania 13 seater van", "price": 24000 },
+          { "vehicle": "A/C 17-Seater Tempo Traveler", "price": 28000 },
+          { "vehicle": "A/C 25-Seater Tempo Traveler", "price": 36000 },
+          { "vehicle": "A/C 45-Seater Tempo Traveler", "price": 58000 }
+        ]
+      },
+      {
+        "name": "Serchhip & Tamdil Lake Adventure",
+        "duration": "4 Days / 3 Nights",
+        "itinerary": [
+          { "day": "Day 01: Arrival at Aizawl", "details": "Arrive and transfer to hotel. Evening free to explore Aizawl local markets. Overnight stay." },
+          { "day": "Day 02: Aizawl – Serchhip", "details": "Drive to Serchhip, visit Vantawng Falls (tallest waterfall in Mizoram) and local villages. Overnight stay at Serchhip." },
+          { "day": "Day 03: Serchhip – Tamdil Lake – Aizawl", "details": "Morning drive to Tamdil Lake (boating and nature walks). Return to Aizawl. Overnight stay." },
+          { "day": "Day 04: Departure", "details": "Transfer to Aizawl Airport for onward journey." }
+        ],
+        "rates": [
+          { "vehicle": "A/C Swift Dzire / Etios", "price": 14500 },
+          { "vehicle": "Innova Crysta", "price": 18500 },
+          { "vehicle": "SUV(ertiga)", "price": 16500 },
+          { "vehicle": "A/C 12-Seater Tempo Traveler", "price": 26000 },
+          { "vehicle": "Force Urbania 13 seater van", "price": 28000 },
+          { "vehicle": "A/C 17-Seater Tempo Traveler", "price": 32000 },
+          { "vehicle": "A/C 25-Seater Tempo Traveler", "price": 42000 },
+          { "vehicle": "A/C 45-Seater Tempo Traveler", "price": 66000 }
+        ]
+      },
+      {
+        "name": "Aizawl & Eco Village Experience",
+        "duration": "5 Days / 4 Nights",
+        "itinerary": [
+          { "day": "Day 01: Arrival at Aizawl", "details": "Arrive at Aizawl Airport, check in, visit Durtlang Hills and evening stroll at Bara Bazar. Overnight stay." },
+          { "day": "Day 02: Aizawl Local Tour", "details": "Explore Mizoram State Museum, Reiek Heritage Village, and Tuirial Dam viewpoint. Overnight stay." },
+          { "day": "Day 03: Day Trip to Eco Village", "details": "Visit nearby Eco Village to learn Mizo traditions, bamboo crafts, and farming practices. Return to Aizawl. Overnight stay." },
+          { "day": "Day 04: Serchhip & Vantawng Falls", "details": "Excursion to Serchhip for Vantawng Falls and nearby tribal villages. Return to Aizawl. Overnight stay." },
+          { "day": "Day 05: Departure", "details": "Transfer to Aizawl Airport for onward journey." }
+        ],
+        "rates": [
+          { "vehicle": "A/C Swift Dzire / Etios", "price": 17000 },
+          { "vehicle": "Innova Crysta", "price": 22000 },
+          { "vehicle": "SUV(ertiga)", "price": 19500 },
+          { "vehicle": "A/C 12-Seater Tempo Traveler", "price": 31000 },
+          { "vehicle": "Force Urbania 13 seater van", "price": 34000 },
+          { "vehicle": "A/C 17-Seater Tempo Traveler", "price": 40000 },
+          { "vehicle": "A/C 25-Seater Tempo Traveler", "price": 52000 },
+          { "vehicle": "A/C 45-Seater Tempo Traveler", "price": 80000 }
+        ]
+      },
+      {
+        "name": "Mizoram Nature & Culture Tour",
+        "duration": "4 Days / 3 Nights",
+        "itinerary": [
+          { "day": "Day 01: Arrival at Aizawl", "details": "Arrive and check in. Visit local markets and evening leisure. Overnight stay at Aizawl." },
+          { "day": "Day 02: Aizawl – Reiek Hills", "details": "Visit Reiek Hills for trekking, panoramic views, and Mizo village experience. Overnight stay at Aizawl." },
+          { "day": "Day 03: Tamdil Lake Excursion", "details": "Morning drive to Tamdil Lake for boating and nature exploration. Return to Aizawl. Overnight stay." },
+          { "day": "Day 04: Departure", "details": "After breakfast, transfer to Aizawl Airport for onward journey." }
+        ],
+        "rates": [
+          { "vehicle": "A/C Swift Dzire / Etios", "price": 14500 },
+          { "vehicle": "Innova Crysta", "price": 18500 },
+          { "vehicle": "SUV(ertiga)", "price": 16500 },
+          { "vehicle": "A/C 12-Seater Tempo Traveler", "price": 26000 },
+          { "vehicle": "Force Urbania 13 seater van", "price": 28000 },
+          { "vehicle": "A/C 17-Seater Tempo Traveler", "price": 32000 },
+          { "vehicle": "A/C 25-Seater Tempo Traveler", "price": 42000 },
+          { "vehicle": "A/C 45-Seater Tempo Traveler", "price": 66000 }
+        ]
+      }
+    ]
+  },
+
+  "Tripura": {
+    "keywords": ["tripura", "agartala", "umarpar", "neermahal", "unakoti"],
+    "bgImage": "https://images.herzindagi.info/image/2024/Feb/popular-places-to-visit-in-tripura.jpg",
+    "packages": [
+      {
+        "name": "Agartala & Neermahal Palace Tour",
+        "duration": "3 Days / 2 Nights",
+        "itinerary": [
+          { "day": "Day 01: Arrival at Agartala", "details": "Arrive at Agartala Airport/Railway Station. Check-in at hotel. Evening visit local markets and heritage spots. Overnight stay." },
+          { "day": "Day 02: Agartala – Neermahal Excursion", "details": "Drive to Neermahal Palace (Lake Palace). Enjoy boating and palace visit. Return to Agartala. Overnight stay." },
+          { "day": "Day 03: Departure", "details": "After breakfast, visit Ujjayanta Palace and Tripura State Museum. Transfer to airport/station for onward journey." }
+        ],
+        "rates": [
+          { "vehicle": "A/C Swift Dzire / Etios", "price": 12600 },
+          { "vehicle": "Innova Crysta", "price": 16200 },
+          { "vehicle": "SUV(ertiga)", "price": 14500 },
+          { "vehicle": "A/C 12-Seater Tempo Traveler", "price": 22000 },
+          { "vehicle": "Force Urbania 13 seater van", "price": 24000 },
+          { "vehicle": "A/C 17-Seater Tempo Traveler", "price": 28000 },
+          { "vehicle": "A/C 25-Seater Tempo Traveler", "price": 36000 },
+          { "vehicle": "A/C 45-Seater Tempo Traveler", "price": 58000 }
+        ]
+      },
+      {
+        "name": "Unakoti & Heritage Trip",
+        "duration": "4 Days / 3 Nights",
+        "itinerary": [
+          { "day": "Day 01: Arrival at Agartala", "details": "Arrive at Agartala and check in. Evening free. Overnight stay at hotel." },
+          { "day": "Day 02: Agartala – Unakoti Excursion", "details": "Drive to Unakoti (approx. 3–4 hrs). Explore ancient rock carvings and sculptures. Return to Agartala. Overnight stay." },
+          { "day": "Day 03: Neermahal & Sepahijala Wildlife Sanctuary", "details": "Visit Neermahal Palace and Sepahijala Wildlife Sanctuary. Overnight stay in Agartala." },
+          { "day": "Day 04: Departure", "details": "Transfer to Agartala Airport/Railway Station after breakfast." }
+        ],
+        "rates": [
+          { "vehicle": "A/C Swift Dzire / Etios", "price": 14500 },
+          { "vehicle": "Innova Crysta", "price": 18500 },
+          { "vehicle": "SUV(ertiga)", "price": 16500 },
+          { "vehicle": "A/C 12-Seater Tempo Traveler", "price": 26000 },
+          { "vehicle": "Force Urbania 13 seater van", "price": 28000 },
+          { "vehicle": "A/C 17-Seater Tempo Traveler", "price": 32000 },
+          { "vehicle": "A/C 25-Seater Tempo Traveler", "price": 42000 },
+          { "vehicle": "A/C 45-Seater Tempo Traveler", "price": 66000 }
+        ]
+      },
+      {
+        "name": "Agartala & Rural Experience",
+        "duration": "3 Days / 2 Nights",
+        "itinerary": [
+          { "day": "Day 01: Arrival at Agartala", "details": "Arrive at Agartala, check-in, visit Ujjayanta Palace and local markets. Overnight stay." },
+          { "day": "Day 02: Rural Trip to Local Villages", "details": "Visit nearby villages, experience local crafts, and taste authentic Tripura cuisine. Overnight stay at Agartala." },
+          { "day": "Day 03: Departure", "details": "Transfer to airport/railway station for onward journey." }
+        ],
+        "rates": [
+          { "vehicle": "A/C Swift Dzire / Etios", "price": 12600 },
+          { "vehicle": "Innova Crysta", "price": 16200 },
+          { "vehicle": "SUV(ertiga)", "price": 14500 },
+          { "vehicle": "A/C 12-Seater Tempo Traveler", "price": 22000 },
+          { "vehicle": "Force Urbania 13 seater van", "price": 24000 },
+          { "vehicle": "A/C 17-Seater Tempo Traveler", "price": 28000 },
+          { "vehicle": "A/C 25-Seater Tempo Traveler", "price": 36000 },
+          { "vehicle": "A/C 45-Seater Tempo Traveler", "price": 58000 }
+        ]
+      },
+      {
+        "name": "Agartala – Heritage & Nature Combo",
+        "duration": "4 Days / 3 Nights",
+        "itinerary": [
+          { "day": "Day 01: Arrival at Agartala", "details": "Check in to hotel. Evening visit local bazaars and markets. Overnight stay." },
+          { "day": "Day 02: Neermahal Palace Visit", "details": "Drive to Neermahal Palace, enjoy lake-side views and palace tour. Return to Agartala. Overnight stay." },
+          { "day": "Day 03: Sepahijala Wildlife & Rural Exploration", "details": "Morning visit to Sepahijala Wildlife Sanctuary. Afternoon visit rural villages and craft centers. Overnight stay." },
+          { "day": "Day 04: Departure", "details": "Transfer to Agartala Airport/Railway Station after breakfast." }
+        ],
+        "rates": [
+          { "vehicle": "A/C Swift Dzire / Etios", "price": 14500 },
+          { "vehicle": "Innova Crysta", "price": 18500 },
+          { "vehicle": "SUV(ertiga)", "price": 16500 },
+          { "vehicle": "A/C 12-Seater Tempo Traveler", "price": 26000 },
+          { "vehicle": "Force Urbania 13 seater van", "price": 28000 },
+          { "vehicle": "A/C 17-Seater Tempo Traveler", "price": 32000 },
+          { "vehicle": "A/C 25-Seater Tempo Traveler", "price": 42000 },
+          { "vehicle": "A/C 45-Seater Tempo Traveler", "price": 66000 }
+        ]
+      }
+    ]
+  },
+
+  "Sikkim": {
+    "keywords": ["sikkim", "gangtok", "pelling", "ravangla", "namchi", "tsomgo lake"],
+    "bgImage": "https://wallpaperaccess.com/full/4268736.jpg",
+    "packages": [
+      {
+        "name": "Gangtok & Tsomgo Lake Tour",
+        "duration": "4 Days / 3 Nights",
+        "itinerary": [
+          { "day": "Day 01: Arrival at Bagdogra – Transfer to Gangtok", "details": "Arrive at Bagdogra Airport/Railway Station and drive to Gangtok (approx. 4–5 hrs). Check-in at hotel. Evening free to explore MG Marg. Overnight stay." },
+          { "day": "Day 02: Gangtok Sightseeing", "details": "Visit Rumtek Monastery, Enchey Monastery, Namgyal Institute of Tibetology, and Hanuman Tok viewpoint. Overnight stay at Gangtok." },
+          { "day": "Day 03: Tsomgo Lake & Baba Mandir Excursion", "details": "Drive to Tsomgo Lake (40 km, 2 hrs). Visit Baba Harbhajan Singh Mandir and enjoy scenic views. Return to Gangtok. Overnight stay." },
+          { "day": "Day 04: Departure", "details": "Transfer to Bagdogra Airport/Railway Station for onward journey." }
+        ],
+        "rates": [
+          { "vehicle": "A/C Swift Dzire / Etios", "price": 14500 },
+          { "vehicle": "Innova Crysta", "price": 18500 },
+          { "vehicle": "SUV(ertiga)", "price": 16500 },
+          { "vehicle": "A/C 12-Seater Tempo Traveler", "price": 26000 },
+          { "vehicle": "Force Urbania 13 seater van", "price": 28000 },
+          { "vehicle": "A/C 17-Seater Tempo Traveler", "price": 32000 },
+          { "vehicle": "A/C 25-Seater Tempo Traveler", "price": 42000 },
+          { "vehicle": "A/C 45-Seater Tempo Traveler", "price": 66000 }
+        ]
+      },
+      {
+        "name": "Pelling & Rabangla Adventure",
+        "duration": "5 Days / 4 Nights",
+        "itinerary": [
+          { "day": "Day 01: Arrival at Bagdogra – Transfer to Pelling", "details": "Arrive and drive to Pelling (approx. 5–6 hrs). Evening free. Overnight stay at Pelling." },
+          { "day": "Day 02: Pelling Sightseeing", "details": "Visit Pemayangtse Monastery, Khecheopalri Lake, Rabdentse Ruins, and Singshore Bridge. Overnight stay at Pelling." },
+          { "day": "Day 03: Pelling – Rabangla", "details": "Drive to Rabangla. Visit Ralang Monastery and scenic viewpoints. Overnight stay at Rabangla." },
+          { "day": "Day 04: Rabangla – Gangtok", "details": "Drive to Gangtok (approx. 4 hrs). Visit Do Drul Chorten and local markets. Overnight stay at Gangtok." },
+          { "day": "Day 05: Departure", "details": "Transfer to Bagdogra Airport/Railway Station for onward journey." }
+        ],
+        "rates": [
+          { "vehicle": "A/C Swift Dzire / Etios", "price": 17000 },
+          { "vehicle": "Innova Crysta", "price": 22000 },
+          { "vehicle": "SUV(ertiga)", "price": 19500 },
+          { "vehicle": "A/C 12-Seater Tempo Traveler", "price": 31000 },
+          { "vehicle": "Force Urbania 13 seater van", "price": 34000 },
+          { "vehicle": "A/C 17-Seater Tempo Traveler", "price": 40000 },
+          { "vehicle": "A/C 25-Seater Tempo Traveler", "price": 52000 },
+          { "vehicle": "A/C 45-Seater Tempo Traveler", "price": 80000 }
+        ]
+      },
+      {
+        "name": "Gangtok – North Sikkim Explorer",
+        "duration": "5 Days / 4 Nights",
+        "itinerary": [
+          { "day": "Day 01: Arrival at Bagdogra – Transfer to Gangtok", "details": "Arrive and drive to Gangtok. Evening free. Overnight stay." },
+          { "day": "Day 02: Gangtok Sightseeing", "details": "Rumtek Monastery, Enchey Monastery, and MG Marg. Overnight stay at Gangtok." },
+          { "day": "Day 03: Gangtok – Lachen", "details": "Drive to Lachen (approx. 6–7 hrs). En route visit Singhik Viewpoint and Seven Sisters Waterfalls. Overnight stay at Lachen." },
+          { "day": "Day 04: Lachen – Gurudongmar Lake – Gangtok", "details": "Early morning excursion to Gurudongmar Lake. Return to Gangtok by evening. Overnight stay." },
+          { "day": "Day 05: Departure", "details": "Transfer to Bagdogra Airport/Railway Station for onward journey." }
+        ],
+        "rates": [
+          { "vehicle": "A/C Swift Dzire / Etios", "price": 17000 },
+          { "vehicle": "Innova Crysta", "price": 22000 },
+          { "vehicle": "SUV(ertiga)", "price": 19500 },
+          { "vehicle": "A/C 12-Seater Tempo Traveler", "price": 31000 },
+          { "vehicle": "Force Urbania 13 seater van", "price": 34000 },
+          { "vehicle": "A/C 17-Seater Tempo Traveler", "price": 40000 },
+          { "vehicle": "A/C 25-Seater Tempo Traveler", "price": 52000 },
+          { "vehicle": "A/C 45-Seater Tempo Traveler", "price": 80000 }
+        ]
+      },
+      {
+        "name": "Gangtok & Namchi Cultural Tour",
+        "duration": "4 Days / 3 Nights",
+        "itinerary": [
+          { "day": "Day 01: Arrival at Bagdogra – Gangtok", "details": "Arrive and transfer to Gangtok. Evening free. Overnight stay." },
+          { "day": "Day 02: Gangtok – Namchi Excursion", "details": "Visit Namchi to see the giant Buddha Statue, Char Dham, and Samdruptse Monastery. Return to Gangtok. Overnight stay." },
+          { "day": "Day 03: Gangtok Local Sightseeing", "details": "Rumtek Monastery, Do Drul Chorten, and MG Marg shopping. Overnight stay." },
+          { "day": "Day 04: Departure", "details": "Transfer to Bagdogra Airport/Railway Station for onward journey." }
+        ],
+        "rates": [
+          { "vehicle": "A/C Swift Dzire / Etios", "price": 14500 },
+          { "vehicle": "Innova Crysta", "price": 18500 },
+          { "vehicle": "SUV(ertiga)", "price": 16500 },
+          { "vehicle": "A/C 12-Seater Tempo Traveler", "price": 26000 },
+          { "vehicle": "Force Urbania 13 seater van", "price": 28000 },
+          { "vehicle": "A/C 17-Seater Tempo Traveler", "price": 32000 },
+          { "vehicle": "A/C 25-Seater Tempo Traveler", "price": 42000 },
+          { "vehicle": "A/C 45-Seater Tempo Traveler", "price": 66000 }
+        ]
+      }
+    ]
+  },
+
+  "WestBengal": {
+    "keywords": ["west bengal", "darjeeling", "gangtok", "siliguri", "kalimpong", "mirik"],
+    "bgImage": "https://www.holidify.com/images/bgImages/DARJEELING.jpg",
+    "packages": [
+      {
+        "name": "Darjeeling Heritage & Tea Garden Tour",
+        "duration": "4 Days / 3 Nights",
+        "itinerary": [
+          { "day": "Day 01: Arrival at Bagdogra – Transfer to Darjeeling", "details": "Arrive at Bagdogra Airport/Railway Station and drive to Darjeeling (approx. 3 hrs). Evening stroll at Chowrasta & Mall Road. Overnight stay at Darjeeling." },
+          { "day": "Day 02: Darjeeling Sightseeing", "details": "Early morning visit Tiger Hill for sunrise over Kanchenjunga, Batasia Loop, Ghoom Monastery, and Darjeeling Himalayan Railway (Toy Train). Afternoon visit Tea Gardens and local markets. Overnight stay." },
+          { "day": "Day 03: Mirik & Pashupati Mandir Excursion", "details": "Drive to Mirik Lake (Sumendu Lake), enjoy boating and scenic views. Return to Darjeeling for overnight stay." },
+          { "day": "Day 04: Departure", "details": "After breakfast, transfer to Bagdogra Airport/Railway Station for onward journey." }
+        ],
+        "rates": [
+          { "vehicle": "A/C Swift Dzire / Etios", "price": 14500 },
+          { "vehicle": "Innova Crysta", "price": 18500 },
+          { "vehicle": "SUV(ertiga)", "price": 16500 },
+          { "vehicle": "A/C 12-Seater Tempo Traveler", "price": 26000 },
+          { "vehicle": "Force Urbania 13 seater van", "price": 28000 },
+          { "vehicle": "A/C 17-Seater Tempo Traveler", "price": 32000 },
+          { "vehicle": "A/C 25-Seater Tempo Traveler", "price": 42000 },
+          { "vehicle": "A/C 45-Seater Tempo Traveler", "price": 66000 }
+        ]
+      },
+      {
+        "name": "Darjeeling – Kalimpong & Scenic Tour",
+        "duration": "5 Days / 4 Nights",
+        "itinerary": [
+          { "day": "Day 01: Arrival at Bagdogra – Transfer to Darjeeling", "details": "Arrive and transfer to Darjeeling. Evening at leisure. Overnight stay." },
+          { "day": "Day 02: Darjeeling Sightseeing", "details": "Tiger Hill sunrise, Batasia Loop, Ghoom Monastery, and Himalayan Mountaineering Institute. Overnight stay at Darjeeling." },
+          { "day": "Day 03: Darjeeling – Kalimpong", "details": "Drive to Kalimpong (approx. 2–3 hrs). Visit Zang Dhok Palri Phodang Monastery, Durpin Dara Hill, and local markets. Overnight stay at Kalimpong." },
+          { "day": "Day 04: Kalimpong – Gangtok", "details": "Drive to Gangtok (Sikkim border). En route visit scenic viewpoints. Evening leisure in Gangtok. Overnight stay." },
+          { "day": "Day 05: Departure", "details": "Transfer to Bagdogra Airport/Railway Station for onward journey." }
+        ],
+        "rates": [
+          { "vehicle": "A/C Swift Dzire / Etios", "price": 17000 },
+          { "vehicle": "Innova Crysta", "price": 22000 },
+          { "vehicle": "SUV(ertiga)", "price": 19500 },
+          { "vehicle": "A/C 12-Seater Tempo Traveler", "price": 31000 },
+          { "vehicle": "Force Urbania 13 seater van", "price": 34000 },
+          { "vehicle": "A/C 17-Seater Tempo Traveler", "price": 40000 },
+          { "vehicle": "A/C 25-Seater Tempo Traveler", "price": 52000 },
+          { "vehicle": "A/C 45-Seater Tempo Traveler", "price": 80000 }
+        ]
+      },
+      {
+        "name": "Darjeeling – Tea Gardens & Local Villages",
+        "duration": "3 Days / 2 Nights",
+        "itinerary": [
+          { "day": "Day 01: Arrival at Bagdogra – Transfer to Darjeeling", "details": "Arrive and drive to Darjeeling. Evening visit Chowrasta and Mall Road. Overnight stay." },
+          { "day": "Day 02: Tea Gardens & Villages Tour", "details": "Visit Happy Valley Tea Estate, explore local villages and markets. Afternoon Toy Train ride. Overnight stay at Darjeeling." },
+          { "day": "Day 03: Departure", "details": "Transfer to Bagdogra Airport/Railway Station after breakfast." }
+        ],
+        "rates": [
+          { "vehicle": "A/C Swift Dzire / Etios", "price": 12600 },
+          { "vehicle": "Innova Crysta", "price": 16200 },
+          { "vehicle": "SUV(ertiga)", "price": 14500 },
+          { "vehicle": "A/C 12-Seater Tempo Traveler", "price": 22000 },
+          { "vehicle": "Force Urbania 13 seater van", "price": 24000 },
+          { "vehicle": "A/C 17-Seater Tempo Traveler", "price": 28000 },
+          { "vehicle": "A/C 25-Seater Tempo Traveler", "price": 36000 },
+          { "vehicle": "A/C 45-Seater Tempo Traveler", "price": 58000 }
+        ]
+      },
+      {
+        "name": "Darjeeling – Mirik & Scenic North Bengal",
+        "duration": "4 Days / 3 Nights",
+        "itinerary": [
+          { "day": "Day 01: Arrival at Bagdogra – Transfer to Darjeeling", "details": "Check-in at hotel. Evening leisure at Chowrasta & local markets. Overnight stay." },
+          { "day": "Day 02: Darjeeling Sightseeing", "details": "Tiger Hill, Batasia Loop, Ghoom Monastery, Himalayan Mountaineering Institute. Overnight stay." },
+          { "day": "Day 03: Darjeeling – Mirik Excursion", "details": "Drive to Mirik for boating in Sumendu Lake and visit local orchards. Return to Darjeeling. Overnight stay." },
+          { "day": "Day 04: Departure", "details": "Transfer to Bagdogra Airport/Railway Station after breakfast." }
+        ],
+        "rates": [
+          { "vehicle": "A/C Swift Dzire / Etios", "price": 14500 },
+          { "vehicle": "Innova Crysta", "price": 18500 },
+          { "vehicle": "SUV(ertiga)", "price": 16500 },
+          { "vehicle": "A/C 12-Seater Tempo Traveler", "price": 26000 },
+          { "vehicle": "Force Urbania 13 seater van", "price": 28000 },
+          { "vehicle": "A/C 17-Seater Tempo Traveler", "price": 32000 },
+          { "vehicle": "A/C 25-Seater Tempo Traveler", "price": 42000 },
+          { "vehicle": "A/C 45-Seater Tempo Traveler", "price": 66000 }
+        ]
+      }
+    ]
+  },
+
+  "Madhya Pradesh": {
+    "keywords": ["madhya pradesh", "khajuraho", "bandhavgarh", "bhopal"],
+    "bgImage": "https://upload.wikimedia.org/wikipedia/commons/9/9e/Khajuraho_Temples_Exterior.jpg",
+    "packages": [
+      {
+        "name": "Khajuraho & Orchha Short Heritage",
+        "duration": "3 Days / 2 Nights",
+        "itinerary": [
+          { "day": "Day 01: Arrival Khajuraho – Temple Tour", "details": "Arrive Khajuraho. Visit Western Group of Temples (UNESCO), sound-and-light show in evening (if available). Overnight at Khajuraho." },
+          { "day": "Day 02: Khajuraho – Orchha", "details": "Drive to Orchha (approx. 3 hours). Explore Orchha Fort, Raja Mahal, Jahangir Mahal and riverside cenotaphs. Overnight at Orchha." },
+          { "day": "Day 03: Return & Departure via Jhansi/Bhopal", "details": "After breakfast depart to nearest rail/airport (Jhansi/Bhopal) for onward journey." }
+        ],
+        "kiloLimits": [150, 60, 150],
+        "kmLimit": "350 km per day",
+        "rates": [
+          { "vehicle": "A/C Swift Dzire / Etios", "price": 12600 },
+          { "vehicle": "Innova Crysta", "price": 16200 },
+          { "vehicle": "SUV(ertiga)", "price": 14500 },
+          { "vehicle": "A/C 12-Seater Tempo Traveler", "price": 22000 },
+          { "vehicle": "Force Urbania 13 seater van", "price": 24000 },
+          { "vehicle": "A/C 17-Seater Tempo Traveler", "price": 28000 },
+          { "vehicle": "A/C 25-Seater Tempo Traveler", "price": 36000 },
+          { "vehicle": "A/C 45-Seater Tempo Traveler", "price": 58000 }
+        ]
+      },
+      {
+        "name": "Wildlife & Temples (Bandhavgarh – Khajuraho)",
+        "duration": "5 Days / 4 Nights",
+        "itinerary": [
+          { "day": "Day 01: Arrival Jabalpur/Bandhavgarh – Transfer", "details": "Arrive and transfer to Bandhavgarh area for wildlife stay. Evening at leisure." },
+          { "day": "Day 02: Bandhavgarh Safari", "details": "Early morning and evening jeep safaris to try and spot tigers and other wildlife (park permits extra). Overnight near park." },
+          { "day": "Day 03: Bandhavgarh – Khajuraho", "details": "Drive to Khajuraho. Evening at leisure. Overnight at Khajuraho." },
+          { "day": "Day 04: Khajuraho Temple Tour", "details": "Full day exploring Western & Eastern Group of Temples and local museum. Overnight." },
+          { "day": "Day 05: Departure", "details": "Transfer to nearest rail/airport for onward journey." }
+        ],
+        "kiloLimits": [150, 60, 200],
+        "kmLimit": "350 km per day",
+        "rates": [
+          { "vehicle": "A/C Swift Dzire / Etios", "price": 17000 },
+          { "vehicle": "Innova Crysta", "price": 22000 },
+          { "vehicle": "SUV(ertiga)", "price": 19500 },
+          { "vehicle": "A/C 12-Seater Tempo Traveler", "price": 31000 },
+          { "vehicle": "Force Urbania 13 seater van", "price": 34000 },
+          { "vehicle": "A/C 17-Seater Tempo Traveler", "price": 40000 },
+          { "vehicle": "A/C 25-Seater Tempo Traveler", "price": 52000 },
+          { "vehicle": "A/C 45-Seater Tempo Traveler", "price": 80000 }
+        ]
+      }
+    ]
+  },
+
+  "Haryana": {
+    "keywords": ["haryana", "gurgaon", "kurukshetra", "panipat"],
+    "bgImage": "https://upload.wikimedia.org/wikipedia/commons/6/6a/Shri_Kurukshetra.jpg",
+    "packages": [
+      {
+        "name": "Gurgaon & Sultanpur Nature Escape",
+        "duration": "3 Days / 2 Nights",
+        "itinerary": [
+          { "day": "Day 01: Arrival Gurgaon – Leisure & Shopping", "details": "Arrive Gurgaon (Gurugram). Evening leisure at Cyber Hub and local malls. Overnight at Gurgaon." },
+          { "day": "Day 02: Sultanpur Bird Sanctuary & Nearby", "details": "Visit Sultanpur National Park for birdwatching (seasonal). Afternoon visit to local cultural spots. Overnight at Gurgaon." },
+          { "day": "Day 03: Local Markets & Departure", "details": "Morning free for shopping, then transfer to Delhi station/airport for onward journey." }
+        ],
+        "kiloLimits": [80, 40, 100],
+        "kmLimit": "250 km per day",
+        "rates": [
+          { "vehicle": "A/C Swift Dzire / Etios", "price": 12600 },
+          { "vehicle": "Innova Crysta", "price": 16200 },
+          { "vehicle": "SUV(ertiga)", "price": 14500 },
+          { "vehicle": "A/C 12-Seater Tempo Traveler", "price": 22000 },
+          { "vehicle": "Force Urbania 13 seater van", "price": 24000 },
+          { "vehicle": "A/C 17-Seater Tempo Traveler", "price": 28000 },
+          { "vehicle": "A/C 25-Seater Tempo Traveler", "price": 36000 },
+          { "vehicle": "A/C 45-Seater Tempo Traveler", "price": 58000 }
+        ]
+      },
+      {
+        "name": "Kurukshetra – Panipat Heritage Loop",
+        "duration": "4 Days / 3 Nights",
+        "itinerary": [
+          { "day": "Day 01: Arrival Kurukshetra – Sightseeing", "details": "Arrive Kurukshetra; visit Brahma Sarovar, Jyotisar and local temples. Overnight at Kurukshetra." },
+          { "day": "Day 02: Kurukshetra – Panipat", "details": "Drive to Panipat; visit Panipat Battlefields and Panipat Museum, local textile markets. Overnight at Panipat/nearby." },
+          { "day": "Day 03: Local Villages & Artisans", "details": "Explore local craft clusters and nearby heritage villages. Overnight." },
+          { "day": "Day 04: Return & Departure", "details": "Drive back to Delhi/Gurgaon for onward journey." }
+        ],
+        "kiloLimits": [100, 60, 150],
+        "kmLimit": "300 km per day",
+        "rates": [
+          { "vehicle": "A/C Swift Dzire / Etios", "price": 14500 },
+          { "vehicle": "Innova Crysta", "price": 18500 },
+          { "vehicle": "SUV(ertiga)", "price": 16500 },
+          { "vehicle": "A/C 12-Seater Tempo Traveler", "price": 26000 },
+          { "vehicle": "Force Urbania 13 seater van", "price": 28000 },
+          { "vehicle": "A/C 17-Seater Tempo Traveler", "price": 32000 },
+          { "vehicle": "A/C 25-Seater Tempo Traveler", "price": 42000 },
+          { "vehicle": "A/C 45-Seater Tempo Traveler", "price": 66000 }
+        ]
+      }
+    ]
+  },
+
+  "Punjab": {
+    "keywords": ["punjab", "amritsar", "chandigarh", "patiala"],
+    "bgImage": "https://upload.wikimedia.org/wikipedia/commons/0/0b/Golden_Temple-Atam_Pur.jpg",
+    "packages": [
+      {
+        "name": "Amritsar Short Pilgrimage",
+        "duration": "3 Days / 2 Nights",
+        "itinerary": [
+          { "day": "Day 01: Arrival Amritsar – Golden Temple", "details": "Arrive Amritsar. Visit Golden Temple (evening Aarti), Jallianwala Bagh and local markets for phulkari and handicrafts. Overnight at Amritsar." },
+          { "day": "Day 02: Wagah Border & Local Culture", "details": "Witness the Wagah Border ceremony in the evening. Daytime visit to Partition Museum or rural village visit (optional). Overnight at Amritsar." },
+          { "day": "Day 03: Patiala Day Trip or Departure", "details": "Optional day trip to Patiala to see Qila Mubarak and local bazaars; otherwise depart from Amritsar." }
+        ],
+        "kiloLimits": [120, 60, 150],
+        "kmLimit": "300 km per day",
+        "rates": [
+          { "vehicle": "A/C Swift Dzire / Etios", "price": 12600 },
+          { "vehicle": "Innova Crysta", "price": 16200 },
+          { "vehicle": "SUV(ertiga)", "price": 14500 },
+          { "vehicle": "A/C 12-Seater Tempo Traveler", "price": 22000 },
+          { "vehicle": "Force Urbania 13 seater van", "price": 24000 },
+          { "vehicle": "A/C 17-Seater Tempo Traveler", "price": 28000 },
+          { "vehicle": "A/C 25-Seater Tempo Traveler", "price": 36000 },
+          { "vehicle": "A/C 45-Seater Tempo Traveler", "price": 58000 }
+        ]
+      },
+      {
+        "name": "Chandigarh – Amritsar Cultural Circuit",
+        "duration": "4 Days / 3 Nights",
+        "itinerary": [
+          { "day": "Day 01: Arrival Chandigarh – Rock Garden & Rose Garden", "details": "Arrive Chandigarh; visit Rock Garden, Sukhna Lake, and Rose Garden. Overnight at Chandigarh." },
+          { "day": "Day 02: Chandigarh – Amritsar", "details": "Drive to Amritsar. Evening visit to Golden Temple for Aarti. Overnight at Amritsar." },
+          { "day": "Day 03: Amritsar – Wagah & Local", "details": "Wagah Border ceremony in the evening and daytime sightseeing like Partition Museum, Jallianwala Bagh. Overnight at Amritsar." },
+          { "day": "Day 04: Return to Chandigarh / Departure", "details": "Drive back to Chandigarh and transfer to onward transport." }
+        ],
+        "kiloLimits": [120, 60, 200],
+        "kmLimit": "350 km per day",
+        "rates": [
+          { "vehicle": "A/C Swift Dzire / Etios", "price": 14500 },
+          { "vehicle": "Innova Crysta", "price": 18500 },
+          { "vehicle": "SUV(ertiga)", "price": 16500 },
+          { "vehicle": "A/C 12-Seater Tempo Traveler", "price": 26000 },
+          { "vehicle": "Force Urbania 13 seater van", "price": 28000 },
+          { "vehicle": "A/C 17-Seater Tempo Traveler", "price": 32000 },
+          { "vehicle": "A/C 25-Seater Tempo Traveler", "price": 42000 },
+          { "vehicle": "A/C 45-Seater Tempo Traveler", "price": 66000 }
+        ]
+      }
+    ]
+  },
+
+  "Tamil Nadu": {
+    "keywords": ["tamilnadu", "chennai", "madurai", "ooty"],
+    "bgImage": "https://upload.wikimedia.org/wikipedia/commons/5/54/Meenakshi_Amman_Temple_entrance.jpg",
+    "packages": [
+      {
+        "name": "Chennai – Mahabalipuram Weekend",
+        "duration": "3 Days / 2 Nights",
+        "itinerary": [
+          { "day": "Day 01: Chennai Arrival – Marina & Fort St. George", "details": "Arrive Chennai. Visit Marina Beach, Fort St. George and Kapaleeswarar Temple. Overnight in Chennai." },
+          { "day": "Day 02: Mahabalipuram Excursion", "details": "Drive to Mahabalipuram to see Shore Temple, Arjuna's Penance and rock-cut temples. Return to Chennai for overnight or stay in Mahabalipuram by choice." },
+          { "day": "Day 03: Local Shopping & Departure", "details": "Morning shopping for Tanjore paintings and handicrafts. Transfer to station/airport." }
+        ],
+        "kiloLimits": [120, 60, 150],
+        "kmLimit": "300 km per day",
+        "rates": [
+          { "vehicle": "A/C Swift Dzire / Etios", "price": 12600 },
+          { "vehicle": "Innova Crysta", "price": 16200 },
+          { "vehicle": "SUV(ertiga)", "price": 14500 },
+          { "vehicle": "A/C 12-Seater Tempo Traveler", "price": 22000 },
+          { "vehicle": "Force Urbania 13 seater van", "price": 24000 },
+          { "vehicle": "A/C 17-Seater Tempo Traveler", "price": 28000 },
+          { "vehicle": "A/C 25-Seater Tempo Traveler", "price": 36000 },
+          { "vehicle": "A/C 45-Seater Tempo Traveler", "price": 58000 }
+        ]
+      },
+      {
+        "name": "Madurai & Ooty Hill Circuit",
+        "duration": "5 Days / 4 Nights",
+        "itinerary": [
+          { "day": "Day 01: Arrival Madurai – Meenakshi Temple", "details": "Arrive Madurai; visit Meenakshi Amman Temple, Thirumalai Nayakkar Palace. Overnight in Madurai." },
+          { "day": "Day 02: Madurai – Thekkady/Drive to Ooty (via Coimbatore)", "details": "Long scenic drive toward Ooty with optional stop at Thekkady or Coimbatore depending on route. Overnight en route or in Ooty." },
+          { "day": "Day 03: Ooty Sightseeing", "details": "Visit Botanical Gardens, Doddabetta Peak, Ooty Lake, and tea gardens. Overnight at Ooty." },
+          { "day": "Day 04: Coonoor Excursion", "details": "Day trip to Coonoor (Sim's Park, Lamb's Rock) and return to Ooty. Overnight." },
+          { "day": "Day 05: Return & Departure", "details": "Transfer to nearest rail/airport (Coimbatore) for onward travel." }
+        ],
+        "kiloLimits": [120, 60, 200],
+        "kmLimit": "350 km per day",
+        "rates": [
+          { "vehicle": "A/C Swift Dzire / Etios", "price": 17000 },
+          { "vehicle": "Innova Crysta", "price": 22000 },
+          { "vehicle": "SUV(ertiga)", "price": 19500 },
+          { "vehicle": "A/C 12-Seater Tempo Traveler", "price": 31000 },
+          { "vehicle": "Force Urbania 13 seater van", "price": 34000 },
+          { "vehicle": "A/C 17-Seater Tempo Traveler", "price": 40000 },
+          { "vehicle": "A/C 25-Seater Tempo Traveler", "price": 52000 },
+          { "vehicle": "A/C 45-Seater Tempo Traveler", "price": 80000 }
+        ]
+      }
+    ]
+  },
+
+  "Karnataka": {
+    "keywords": ["karnataka", "bengaluru", "coorg", "hampi"],
+    "bgImage": "https://upload.wikimedia.org/wikipedia/commons/7/75/Hampi_Vittala_Temple_Stone_Chariot.jpg",
+    "packages": [
+      {
+        "name": "Bengaluru – Coorg Quick Retreat",
+        "duration": "3 Days / 2 Nights",
+        "itinerary": [
+          { "day": "Day 01: Arrival Bengaluru – City Sights", "details": "Arrive Bengaluru. Visit Lalbagh Botanical Garden, Cubbon Park, and MG Road/Brigade for evenings. Overnight in Bengaluru." },
+          { "day": "Day 02: Bengaluru – Coorg (Madikeri)", "details": "Drive to Coorg (approx. 5–6 hours). Visit Abbey Falls, Raja's Seat for sunset. Overnight in Coorg." },
+          { "day": "Day 03: Coffee Plantations & Departure", "details": "Explore coffee plantation tour in the morning. Drive back to Bengaluru or transfer to nearest airport for onward journey." }
+        ],
+        "kiloLimits": [150, 60, 200],
+        "kmLimit": "350 km per day",
+        "rates": [
+          { "vehicle": "A/C Swift Dzire / Etios", "price": 12600 },
+          { "vehicle": "Innova Crysta", "price": 16200 },
+          { "vehicle": "SUV(ertiga)", "price": 14500 },
+          { "vehicle": "A/C 12-Seater Tempo Traveler", "price": 22000 },
+          { "vehicle": "Force Urbania 13 seater van", "price": 24000 },
+          { "vehicle": "A/C 17-Seater Tempo Traveler", "price": 28000 },
+          { "vehicle": "A/C 25-Seater Tempo Traveler", "price": 36000 },
+          { "vehicle": "A/C 45-Seater Tempo Traveler", "price": 58000 }
+        ]
+      },
+      {
+        "name": "Hampi Heritage & Bangalore",
+        "duration": "4 Days / 3 Nights",
+        "itinerary": [
+          { "day": "Day 01: Arrival Bengaluru – City Highlights", "details": "Arrive Bengaluru, city tour and overnight." },
+          { "day": "Day 02: Bengaluru – Hampi (Drive/Train)", "details": "Travel to Hampi (overnight drive or rail). On arrival visit Virupaksha Temple and local ruins. Overnight at Hampi." },
+          { "day": "Day 03: Hampi Full Day Sightseeing", "details": "Explore Vittala Temple complex, Stone Chariot, Royal Enclosure, and Hemakuta Hill viewpoints. Overnight at Hampi." },
+          { "day": "Day 04: Return to Bengaluru & Departure", "details": "Return to Bengaluru and transfer to your onward transport." }
+        ],
+        "kiloLimits": [150, 60, 200],
+        "kmLimit": "350 km per day",
+        "rates": [
+          { "vehicle": "A/C Swift Dzire / Etios", "price": 14500 },
+          { "vehicle": "Innova Crysta", "price": 18500 },
+          { "vehicle": "SUV(ertiga)", "price": 16500 },
+          { "vehicle": "A/C 12-Seater Tempo Traveler", "price": 26000 },
+          { "vehicle": "Force Urbania 13 seater van", "price": 28000 },
+          { "vehicle": "A/C 17-Seater Tempo Traveler", "price": 32000 },
+          { "vehicle": "A/C 25-Seater Tempo Traveler", "price": 42000 },
+          { "vehicle": "A/C 45-Seater Tempo Traveler", "price": 66000 }
+        ]
+      }
+    ]
+  },
+
+  "Andhra Pradesh": {
+    "keywords": ["andhra pradesh", "visakhapatnam", "tirupati", "amaravati"],
+    "bgImage": "https://upload.wikimedia.org/wikipedia/commons/2/2a/Araku_Valley.jpg",
+    "packages": [
+      {
+        "name": "Visakhapatnam Coastal Break",
+        "duration": "3 Days / 2 Nights",
+        "itinerary": [
+          { "day": "Day 01: Arrival Vizag – Beaches & RK Beach", "details": "Arrive Visakhapatnam. Visit RK Beach, Submarine Museum (INS Kurusura), and local promenades. Overnight at Vizag." },
+          { "day": "Day 02: Kailasagiri & Araku Valley Excursion", "details": "Morning visit Kailasagiri viewpoint, then day trip to Araku Valley (if time) or Borra Caves. Return to Vizag for overnight." },
+          { "day": "Day 03: Local Markets & Departure", "details": "Shopping for local handicrafts, transfer to station/airport for onward travel." }
+        ],
+        "kiloLimits": [120, 60, 150],
+        "kmLimit": "300 km per day",
+        "rates": [
+          { "vehicle": "A/C Swift Dzire / Etios", "price": 12600 },
+          { "vehicle": "Innova Crysta", "price": 16200 },
+          { "vehicle": "SUV(ertiga)", "price": 14500 },
+          { "vehicle": "A/C 12-Seater Tempo Traveler", "price": 22000 },
+          { "vehicle": "Force Urbania 13 seater van", "price": 24000 },
+          { "vehicle": "A/C 17-Seater Tempo Traveler", "price": 28000 },
+          { "vehicle": "A/C 25-Seater Tempo Traveler", "price": 36000 },
+          { "vehicle": "A/C 45-Seater Tempo Traveler", "price": 58000 }
+        ]
+      },
+      {
+        "name": "Temple Trail: Visakhapatnam – Tirupati",
+        "duration": "4 Days / 3 Nights",
+        "itinerary": [
+          { "day": "Day 01: Arrival Visakhapatnam – City Sights", "details": "Arrive Vizag; local sightseeing and evening at RK Beach. Overnight." },
+          { "day": "Day 02: Vizag – Araku Valley/Borra Caves", "details": "Full-day trip to Araku Valley and Borra Caves. Overnight at Vizag/Araku (based on hotel)." },
+          { "day": "Day 03: Transfer to Tirupati", "details": "Drive to Tirupati (or take train/flight option). Evening at leisure in Tirupati. Overnight." },
+          { "day": "Day 04: Tirupati Darshan & Departure", "details": "Tirupati darshan (timings & quota permitting) or visit Sri Venkateswara Temple complex and local sights. Transfer to departure point." }
+        ],
+        "kiloLimits": [120, 60, 200],
+        "kmLimit": "350 km per day",
+        "rates": [
+          { "vehicle": "A/C Swift Dzire / Etios", "price": 14500 },
+          { "vehicle": "Innova Crysta", "price": 18500 },
+          { "vehicle": "SUV(ertiga)", "price": 16500 },
+          { "vehicle": "A/C 12-Seater Tempo Traveler", "price": 26000 },
+          { "vehicle": "Force Urbania 13 seater van", "price": 28000 },
+          { "vehicle": "A/C 17-Seater Tempo Traveler", "price": 32000 },
+          { "vehicle": "A/C 25-Seater Tempo Traveler", "price": 42000 },
+          { "vehicle": "A/C 45-Seater Tempo Traveler", "price": 66000 }
+        ]
+      }
+    ]
+  },
+
+  "Telangana": {
+    "keywords": ["telangana", "hyderabad", "warangal"],
+    "bgImage": "https://www.abhibus.com/blog/wp-content/uploads/2023/03/charminar-hyderabad-entryfee-timings-tour-package-header-1-1024x512.jpg",
+    "packages": [
+      {
+        "name": "Hyderabad Heritage Weekend",
+        "duration": "3 Days / 2 Nights",
+        "itinerary": [
+          { "day": "Day 01: Hyderabad Arrival – Charminar & Local Bazaars", "details": "Arrive Hyderabad. Visit Charminar, Laad Bazaar, and nearby Mecca Masjid. Evening tasting of Hyderabadi cuisine (biryani). Overnight in Hyderabad." },
+          { "day": "Day 02: Golconda Fort & Qutb Shahi Tombs", "details": "Visit Golconda Fort with light-and-sound (if available), Qutb Shahi Tombs, and Salar Jung Museum. Evening at Hussain Sagar Lake (Necklace Road). Overnight." },
+          { "day": "Day 03: Local Markets & Departure", "details": "Morning for shopping or Ramoji Film City optional (extra). Transfer to airport/railway for onward journey." }
+        ],
+        "kiloLimits": [100, 60, 120],
+        "kmLimit": "300 km per day",
+        "rates": [
+          { "vehicle": "A/C Swift Dzire / Etios", "price": 12600 },
+          { "vehicle": "Innova Crysta", "price": 16200 },
+          { "vehicle": "SUV(ertiga)", "price": 14500 },
+          { "vehicle": "A/C 12-Seater Tempo Traveler", "price": 22000 },
+          { "vehicle": "Force Urbania 13 seater van", "price": 24000 },
+          { "vehicle": "A/C 17-Seater Tempo Traveler", "price": 28000 },
+          { "vehicle": "A/C 25-Seater Tempo Traveler", "price": 36000 },
+          { "vehicle": "A/C 45-Seater Tempo Traveler", "price": 58000 }
+        ]
+      },
+      {
+        "name": "Hyderabad – Warangal Cultural Loop",
+        "duration": "4 Days / 3 Nights",
+        "itinerary": [
+          { "day": "Day 01: Hyderabad Arrival & City Sights", "details": "Arrive Hyderabad. City tour including Charminar & Salar Jung Museum. Overnight Hyderabad." },
+          { "day": "Day 02: Hyderabad – Warangal", "details": "Drive to Warangal (approx. 3 hours). Visit Warangal Fort, Thousand Pillar Temple, and local bazaars. Overnight at Warangal." },
+          { "day": "Day 03: Pakhal Lake & Local", "details": "Visit Pakhal Lake and nearby scenic spots, local temples. Return to Warangal for overnight." },
+          { "day": "Day 04: Return to Hyderabad & Departure", "details": "Drive back to Hyderabad and transfer to station/airport." }
+        ],
+        "kiloLimits": [100, 60, 150],
+        "kmLimit": "300 km per day",
+        "rates": [
+          { "vehicle": "A/C Swift Dzire / Etios", "price": 14500 },
+          { "vehicle": "Innova Crysta", "price": 18500 },
+          { "vehicle": "SUV(ertiga)", "price": 16500 },
+          { "vehicle": "A/C 12-Seater Tempo Traveler", "price": 26000 },
+          { "vehicle": "Force Urbania 13 seater van", "price": 28000 },
+          { "vehicle": "A/C 17-Seater Tempo Traveler", "price": 32000 },
+          { "vehicle": "A/C 25-Seater Tempo Traveler", "price": 42000 },
+          { "vehicle": "A/C 45-Seater Tempo Traveler", "price": 66000 }
+        ]
+      }
+    ]
+  },
+
+  "Rajasthan": {
+    "keywords": ["rajasthan", "jaipur", "udaipur", "jodhpur"],
+    "bgImage": "https://s7ap1.scene7.com/is/image/incredibleindia/hawa-mahal-jaipur-rajasthan-city-1-hero?qlt=82&ts=1742200253577",
+    "packages": [
+      {
+        "name": "Jaipur – Udaipur Heritage Tour",
+        "duration": "5 Days / 4 Nights",
+        "itinerary": [
+          { "day": "Day 01: Arrival at Jaipur", "details": "On arrival at Jaipur airport/railway station, transfer to the hotel. After freshening up, visit City Palace, Jantar Mantar, and the magnificent Hawa Mahal (Palace of Winds). In the evening, enjoy shopping at the local bazaars. Overnight stay at Jaipur." },
+          { "day": "Day 02: Jaipur Sightseeing", "details": "After breakfast, proceed to visit Amber Fort and enjoy an elephant ride/jeep ride to the fort. Later, visit Jaigarh Fort, Nahargarh Fort, and Jal Mahal. Evening at leisure. Overnight stay at Jaipur." },
+          { "day": "Day 03: Jaipur – Udaipur (By Road / 6-7 hrs)", "details": "Check out after breakfast and drive towards Udaipur, the 'City of Lakes'. En route, visit Chittorgarh Fort – the largest fort in India and a UNESCO World Heritage Site. On arrival at Udaipur, check in to the hotel. Evening leisure by Lake Pichola. Overnight stay at Udaipur." },
+          { "day": "Day 04: Udaipur Sightseeing", "details": "After breakfast, enjoy full-day sightseeing in Udaipur. Visit the City Palace (one of the largest palace complexes in Rajasthan), Saheliyon Ki Bari, Jagdish Temple, and Fateh Sagar Lake. In the evening, enjoy a boat ride at Lake Pichola and visit Jag Mandir. Overnight stay at Udaipur." },
+          { "day": "Day 05: Udaipur Departure", "details": "After breakfast, check out from hotel. Depending on your flight/train schedule, visit Shilpgram or local markets. Later, transfer to Udaipur airport/railway station for onward journey. Tour Ends." }
+        ],
+        "kiloLimits": [80, 70, 400, 60, 20],
+        "kmLimit": "300 km per day",
+        "rates": [
+          { "vehicle": "A/C Swift Dzire / Etios", "price": 17000 },
+          { "vehicle": "Innova Crysta", "price": 22000 },
+          { "vehicle": "SUV(ertiga)", "price": 19500 },
+          { "vehicle": "A/C 12-Seater Tempo Traveler", "price": 31000 },
+          { "vehicle": "Force Urbania 13 seater van", "price": 34000 },
+          { "vehicle": "A/C 17-Seater Tempo Traveler", "price": 40000 },
+          { "vehicle": "A/C 25-Seater Tempo Traveler", "price": 52000 },
+          { "vehicle": "A/C 45-Seater Tempo Traveler", "price": 80000 }
+        ]
+      },
+      {
+        "name": "Royal Jaipur Weekend",
+        "duration": "3 Days / 2 Nights",
+        "itinerary": [
+          "Day 1: Arrival Jaipur, City Palace & Hawa Mahal.",
+          "Day 2: Amber Fort & Jaigarh Fort.",
+          "Day 3: Local shopping, leisure & departure."
+        ],
+        "kiloLimits": [60, 70, 40],
+        "kmLimit": "250 km per day",
+        "rates": [
+          { "vehicle": "A/C Swift Dzire / Etios", "price": 12600 },
+          { "vehicle": "Innova Crysta", "price": 16200 },
+          { "vehicle": "SUV(ertiga)", "price": 14500 },
+          { "vehicle": "A/C 12-Seater Tempo Traveler", "price": 22000 },
+          { "vehicle": "Force Urbania 13 seater van", "price": 24000 },
+          { "vehicle": "A/C 17-Seater Tempo Traveler", "price": 28000 },
+          { "vehicle": "A/C 25-Seater Tempo Traveler", "price": 36000 },
+          { "vehicle": "A/C 45-Seater Tempo Traveler", "price": 58000 }
+        ]
+      },
+      {
+        "name": "Jodhpur Blue City Escape",
+        "duration": "3 Days / 2 Nights",
+        "itinerary": [
+          { "day": "Day 01: Arrival in Jodhpur", "details": "Arrive at Jodhpur airport/railway station. Visit Mehrangarh Fort and Jaswant Thada. Evening leisure at local markets near Clock Tower. Overnight stay in Jodhpur." },
+          { "day": "Day 02: Jodhpur Sightseeing", "details": "After breakfast, visit Umaid Bhawan Palace, Mandore Gardens, and stepwells (Toorji ka Jhalra). Evening free for shopping and local cuisine. Overnight stay in Jodhpur." },
+          { "day": "Day 03: Departure", "details": "Morning at leisure. Optional Bishnoi Village Safari (if time permits). Drop at Jodhpur airport/railway station. Tour ends." }
+        ],
+        "kiloLimits": [50, 60, 40],
+        "kmLimit": "250 km per day",
+        "rates": [
+          { "vehicle": "A/C Swift Dzire / Etios", "price": 12600 },
+          { "vehicle": "Innova Crysta", "price": 17500 },
+          { "vehicle": "SUV(ertiga)", "price": 14500 },
+          { "vehicle": "A/C 12-Seater Tempo Traveler", "price": 32500 },
+          { "vehicle": "Force Urbania 13 seater van", "price": 35000 },
+          { "vehicle": "A/C 17-Seater Tempo Traveler", "price": 42000 },
+          { "vehicle": "A/C 25-Seater Tempo Traveler", "price": 55000 },
+          { "vehicle": "A/C 45-Seater Tempo Traveler", "price": 70500 }
+        ]
+      }
+    ]
+  },
+
+  "Uttarakhand": {
+    "keywords": ["uttarakhand", "nainital", "mussoorie"],
+    "bgImage": "https://deih43ym53wif.cloudfront.net/Uttarakhand-kuari-%20pass-india-shutterstock_414329779.jpg_6b2ecd2c47.jpg",
+    "packages": [
+      {
+        "name": "Nainital & Jim Corbett Tour",
+        "duration": "5 Days / 4 Nights",
+        "itinerary": [
+          { "day": "Day 01: Delhi – Nainital (Approx. 7–8 hrs drive)", "details": "Early morning pick up from Delhi and proceed towards Nainital, a beautiful hill station in Uttarakhand surrounded by lush green hills. On arrival, check into the hotel. Evening free for leisure – take a walk around Mall Road, explore the Tibetan Market, or enjoy boating at Naini Lake under the stars. Overnight stay at Nainital." },
+          { "day": "Day 02: Nainital Sightseeing", "details": "After breakfast, enjoy full-day sightseeing of Nainital. Visit Naina Devi Temple, Snow View Point (via ropeway), Tiffin Top, and Raj Bhawan. Spend time at the scenic Naini Lake – boating, yachting, or just relaxing by the lakeside. Evening for shopping at Mall Road. Overnight stay in Nainital." },
+          { "day": "Day 03: Nainital – Corbett (Approx. 3–4 hrs drive)", "details": "After breakfast, drive towards Jim Corbett National Park, India's oldest and most famous tiger reserve. En route, you may stop at Corbett Museum or Corbett Falls. On arrival, check into the wildlife resort. Evening free for leisure or nature walk by the Kosi River. Dinner and overnight stay at resort." },
+          { "day": "Day 04: Corbett Safari & Leisure", "details": "Early morning Jeep Safari inside Corbett National Park to spot tigers, elephants, deer, and a variety of birds. Return to resort for breakfast. Day free for leisure – you can enjoy resort activities like swimming, indoor games, or relax amidst nature. Optional evening safari (at extra cost). Dinner and overnight stay at resort." },
+          { "day": "Day 05: Corbett – Delhi (Approx. 6–7 hrs drive)", "details": "After breakfast, check out from the resort and drive back to Delhi. En route, stop for refreshments. Reach Delhi by evening. Tour concludes with fond memories of the hills and wildlife." }
+        ],
+        "kiloLimits": [300, 60, 90, 50, 300],
+        "kmLimit": "350 km per day",
+        "rates": [
+          { "vehicle": "A/C Swift Dzire / Etios", "price": 22000 },
+          { "vehicle": "Innova Crysta", "price": 29000 },
+          { "vehicle": "SUV(ertiga)", "price": 25000 },
+          { "vehicle": "A/C 12-Seater Tempo Traveler", "price": 52000 },
+          { "vehicle": "Force Urbania 13 seater van", "price": 56000 },
+          { "vehicle": "A/C 17-Seater Tempo Traveler", "price": 64000 },
+          { "vehicle": "A/C 25-Seater Tempo Traveler", "price": 69000 },
+          { "vehicle": "A/C 45-Seater Tempo Traveler", "price": 105000 }
+        ]
+      },
+      {
+        "name": "Mussoorie Weekend Break",
+        "duration": "3 Days / 2 Nights",
+        "itinerary": [
+          { "day": "Day 01: Delhi – Mussoorie (Approx. 6–7 hrs drive)", "details": "Start your journey from Delhi in the morning and drive towards Mussoorie, the 'Queen of Hills'. On arrival, check into your hotel and freshen up. In the evening, stroll along Mall Road, explore Camel's Back Road, and enjoy a ropeway ride to Gun Hill for breathtaking views of the Himalayan peaks. Overnight stay at Mussoorie." },
+          { "day": "Day 02: Mussoorie Sightseeing", "details": "After breakfast, embark on a full-day sightseeing tour. Visit Kempty Falls, Company Garden, and the Tibetan Buddhist Temple. Later, proceed to Lal Tibba – the highest point in Mussoorie, offering panoramic views of the snow-clad mountains. Evening at leisure for shopping on Mall Road or trying local cafes. Overnight stay at Mussoorie." },
+          { "day": "Day 03: Mussoorie – Delhi", "details": "After breakfast, check out from the hotel. If time permits, visit Mussoorie Lake or Jharipani Falls for a short stopover. Later, begin your drive back to Delhi with unforgettable memories of your hill retreat. Tour ends on arrival." }
+        ],
+        "kiloLimits": [280, 60, 280],
+        "kmLimit": "300 km per day",
+        "rates": [
+          { "vehicle": "A/C Swift Dzire / Etios", "price": 14500 },
+          { "vehicle": "Innova Crysta", "price": 18500 },
+          { "vehicle": "SUV(ertiga)", "price": 16500 },
+          { "vehicle": "A/C 12-Seater Tempo Traveler", "price": 26000 },
+          { "vehicle": "Force Urbania 13 seater van", "price": 28000 },
+          { "vehicle": "A/C 17-Seater Tempo Traveler", "price": 32000 },
+          { "vehicle": "A/C 25-Seater Tempo Traveler", "price": 42000 },
+          { "vehicle": "A/C 45-Seater Tempo Traveler", "price": 66000 }
+        ]
+      },
+      {
+        "name": "Quick Mussoorie Trip",
+        "duration": "2 Days / 1 Night",
+        "itinerary": [
+          { "day": "Day 01: Delhi – Mussoorie (Approx. 6–7 hrs drive)", "details": "Early morning departure from Delhi and proceed towards Mussoorie, popularly known as the 'Queen of Hills'. On arrival, check into the hotel. Later, explore Mall Road, Camel's Back Road, and Gun Hill (via ropeway) for panoramic views of the Himalayas. Evening free for leisure and shopping. Overnight stay at Mussoorie." },
+          { "day": "Day 02: Mussoorie Sightseeing – Delhi", "details": "After breakfast, proceed for local sightseeing including Kempty Falls, Company Garden, and Lal Tibba (the highest point of Mussoorie). Enjoy scenic views and photography. Afternoon, check out and start drive back to Delhi with fond memories. Tour ends on arrival." }
+        ],
+        "kiloLimits": [280, 280],
+        "kmLimit": "300 km per day",
+        "rates": [
+          { "vehicle": "A/C Swift Dzire / Etios", "price": 12600 },
+          { "vehicle": "Innova Crysta", "price": 16200 },
+          { "vehicle": "SUV(ertiga)", "price": 14500 },
+          { "vehicle": "A/C 12-Seater Tempo Traveler", "price": 22000 },
+          { "vehicle": "Force Urbania 13 seater van", "price": 24000 },
+          { "vehicle": "A/C 17-Seater Tempo Traveler", "price": 28000 },
+          { "vehicle": "A/C 25-Seater Tempo Traveler", "price": 36000 },
+          { "vehicle": "A/C 45-Seater Tempo Traveler", "price": 58000 }
+        ]
+      },
+      {
+        "name": "Mussoorie Leisure Trip",
+        "duration": "3 Days / 2 Nights",
+        "itinerary": [
+          { "day": "Day 01: Delhi – Mussoorie (Approx. 6–7 hrs drive)", "details": "Start your journey from Delhi in the morning and drive towards Mussoorie, the 'Queen of Hills'. On arrival, check into your hotel and freshen up. In the evening, stroll along Mall Road, explore Camel's Back Road, and enjoy a ropeway ride to Gun Hill for breathtaking views of the Himalayan peaks. Overnight stay at Mussoorie." },
+          { "day": "Day 02: Mussoorie Sightseeing", "details": "After breakfast, embark on a full-day sightseeing tour. Visit Kempty Falls, Company Garden, and the Tibetan Buddhist Temple. Later, proceed to Lal Tibba – the highest point in Mussoorie, offering panoramic views of the snow-clad mountains. Evening at leisure for shopping on Mall Road or trying local cafes. Overnight stay at Mussoorie." },
+          { "day": "Day 03: Mussoorie – Delhi", "details": "After breakfast, check out from the hotel. If time permits, visit Mussoorie Lake or Jharipani Falls for a short stopover. Later, begin your drive back to Delhi with unforgettable memories of your hill retreat. Tour ends on arrival." }
+        ],
+        "kiloLimits": [280, 280],
+        "kmLimit": "300 km per day",
+        "rates": [
+          { "vehicle": "A/C Swift Dzire / Etios", "price": 14500 },
+          { "vehicle": "Innova Crysta", "price": 18500 },
+          { "vehicle": "SUV(ertiga)", "price": 16500 },
+          { "vehicle": "A/C 12-Seater Tempo Traveler", "price": 26000 },
+          { "vehicle": "Force Urbania 13 seater van", "price": 28000 },
+          { "vehicle": "A/C 17-Seater Tempo Traveler", "price": 32000 },
+          { "vehicle": "A/C 25-Seater Tempo Traveler", "price": 42000 },
+          { "vehicle": "A/C 45-Seater Tempo Traveler", "price": 66000 }
+        ]
+      }
+    ]
+  },
+
+  "Goa": {
+    "keywords": ["goa", "beach", "panjim"],
+    "bgImage": "https://static.independent.co.uk/s3fs-public/thumbnails/image/2019/10/18/16/goa-overview.jpg",
+    "packages": [
+      {
+        "name": "Goa Beach Holiday",
+        "duration": "3 Days / 2 Nights",
+        "itinerary": [
+          { "day": "Day 01: Arrival in Goa", "details": "Arrive at Goa airport/railway station and transfer to hotel. Check-in and relax at Calangute Beach. In the evening, enjoy the vibrant nightlife at Tito's Lane or beach shacks. Overnight stay in Goa." },
+          { "day": "Day 02: North Goa Tour", "details": "After breakfast, proceed for a full-day North Goa sightseeing. Visit Fort Aguada, Anjuna Beach, Vagator Beach, and Baga Beach. Enjoy water sports (optional) or relax by the beach. Evening free for shopping or nightlife. Overnight stay in Goa." },
+          { "day": "Day 03: South Goa & Departure", "details": "Post breakfast, check out and explore South Goa. Visit Basilica of Bom Jesus, Miramar Beach, and Dona Paula viewpoint. Later, transfer to airport/railway station for departure. Tour ends." }
+        ],
+        "kmLimit": "250 km per day",
+        "rates": [
+          { "vehicle": "A/C Swift Dzire / Etios", "price": 12600 },
+          { "vehicle": "Innova Crysta", "price": 16200 },
+          { "vehicle": "SUV(ertiga)", "price": 14500 },
+          { "vehicle": "A/C 12-Seater Tempo Traveler", "price": 22000 },
+          { "vehicle": "Force Urbania 13 seater van", "price": 24000 },
+          { "vehicle": "A/C 17-Seater Tempo Traveler", "price": 28000 },
+          { "vehicle": "A/C 25-Seater Tempo Traveler", "price": 36000 },
+          { "vehicle": "A/C 45-Seater Tempo Traveler", "price": 58000 }
+        ]
+      },
+      {
+        "name": "Quick Goa Getaway",
+        "duration": "2 Days / 1 Night",
+        "itinerary": [
+          { "day": "Day 01: Arrival & North Goa", "details": "Arrive in Goa, transfer to hotel and check-in. Later, head out for North Goa sightseeing – Fort Aguada, Candolim Beach, and Baga Beach. Evening free to enjoy nightlife or beachside cafes. Overnight stay in Goa." },
+          { "day": "Day 02: South Goa & Departure", "details": "After breakfast, check out and visit Basilica of Bom Jesus, Miramar Beach, and Dona Paula viewpoint. Later, proceed to the airport/railway station for your return journey. Tour ends." }
+        ],
+        "kmLimit": "200 km per day",
+        "rates": [
+          { "vehicle": "A/C Swift Dzire / Etios", "price": 10500 },
+          { "vehicle": "Innova Crysta", "price": 13500 },
+          { "vehicle": "SUV(ertiga)", "price": 12000 },
+          { "vehicle": "A/C 12-Seater Tempo Traveler", "price": 18500 },
+          { "vehicle": "Force Urbania 13 seater van", "price": 20000 },
+          { "vehicle": "A/C 17-Seater Tempo Traveler", "price": 24000 },
+          { "vehicle": "A/C 25-Seater Tempo Traveler", "price": 30000 },
+          { "vehicle": "A/C 45-Seater Tempo Traveler", "price": 48000 }
+        ]
+      }
+    ]
+  },
+
+  "Kashmir": {
+    "keywords": ["kashmir", "srinagar", "gulmarg", "pahalgam", "dal lake"],
+    "bgImage": "https://www.holidify.com/images/bgImages/KASHMIR.jpg",
+    "packages": [
+      {
+        "name": "Kashmir Paradise Tour",
+        "duration": "3 Days / 2 Nights",
+        "itinerary": [
+          { "day": "Day 01: Arrival in Srinagar", "details": "On arrival, check-in at a houseboat/hotel. Enjoy Shikara ride on Dal Lake and explore Mughal Gardens – Shalimar Bagh, Nishat Bagh." },
+          { "day": "Day 02: Excursion to Gulmarg", "details": "Drive to Gulmarg (approx. 2 hrs). Enjoy Gondola ride (optional), meadows, and snow activities. Return to Srinagar by evening." },
+          { "day": "Day 03: Departure", "details": "After breakfast, visit Shankaracharya Temple and local Srinagar markets. Drop at airport. Tour ends." }
+        ],
+        "kmLimit": "250 km per day",
+        "rates": [
+          { "vehicle": "A/C Swift Dzire / Etios", "price": 14500 },
+          { "vehicle": "Innova Crysta", "price": 18500 },
+          { "vehicle": "SUV(ertiga)", "price": 16500 },
+          { "vehicle": "A/C 12-Seater Tempo Traveler", "price": 26000 },
+          { "vehicle": "Force Urbania 13 seater van", "price": 28000 },
+          { "vehicle": "A/C 17-Seater Tempo Traveler", "price": 32000 },
+          { "vehicle": "A/C 25-Seater Tempo Traveler", "price": 42000 },
+          { "vehicle": "A/C 45-Seater Tempo Traveler", "price": 66000 }
+        ]
+      },
+      {
+        "name": "Quick Srinagar Escape",
+        "duration": "2 Days / 1 Night",
+        "itinerary": [
+          { "day": "Day 01: Arrival in Srinagar", "details": "Check-in at hotel/houseboat. Enjoy Dal Lake Shikara ride and visit Nishat & Shalimar Gardens." },
+          { "day": "Day 02: Srinagar – Departure", "details": "After breakfast, visit Shankaracharya Temple and shop for Kashmiri handicrafts. Drop at airport. Tour ends." }
+        ],
+        "kmLimit": "200 km per day",
+        "rates": [
+          { "vehicle": "A/C Swift Dzire / Etios", "price": 10500 },
+          { "vehicle": "Innova Crysta", "price": 13500 },
+          { "vehicle": "SUV(ertiga)", "price": 12000 },
+          { "vehicle": "A/C 12-Seater Tempo Traveler", "price": 18500 },
+          { "vehicle": "Force Urbania 13 seater van", "price": 20000 },
+          { "vehicle": "A/C 17-Seater Tempo Traveler", "price": 24000 },
+          { "vehicle": "A/C 25-Seater Tempo Traveler", "price": 30000 },
+          { "vehicle": "A/C 45-Seater Tempo Traveler", "price": 48000 }
+        ]
+      },
+      {
+        "name": "Kashmir Delight Tour",
+        "duration": "4 Days / 3 Nights",
+        "itinerary": [
+          { "day": "Day 01: Arrival in Srinagar", "details": "On arrival, check-in at hotel/houseboat. Evening Shikara ride on Dal Lake and leisure." },
+          { "day": "Day 02: Srinagar – Gulmarg – Srinagar", "details": "After breakfast, drive to Gulmarg (2 hrs). Explore meadows, Gondola ride (optional), and snow activities. Return to Srinagar for overnight stay." },
+          { "day": "Day 03: Srinagar – Pahalgam – Srinagar", "details": "Full-day excursion to Pahalgam (3 hrs). Visit Betaab Valley, Aru Valley, and enjoy the Lidder River views. Return to Srinagar by evening." },
+          { "day": "Day 04: Srinagar – Departure", "details": "After breakfast, visit Mughal Gardens and Shankaracharya Temple. Drop at airport. Tour ends." }
+        ],
+        "kmLimit": "300 km per day",
+        "rates": [
+          { "vehicle": "A/C Swift Dzire / Etios", "price": 16500 },
+          { "vehicle": "Innova Crysta", "price": 21000 },
+          { "vehicle": "SUV(ertiga)", "price": 18500 },
+          { "vehicle": "A/C 12-Seater Tempo Traveler", "price": 30000 },
+          { "vehicle": "Force Urbania 13 seater van", "price": 32000 },
+          { "vehicle": "A/C 17-Seater Tempo Traveler", "price": 38000 },
+          { "vehicle": "A/C 25-Seater Tempo Traveler", "price": 50000 },
+          { "vehicle": "A/C 45-Seater Tempo Traveler", "price": 78000 }
+        ]
+      }
+    ]
+  }
+}

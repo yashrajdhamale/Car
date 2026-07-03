@@ -1,0 +1,104 @@
+/**********************************************
+ APP ONLY HEADER STYLING  
+***********************************************/
+
+html.app-mode .app-header {
+  background: #1c1c1e !important; /* iOS/Android dark bar */
+  box-shadow: none !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  height: 60px !important;
+}
+
+html.app-mode .app-header .container {
+  padding-left: 12px !important;
+  padding-right: 12px !important;
+}
+
+/* Logo slightly larger for app */
+html.app-mode .app-header img {
+  height: 34px !important;
+}
+
+/**********************************************
+ APP ONLY MOBILE MENU BUTTON
+***********************************************/
+html.app-mode .app-header button[aria-label="Toggle menu"] {
+  background: transparent !important;
+  padding: 8px !important;
+}
+
+html.app-mode .app-header svg {
+  stroke-width: 2.2;
+}
+
+/**********************************************
+ APP ONLY MOBILE DRAWER
+***********************************************/
+html.app-mode .mobile-drawer {
+  width: 88% !important;
+  max-width: 340px !important;
+  background: #ffffff !important;
+  border-radius: 0 16px 16px 0 !important;
+  box-shadow: 6px 0 25px rgba(0,0,0,0.25) !important;
+  padding-top: 12px !important;
+}
+
+/**********************************************
+ DRAWER HEADER
+***********************************************/
+html.app-mode .mobile-drawer h2 {
+  font-size: 20px !important;
+  font-weight: 700 !important;
+  color: #111827 !important;
+}
+
+html.app-mode .mobile-drawer .border-b {
+  border-color: #e5e7eb !important;
+}
+
+/**********************************************
+ USER BLOCK
+***********************************************/
+html.app-mode .mobile-drawer .bg-orange-300 {
+  background: #ffb347 !important;
+}
+
+html.app-mode .mobile-drawer p {
+  font-size: 15px !important;
+}
+
+/**********************************************
+ MENU ITEMS
+***********************************************/
+html.app-mode .mobile-drawer nav a {
+  font-size: 16px !important;
+  padding-top: 14px !important;
+  padding-bottom: 14px !important;
+  border-radius: 8px !important;
+  margin: 4px 0 !important;
+}
+
+html.app-mode .mobile-drawer nav a:hover {
+  background: #f3f4f6 !important;
+}
+
+html.app-mode .mobile-drawer nav a.bg-gray-100 {
+  background: #e5e7eb !important;
+}
+
+/**********************************************
+ OVERLAY 
+***********************************************/
+html.app-mode .mobile-menu-overlay > div:first-child {
+  background: rgba(0,0,0,0.55) !important;
+}
+
+/**********************************************
+ SIGN OUT / LOGIN BUTTON
+***********************************************/
+html.app-mode .mobile-drawer .p-4 button,
+html.app-mode .mobile-drawer .p-4 a {
+  font-size: 16px !important;
+  height: 46px !important;
+  border-radius: 10px !important;
+}

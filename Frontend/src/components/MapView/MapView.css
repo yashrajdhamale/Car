@@ -1,0 +1,73 @@
+/* Full viewport height minus header */
+.map-container {
+  position: relative;
+  width: 100%;
+  height: calc(100vh - 64px); /* Adjust 64px to match your header height */
+  overflow: hidden;
+}
+
+/* For mobile devices with different header height */
+@media (max-width: 600px) {
+  .map-container {
+    height: calc(100vh - 56px); /* Standard mobile header height */
+  }
+}
+
+.map-root {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.map-loading {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.8);
+  z-index: 1000;
+  gap: 1rem;
+}
+
+/* Ensure map controls are properly positioned */
+.mapmyindia-ctrl-top-right,
+.mapmyindia-ctrl-top-left,
+.mapmyindia-ctrl-bottom-right,
+.mapmyindia-ctrl-bottom-left {
+  z-index: 10;
+}
+
+/* Style for the location control */
+.mapmyindia-ctrl-locate {
+  margin: 10px;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+/* Error state */
+.map-container.error {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f5f5f5;
+  color: #d32f2f;
+  padding: 1rem;
+  text-align: center;
+}
+
+/* Capacitor specific styles */
+html.capacitor-ios .map-container,
+html.capacitor-android .map-container {
+  height: 100vh; /* Full viewport height in native apps */
+  padding-top: env(safe-area-inset-top); /* Account for notch */
+  padding-bottom: env(safe-area-inset-bottom); /* Account for home indicator */
+}
