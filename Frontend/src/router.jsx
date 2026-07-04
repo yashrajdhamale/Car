@@ -205,6 +205,56 @@ const ProtectedRoute = ({ children, requiredRole = null }) => {
   return children;
 };
 
+const getAuthenticatedRedirectPath = (userRole) => {
+  const normalizedRole = (userRole || '').toLowerCase().trim();
+
+  if (normalizedRole === 'driver') {
+    return '/driver/dashboard';
+  }
+
+  if (normalizedRole === 'admin') {
+    return '/admin';
+  }
+
+  if (['agency', 'travelagency', 'travel_agency'].includes(normalizedRole)) {
+    return '/agency-dashboard';
+  }
+
+  return '/';
+};
+
+const GuestRoute = ({ children }) => {
+  const { userData, loading } = useAuthState();
+  const navigate = useNavigate();
+  const hasNavigated = useRef(false);
+
+  const currentUser = auth.currentUser;
+  const redirectPath = getAuthenticatedRedirectPath(userData?.role || userData?.type);
+
+  useEffect(() => {
+    if (loading) return;
+
+    if (currentUser && !hasNavigated.current) {
+      hasNavigated.current = true;
+      navigate(redirectPath, { replace: true });
+    }
+  }, [currentUser, loading, navigate, redirectPath]);
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="animate-spin h-12 w-12 border-t-2 border-b-2 border-blue-500 rounded-full"></div>
+      </div>
+    );
+  }
+
+  if (currentUser) {
+    return null;
+  }
+
+  return children;
+};
+
 // ---- Layout ----
 const AppLayout = () => (
   <UserProvider>
@@ -230,7 +280,7 @@ const router = createBrowserRouter([
       { path: "about", element: <About /> },
       { path: "contact", element: <Contact /> },
       { path: "blog", element: <Blog /> },
-      { path: "register", element: <Register /> },
+      { path: "register", element: <GuestRoute><Register /></GuestRoute> },
       { path: "sitemap", element: <SiteMap /> },
       { path: "pdf", element: <PdfHome /> },
       { path: "not-authorized", element: <NotAuthorized /> },
@@ -262,8 +312,8 @@ const router = createBrowserRouter([
       { path: "driver-dashboard", element: <Navigate to="/driver/dashboard" replace /> },
 
       // Auth
-      { path: "login", element: <NewLogin /> },
-      { path: "driver-signup", element: <DriverSignup /> },
+      { path: "login", element: <GuestRoute><NewLogin /></GuestRoute> },
+      { path: "driver-signup", element: <GuestRoute><DriverSignup /></GuestRoute> },
       { path: "driver/terms", element: <TermsAndConditions /> },
       { path: "booking-tester", element: <BookingTester /> },
 
@@ -299,15 +349,15 @@ const router = createBrowserRouter([
       { path: "/user-dashboard", element: <UserDashboard /> },
       { path: "/booking-details", element: <BookingDetails /> },
       { path: "firestore-test", element: <FirestoreTestPage /> },
-      { path: "register", element: <Register /> },
+      { path: "register", element: <GuestRoute><Register /></GuestRoute> },
       { path: 'booking-page', element: <BookingPage /> },
       { path: '/track-outstation/:bookingId', element: <OutstationTrackingPage /> },
-      { path: "agency-register", element: <AgencyRegister /> },
-      { path: "agency-login", element: <AgencyLogin /> },
+      { path: "agency-register", element: <GuestRoute><AgencyRegister /></GuestRoute> },
+      { path: "agency-login", element: <GuestRoute><AgencyLogin /></GuestRoute> },
 
-      { path: "agency-verify-email", element: <AgencyVerifyEmail /> },
+      { path: "agency-verify-email", element: <GuestRoute><AgencyVerifyEmail /></GuestRoute> },
 
-      { path: "agency-verify-phone", element: <AgencyVerifyPhone /> },
+      { path: "agency-verify-phone", element: <GuestRoute><AgencyVerifyPhone /></GuestRoute> },
 
       {
         path: "agency-dashboard",
@@ -326,7 +376,7 @@ const router = createBrowserRouter([
           { path: "holiday-packages", element: <AdminHolidayPackages /> },
           { path: "holiday-packages/new", element: <ANewPacakge /> },
           { path: "holiday-packages/edit/:id", element: <AEditPacakge /> },
-          { path: "login", element: <ALogin /> },
+          { path: "login", element: <GuestRoute><ALogin /></GuestRoute> },
           { path: "holiday-data", element: <AHolidayData /> },
           { path: "navbar", element: <ANavBar /> },
           { path: "vehicles", element: <VehiclePage /> },
