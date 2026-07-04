@@ -1,13 +1,14 @@
-// src/contexts/AuthContext.tsx
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
+
+type UserRole = 'customer' | 'agency' | 'driver';
 
 interface AuthContextType {
   user: FirebaseAuthTypes.User | null;
   isDriver: boolean;
   isLoading: boolean;
-  signIn: (email: string, password: string) => Promise<void>;
+  signIn: (email: string, password: string, role: UserRole) => Promise<void>;
   signUp: (email: string, password: string, userData: any) => Promise<void>;
   signOut: () => Promise<void>;
   resetPassword: (email: string) => Promise<void>;
@@ -15,12 +16,38 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+const API_BASE_URL = process.env.EXPO_PUBLIC_API_BASE_URL || 'http://localhost:5000/api';
+
+const getErrorMessage = (error: unknown) => {
+  if (error && typeof error === 'object' && 'message' in error) {
+    return String((error as { message?: string }).message || 'Authentication failed');
+  }
+  return 'Authentication failed';
+};
+
+const loginWithBackend = async (email: string, password: string, role: UserRole) => {
+  const response = await fetch(`${API_BASE_URL}/auth/login`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ email, password, role }),
+  });
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data?.message || 'Login failed');
+  }
+
+  return data as { customToken: string };
+};
+
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<FirebaseAuthTypes.User | null>(null);
   const [isDriver, setIsDriver] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Check user role in Firestore
   const checkUserRole = async (uid: string) => {
     try {
       const userDoc = await firestore().collection('users').doc(uid).get();
@@ -32,42 +59,40 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
-  // Handle auth state changes
   useEffect(() => {
-    const subscriber = auth().onAuthStateChanged(async (user) => {
-      setUser(user);
-      if (user) {
-        await checkUserRole(user.uid);
+    const subscriber = auth().onAuthStateChanged(async (currentUser) => {
+      setUser(currentUser);
+      if (currentUser) {
+        await checkUserRole(currentUser.uid);
       } else {
         setIsDriver(false);
       }
       setIsLoading(false);
     });
 
-    return subscriber; // Unsubscribe on unmount
+    return subscriber;
   }, []);
 
-  // Sign in with email/password
-  const signIn = async (email: string, password: string) => {
+  const signIn = async (email: string, password: string, role: UserRole) => {
     try {
       setIsLoading(true);
-      await auth().signInWithEmailAndPassword(email, password);
+      await auth().signOut();
+      const { customToken } = await loginWithBackend(email, password, role);
+      await auth().signInWithCustomToken(customToken);
     } catch (error) {
       console.error('Sign in error:', error);
-      throw error;
+      throw new Error(getErrorMessage(error));
     } finally {
       setIsLoading(false);
     }
   };
 
-  // Sign up with email/password
   const signUp = async (email: string, password: string, userData: any) => {
     try {
       setIsLoading(true);
       const userCredential = await auth().createUserWithEmailAndPassword(email, password);
       await userCredential.user?.updateProfile({ displayName: userData.name });
-      
-      // Save additional user data to Firestore
+
       await firestore().collection('users').doc(userCredential.user?.uid).set({
         ...userData,
         createdAt: firestore.FieldValue.serverTimestamp(),
@@ -81,7 +106,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
-  // Sign out
   const signOut = async () => {
     try {
       setIsLoading(true);
@@ -94,7 +118,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
-  // Reset password
   const resetPassword = async (email: string) => {
     try {
       setIsLoading(true);

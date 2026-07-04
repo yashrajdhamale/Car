@@ -1,30 +1,30 @@
-// src/screens/LoginScreen.tsx
 import React, { useState } from 'react';
-import { 
-  View, 
-  Text, 
-  TextInput, 
-  TouchableOpacity, 
-  StyleSheet, 
-  Alert, 
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  Alert,
   ActivityIndicator,
   KeyboardAvoidingView,
   Platform,
-  ScrollView
+  ScrollView,
 } from 'react-native';
 import { useAuth } from '../contexts/AuthContext';
-import { GoogleSignin } from '@react-native-google-signin/google-signin';
-import { GOOGLE_WEB_CLIENT_ID } from '@env';
-// Configure Google Sign-In
-GoogleSignin.configure({
-  webClientId: GOOGLE_WEB_CLIENT_ID,
-  offlineAccess: true,
-});
 
+type UserRole = 'customer' | 'agency' | 'driver';
 
-const LoginScreen = () => {
+const roleOptions: Array<{ label: string; value: UserRole }> = [
+  { label: 'Customer', value: 'customer' },
+  { label: 'Agency', value: 'agency' },
+  { label: 'Driver', value: 'driver' },
+];
+
+const LoginScreen = ({ navigation }: any) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [role, setRole] = useState<UserRole>('customer');
   const [isLoading, setIsLoading] = useState(false);
   const { signIn } = useAuth();
 
@@ -36,24 +36,9 @@ const LoginScreen = () => {
 
     try {
       setIsLoading(true);
-      await signIn(email, password);
+      await signIn(email.trim(), password, role);
     } catch (error) {
-      Alert.alert('Login Failed', error.message);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleGoogleSignIn = async () => {
-    try {
-      setIsLoading(true);
-      await GoogleSignin.hasPlayServices();
-      const { idToken } = await GoogleSignin.signIn();
-      const googleCredential = auth.GoogleAuthProvider.credential(idToken);
-      await auth().signInWithCredential(googleCredential);
-    } catch (error) {
-      console.error('Google Sign-In Error:', error);
-      Alert.alert('Error', 'Failed to sign in with Google');
+      Alert.alert('Login Failed', error instanceof Error ? error.message : 'Unable to sign in');
     } finally {
       setIsLoading(false);
     }
@@ -66,7 +51,22 @@ const LoginScreen = () => {
     >
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <Text style={styles.title}>Welcome Back</Text>
-        
+        <Text style={styles.subtitle}>Sign in as customer, agency, or driver</Text>
+
+        <View style={styles.segmented}>
+          {roleOptions.map((option) => (
+            <TouchableOpacity
+              key={option.value}
+              style={[styles.segmentButton, role === option.value && styles.segmentButtonActive]}
+              onPress={() => setRole(option.value)}
+            >
+              <Text style={[styles.segmentText, role === option.value && styles.segmentTextActive]}>
+                {option.label}
+              </Text>
+            </TouchableOpacity>
+          ))}
+        </View>
+
         <View style={styles.inputContainer}>
           <Text style={styles.label}>Email</Text>
           <TextInput
@@ -90,45 +90,17 @@ const LoginScreen = () => {
           />
         </View>
 
-        <TouchableOpacity 
-          style={styles.forgotPassword}
-          onPress={() => navigation.navigate('ForgotPassword')}
-        >
-          <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
+        <TouchableOpacity style={styles.forgotPassword} onPress={() => navigation.navigate('Signup')}>
+          <Text style={styles.forgotPasswordText}>Need an account?</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity 
+        <TouchableOpacity
           style={[styles.button, isLoading && styles.buttonDisabled]}
           onPress={handleLogin}
           disabled={isLoading}
         >
-          {isLoading ? (
-            <ActivityIndicator color="#fff" />
-          ) : (
-            <Text style={styles.buttonText}>Sign In</Text>
-          )}
+          {isLoading ? <ActivityIndicator color="#fff" /> : <Text style={styles.buttonText}>Sign In</Text>}
         </TouchableOpacity>
-
-        <View style={styles.divider}>
-          <View style={styles.dividerLine} />
-          <Text style={styles.dividerText}>OR</Text>
-          <View style={styles.dividerLine} />
-        </View>
-
-        <TouchableOpacity 
-          style={[styles.googleButton, styles.button]}
-          onPress={handleGoogleSignIn}
-          disabled={isLoading}
-        >
-          <Text style={styles.googleButtonText}>Sign in with Google</Text>
-        </TouchableOpacity>
-
-        <View style={styles.footer}>
-          <Text style={styles.footerText}>Don't have an account? </Text>
-          <TouchableOpacity onPress={() => navigation.navigate('Signup')}>
-            <Text style={styles.signUpText}>Sign Up</Text>
-          </TouchableOpacity>
-        </View>
       </ScrollView>
     </KeyboardAvoidingView>
   );
@@ -137,40 +109,68 @@ const LoginScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#0f172a',
   },
   scrollContainer: {
     flexGrow: 1,
-    padding: 20,
+    padding: 24,
     justifyContent: 'center',
   },
   title: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    marginBottom: 30,
+    fontSize: 32,
+    fontWeight: '800',
+    marginBottom: 8,
     textAlign: 'center',
-    color: '#333',
+    color: '#f8fafc',
+  },
+  subtitle: {
+    textAlign: 'center',
+    color: '#cbd5e1',
+    marginBottom: 28,
+  },
+  segmented: {
+    flexDirection: 'row',
+    gap: 8,
+    marginBottom: 24,
+  },
+  segmentButton: {
+    flex: 1,
+    paddingVertical: 12,
+    borderRadius: 14,
+    backgroundColor: '#1e293b',
+    alignItems: 'center',
+  },
+  segmentButtonActive: {
+    backgroundColor: '#38bdf8',
+  },
+  segmentText: {
+    color: '#cbd5e1',
+    fontWeight: '600',
+  },
+  segmentTextActive: {
+    color: '#082f49',
   },
   inputContainer: {
-    marginBottom: 20,
+    marginBottom: 18,
   },
   label: {
-    fontSize: 16,
+    fontSize: 15,
     marginBottom: 8,
-    color: '#555',
+    color: '#e2e8f0',
   },
   input: {
     borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 8,
+    borderColor: '#334155',
+    borderRadius: 14,
     padding: 15,
     fontSize: 16,
-    backgroundColor: '#f9f9f9',
+    backgroundColor: '#111827',
+    color: '#f8fafc',
   },
   button: {
-    backgroundColor: '#4a90e2',
-    padding: 15,
-    borderRadius: 8,
+    backgroundColor: '#38bdf8',
+    padding: 16,
+    borderRadius: 14,
     alignItems: 'center',
     marginTop: 10,
   },
@@ -178,52 +178,16 @@ const styles = StyleSheet.create({
     opacity: 0.7,
   },
   buttonText: {
-    color: '#fff',
+    color: '#082f49',
     fontSize: 16,
-    fontWeight: 'bold',
-  },
-  googleButton: {
-    backgroundColor: '#fff',
-    borderWidth: 1,
-    borderColor: '#ddd',
-  },
-  googleButtonText: {
-    color: '#555',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  divider: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginVertical: 20,
-  },
-  dividerLine: {
-    flex: 1,
-    height: 1,
-    backgroundColor: '#ddd',
-  },
-  dividerText: {
-    marginHorizontal: 10,
-    color: '#999',
-  },
-  footer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    marginTop: 20,
-  },
-  footerText: {
-    color: '#666',
-  },
-  signUpText: {
-    color: '#4a90e2',
-    fontWeight: 'bold',
+    fontWeight: '800',
   },
   forgotPassword: {
     alignSelf: 'flex-end',
-    marginBottom: 20,
+    marginBottom: 10,
   },
   forgotPasswordText: {
-    color: '#4a90e2',
+    color: '#7dd3fc',
   },
 });
 

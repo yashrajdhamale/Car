@@ -1,13 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { storage, auth, db } from '../config/firebase';
-import {
-  createUserWithEmailAndPassword,
-  sendEmailVerification,
-  signOut,
-} from 'firebase/auth';
-import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useNotification } from '../context/NotificationContext';
 import { ScrollToTop } from '@components';
@@ -34,6 +26,9 @@ const COMPANY_ADDRESS = '';
 const COMPANY_SIGNER_NAME = '';
 const COMPANY_SIGNER_DESIGNATION = '';
 const AGREEMENT_VERSION = 'v1';
+const BACKEND_BASE_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
+const MAX_DOCUMENT_SIZE_MB = 10;
+const MAX_DOCUMENT_SIZE_BYTES = MAX_DOCUMENT_SIZE_MB * 1024 * 1024;
 
 const DRAFT_KEY = 'driver_registration_draft';
 const STEP_KEY = 'driver_registration_step';
@@ -230,9 +225,25 @@ const DriverSignup = () => {
     );
   };
 
+  const validateFileSize = (file, label) => {
+    if (!file) return false;
+    if (file.size > MAX_DOCUMENT_SIZE_BYTES) {
+      const sizeMb = (file.size / (1024 * 1024)).toFixed(1);
+      addNotification(
+        `${label} is ${sizeMb}MB. Please upload a file smaller than ${MAX_DOCUMENT_SIZE_MB}MB.`,
+        'error'
+      );
+      return false;
+    }
+    return true;
+  };
+
   const handleFileChange = (e, setFile) => {
     if (e.target.files?.[0]) {
-      setFile(e.target.files[0]);
+      const file = e.target.files[0];
+      if (validateFileSize(file, file.name)) {
+        setFile(file);
+      }
     }
   };
 
@@ -242,13 +253,16 @@ const DriverSignup = () => {
       addNotification('You can only upload up to 6 vehicle photos.', 'error');
       return;
     }
+    const oversized = files.find((file) => file.size > MAX_DOCUMENT_SIZE_BYTES);
+    if (oversized) {
+      const sizeMb = (oversized.size / (1024 * 1024)).toFixed(1);
+      addNotification(
+        `${oversized.name} is ${sizeMb}MB. Please upload vehicle photos smaller than ${MAX_DOCUMENT_SIZE_MB}MB.`,
+        'error'
+      );
+      return;
+    }
     setVehiclePhotos(files);
-  };
-
-  const uploadFile = async (file, path) => {
-    const storageRef = ref(storage, path);
-    await uploadBytes(storageRef, file);
-    return await getDownloadURL(storageRef);
   };
 
   const getVehicleTypeValue = () => {
@@ -330,9 +344,7 @@ const DriverSignup = () => {
         throw new Error('Please enter a valid PAN number.');
       }
 
-      if (!data.driverSignatureName?.trim()) {
-        throw new Error('Driver signature name is required.');
-      }
+      
 
       if (!aadharFile || !panFile || !licenseFile || !rcBookFile) {
         throw new Error('Please upload all required documents.');
@@ -342,134 +354,61 @@ const DriverSignup = () => {
         throw new Error('Please upload at least one vehicle photo.');
       }
 
-      const userCredential = await createUserWithEmailAndPassword(auth, data.email, data.password);
-      const userId = userCredential.user.uid;
+      const oversizedDoc = [
+        { file: aadharFile, label: 'Aadhaar document' },
+        { file: panFile, label: 'PAN document' },
+        { file: licenseFile, label: 'Driver license' },
+        { file: rcBookFile, label: 'RC book' },
+        ...(signatureFile ? [{ file: signatureFile, label: 'Signature file' }] : []),
+        ...vehiclePhotos.map((file, index) => ({ file, label: `Vehicle photo ${index + 1}` })),
+      ].find(({ file }) => file && file.size > MAX_DOCUMENT_SIZE_BYTES);
 
-      await sendEmailVerification(userCredential.user);
+      if (oversizedDoc) {
+        const sizeMb = (oversizedDoc.file.size / (1024 * 1024)).toFixed(1);
+        throw new Error(
+          `${oversizedDoc.label} is ${sizeMb}MB. Please upload files smaller than ${MAX_DOCUMENT_SIZE_MB}MB.`
+        );
+      }
 
-      const uploadPromises = [
-        uploadFile(
-          aadharFile,
-          `drivers/${userId}/documents/aadhar_${Date.now()}_${aadharFile.name}`
-        ),
-        uploadFile(
-          panFile,
-          `drivers/${userId}/documents/pan_${Date.now()}_${panFile.name}`
-        ),
-        uploadFile(
-          licenseFile,
-          `drivers/${userId}/documents/license_${Date.now()}_${licenseFile.name}`
-        ),
-        uploadFile(
-          rcBookFile,
-          `drivers/${userId}/documents/rcbook_${Date.now()}_${rcBookFile.name}`
-        ),
-
-        signatureFile
-          ? uploadFile(
-              signatureFile,
-              `drivers/${userId}/documents/signature_${Date.now()}_${signatureFile.name}`
-            )
-          : Promise.resolve(""),
-
-        ...vehiclePhotos.map((file, index) =>
-          uploadFile(
-            file,
-            `drivers/${userId}/vehicle/photos/vehicle_${index}_${Date.now()}_${file.name}`
-          )
-        ),
-      ];
-
-      const [
-        aadharUrl,
-        panUrl,
-        licenseUrl,
-        rcBookUrl,
-        signatureUrl,
-        ...vehiclePhotoUrls
-      ] = await Promise.all(uploadPromises);
-      const agreementData = {
+      const formData = new FormData();
+      Object.entries({
+        ...data,
+        vehicleType: getVehicleTypeValue(),
         agreementVersion: AGREEMENT_VERSION,
         companyName: COMPANY_NAME,
         companyAddress: COMPANY_ADDRESS,
         companySignerName: COMPANY_SIGNER_NAME,
         companySignerDesignation: COMPANY_SIGNER_DESIGNATION,
-        agreementDate: data.agreementDate,
-        driverName: fullName,
-        firmName: data.firmName || '',
-        address: data.agreementAddress,
-        aadhaarNumber: data.aadhaarNumber,
-        panNumber: data.panNumber,
-        paymentStructure: data.paymentStructure,
-        paymentCycle: data.paymentCycle,
-        validityStartDate: data.agreementStartDate,
-        validityEndDate: data.agreementEndDate,
-        driverSignatureUrl: signatureUrl,
-        declarationAccepted: true,
-        femaleSafetyAccepted: !!data.femaleSafetyAccepted,
-        noSolicitationAccepted: !!data.noSolicitationAccepted,
-        legalComplianceAccepted: !!data.legalComplianceAccepted,
-        acceptedAt: new Date().toISOString(),
-      };
+      }).forEach(([key, value]) => {
+        if (value !== undefined && value !== null) {
+          formData.append(key, String(value));
+        }
+      });
 
-      const userProfile = {
-        uid: userId,
-        email: data.email,
-        fullName,
-        firstName: data.firstName,
-        middleName: data.middleName || '',
-        lastName: data.lastName,
-        phone: data.primaryContact,
-        primaryContact: data.primaryContact,
-        secondaryContact: data.secondaryContact || '',
-        address: data.homeAddress,
-        officeAddress: data.officeAddress || '',
-        role: 'driver',
-        type: 'driver',
-        status: 'pending',
-        emailVerified: false,
-        isDriver: true,
-        agreementAccepted: true,
-        agreementAcceptedAt: serverTimestamp(),
-        agreementVersion: AGREEMENT_VERSION,
-        agreementData,
-        vehicle: {
-          type: getVehicleTypeValue(),
-          model: data.vehicleModel,
-          color: data.vehicleColor,
-          number: data.vehicleNumber.toUpperCase(),
-          photos: vehiclePhotoUrls,
-        },
-        documents: {
-          aadhar: aadharUrl,
-          pan: panUrl,
-          license: licenseUrl,
-          rcBook: rcBookUrl,
-          signature: signatureUrl,
-        },
-        createdAt: serverTimestamp(),
-        updatedAt: serverTimestamp(),
-        lastLogin: null,
-      };
+      formData.append('aadhar', aadharFile);
+      formData.append('pan', panFile);
+      formData.append('license', licenseFile);
+      formData.append('rcBook', rcBookFile);
+      if (signatureFile) {
+        formData.append('signature', signatureFile);
+      }
+      vehiclePhotos.forEach((file) => formData.append('vehiclePhotos', file));
 
-      const driverProfile = {
-        ...userProfile,
-        userId,
-        isActive: false,
-        isVerified: false,
-        lastOnline: null,
-      };
+      const response = await fetch(`${BACKEND_BASE_URL}/api/auth/register-driver`, {
+        method: 'POST',
+        body: formData,
+      });
 
-      await setDoc(doc(db, 'users', userId), userProfile, { merge: true });
-      await setDoc(doc(db, 'drivers', userId), driverProfile, { merge: true });
+      const result = await response.json();
+      if (!response.ok) {
+        throw new Error(result?.message || 'Driver registration failed');
+      }
 
       localStorage.removeItem(DRAFT_KEY);
       localStorage.removeItem(STEP_KEY);
 
-      await signOut(auth);
-
       addNotification(
-        'Registration submitted successfully. Please verify your email. Your driver account will be activated after review.',
+        'Registration submitted successfully. Your driver account will be activated after review.',
         'success'
       );
 
@@ -478,13 +417,7 @@ const DriverSignup = () => {
       console.error('Registration error:', error);
 
       let errorMessage = 'Registration failed. Please try again.';
-      if (error.code === 'auth/email-already-in-use') {
-        errorMessage = 'This email is already registered. Please sign in instead.';
-      } else if (error.code === 'auth/weak-password') {
-        errorMessage = 'Password should be at least 6 characters.';
-      } else if (error.code === 'auth/invalid-email') {
-        errorMessage = 'Please enter a valid email address.';
-      } else if (error.message) {
+      if (error.message) {
         errorMessage = error.message;
       }
 

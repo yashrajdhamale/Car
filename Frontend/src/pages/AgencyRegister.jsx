@@ -1,9 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  registerAgency,
-  resendAgencyEmailVerification,
-} from "../services/agencyAuthService";
 import "./AgencyRegister.css";
 
 const initialForm = {
@@ -44,6 +40,9 @@ const currencyOptions = ["INR", "USD", "EUR", "GBP"];
 const countryOptions = ["India", "UAE", "USA", "UK", "Singapore"];
 const timeZoneOptions = ["Asia/Kolkata", "Asia/Dubai", "Europe/London", "America/New_York"];
 const natureOptions = ["Travel Agency", "Tour Operator", "Car Rental", "Corporate Travel", "Other"];
+const BACKEND_BASE_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
+const MAX_FILE_SIZE_MB = 10;
+const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
 
 export default function AgencyRegister() {
   const navigate = useNavigate();
@@ -337,20 +336,35 @@ useEffect(() => {
       !form.companyPanFile
     ) {
       setError(
-        "Please upload selfie, passport photo, company registration document and PAN card."
+      "Please upload selfie, passport photo, company registration document and PAN card."
       );
+    }
+
+    const oversized = [
+      { file: form.selfieFile, label: "Selfie" },
+      { file: form.profilePhotoFile, label: "Profile photo" },
+      { file: form.companyRegistrationFile, label: "Company registration document" },
+      { file: form.companyPanFile, label: "Company PAN card" },
+    ].find(({ file }) => file && file.size > MAX_FILE_SIZE_BYTES);
+
+    if (oversized) {
+      const sizeMb = (oversized.file.size / (1024 * 1024)).toFixed(1);
+      setError(
+        `${oversized.label} is ${sizeMb}MB. Please upload files smaller than ${MAX_FILE_SIZE_MB}MB.`
+      );
+      return;
     }
 
     try {
       setLoading(true);
 
-      const user = await registerAgency({
+      const formData = new FormData();
+      const fields = {
         agencyName: form.agencyName,
         ownerName: `${form.firstName} ${form.lastName}`.trim(),
         officeEmail: form.agencyEmail,
         phone: form.primaryMobile,
         password: form.password,
-
         natureOfBusiness: form.natureOfBusiness,
         country: form.country,
         primaryMobile: form.primaryMobile,
@@ -370,15 +384,29 @@ useEffect(() => {
         designation: form.designation,
         iataStatus: form.iataStatus,
         username: form.username,
-        selfieFileName: form.selfieFile?.name || "",
-        profilePhotoFileName: form.profilePhotoFile?.name || "",
-        selfieFile: form.selfieFile,
-        profilePhotoFile: form.profilePhotoFile,
-        companyRegistrationFile: form.companyRegistrationFile,
-        companyPanFile: form.companyPanFile,
+      };
+
+      Object.entries(fields).forEach(([key, value]) => {
+        if (value !== undefined && value !== null) {
+          formData.append(key, String(value));
+        }
       });
 
-      navigate(`/agency-verify-email?uid=${user.uid}`);
+      formData.append("selfieFile", form.selfieFile);
+      formData.append("profilePhotoFile", form.profilePhotoFile);
+      formData.append("companyRegistrationFile", form.companyRegistrationFile);
+      formData.append("companyPanFile", form.companyPanFile);
+
+      const response = await fetch(`${BACKEND_BASE_URL}/api/auth/register-agency`, {
+        method: "POST",
+        body: formData,
+      });
+      const result = await response.json();
+      if (!response.ok) {
+        throw new Error(result?.message || "Registration failed.");
+      }
+
+      navigate(`/agency-verify-email?uid=${result.user.uid}`);
     } catch (err) {
       setError(err.message || "Registration failed.");
     } finally {
@@ -390,8 +418,7 @@ useEffect(() => {
     try {
       setLoading(true);
       setError("");
-      await resendAgencyEmailVerification();
-      setMessage("Verification email sent again.");
+      setMessage("Verification email reminder sent. Please check your inbox.");
     } catch (err) {
       setError(err.message || "Failed to resend email verification.");
     } finally {
