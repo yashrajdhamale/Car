@@ -3,9 +3,15 @@
 // export default InterestedRoutes;
 import React, { useState, useEffect } from 'react';
 import { useAuthState } from '../../router';
-import { collection, query, where, onSnapshot, addDoc, updateDoc, deleteDoc, doc, serverTimestamp } from 'firebase/firestore';
-import { db, auth } from '../../config/firebase';
+import { auth } from '../../config/firebase';
 import DriverLayout from '../../components/driver/DriverLayout';
+import {
+  addRoute,
+  deleteRoute,
+  subscribeToCities,
+  subscribeToRoutes,
+  updateRoute,
+} from '../../services/firestoreService';
 
 // Sample cities for autocomplete
 const sampleCities = [
@@ -36,40 +42,10 @@ const InterestedRoutes = () => {
     }
 
     setLoading(true);
-    const q = query(
-      collection(db, 'routes'),
-      where('driverId', '==', currentUser.uid)
-    );
-
-    const unsubscribe = onSnapshot(
-      q,
-      (snapshot) => {
-        const routesList = [];
-        snapshot.forEach((docSnap) => {
-          routesList.push({ id: docSnap.id, ...docSnap.data() });
-        });
-        // Sort by createdAt descending (newest first), handle missing timestamps
-        routesList.sort((a, b) => {
-          const aTime = a.createdAt?.toMillis?.() ?? 0;
-          const bTime = b.createdAt?.toMillis?.() ?? 0;
-          return bTime - aTime;
-        });
-        setRoutes(routesList);
-        setLoading(false);
-      },
-      (err) => {
-        console.error('Error fetching routes:', err.code, err.message);
-        // FIX: show specific error message
-        if (err.code === 'permission-denied') {
-          setError('Permission denied. Please check Firestore security rules.');
-        } else if (err.code === 'failed-precondition') {
-          setError('A Firestore index is required. Check the browser console for a link to create it.');
-        } else {
-          setError(`Failed to load routes: ${err.message}`);
-        }
-        setLoading(false); // FIX: always stop loading on error
-      }
-    );
+    const unsubscribe = subscribeToRoutes(currentUser.uid, (routesList) => {
+      setRoutes(routesList);
+      setLoading(false);
+    });
 
     return () => unsubscribe();
   }, [currentUser]);
@@ -105,28 +81,22 @@ const InterestedRoutes = () => {
     }
 
     try {
-      const timestamp = serverTimestamp();
-
       const routeData = {
         from: formData.from.trim(),
         to: formData.to.trim(),
-        // FIX: use null instead of NaN for missing rate
         rate: parsedRate,
-        driverId: currentUser.uid,
         driverName: userData?.fullName || currentUser.email?.split('@')[0] || 'Driver',
-        isActive: true,
+        active: true,
         vehicle: {
           type: 'Sedan',
           capacity: 4
         },
-        status: 'available',
-        createdAt: timestamp,
-        updatedAt: timestamp
+        radiusKm: 30,
       };
 
       console.log('Adding route with data:', routeData);
-      const docRef = await addDoc(collection(db, 'routes'), routeData);
-      console.log('Route added with ID:', docRef.id);
+      const routeId = await addRoute(currentUser.uid, routeData);
+      console.log('Route added with ID:', routeId);
 
       // Reset form
       setFormData({ from: '', to: '', rate: '', isActive: true });
@@ -150,9 +120,8 @@ const InterestedRoutes = () => {
   const toggleRouteStatus = async (routeId, currentStatus) => {
     setError('');
     try {
-      await updateDoc(doc(db, 'routes', routeId), {
-        isActive: !currentStatus,
-        updatedAt: serverTimestamp()
+      await updateRoute(currentUser.uid, routeId, {
+        active: !currentStatus,
       });
     } catch (err) {
       console.error('Error updating route status:', err.code, err.message);
@@ -164,7 +133,7 @@ const InterestedRoutes = () => {
     if (!window.confirm('Are you sure you want to delete this route?')) return;
     setError('');
     try {
-      await deleteDoc(doc(db, 'routes', routeId));
+      await deleteRoute(routeId);
       setSuccess('Route deleted successfully.');
       setTimeout(() => setSuccess(''), 3000);
     } catch (err) {

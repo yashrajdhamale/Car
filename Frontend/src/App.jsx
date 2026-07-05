@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Routes, Route, Outlet, Navigate } from "react-router-dom";
-import { auth } from './config/firebase';
-import { getUserDocument } from './config/functions';
 import { useDriverStatus } from './hooks/useDriverStatus';
-import { doc, getDoc } from 'firebase/firestore';
-import { db } from './config/firebase';
 import { isNativeApp, initializePlatformStyles } from './utils/platform';
 
 initializePlatformStyles();
@@ -55,41 +51,22 @@ const ProtectedRoute = ({ children, requiredRole = null }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged(async (user) => {
-      if (user) {
-        try {
-          const [userDoc, driverDoc] = await Promise.all([
-            getUserDocument(user.uid),
-            getDoc(doc(db, 'drivers', user.uid))
-          ]);
-
-          if (!userDoc) {
-            setLoading(false);
-            return;
-          }
-
-          setUserData(userDoc);
-
-          const userRole = userDoc.role || userDoc.type;
-          const isDriverApproved = driverDoc.exists() && driverDoc.data()?.status === 'active';
-
-          if (requiredRole && userRole !== requiredRole) {
-            setLoading(false);
-            return;
-          }
-
-          if (requiredRole === 'driver' && !isDriverApproved) {
-            setLoading(false);
-            return;
-          }
-        } catch (error) {
-          console.error('Error fetching user data:', error);
+    try {
+      const storedUser = JSON.parse(localStorage.getItem("auth_user") || "null");
+      if (storedUser) {
+        setUserData(storedUser);
+        const userRole = storedUser.role || storedUser.type;
+        if (requiredRole && userRole !== requiredRole) {
+          setLoading(false);
+          return;
         }
       }
-      setLoading(false);
-    });
+    } catch (error) {
+      console.error('Error reading stored user data:', error);
+    }
 
-    return () => unsubscribe();
+    setLoading(false);
+    return () => {};
   }, [requiredRole]);
 
   if (loading) {

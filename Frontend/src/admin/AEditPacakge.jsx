@@ -2,11 +2,10 @@ import React, { useEffect, useState, useContext } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { Plus, ArrowBigRightDash, Trash2 } from "lucide-react"
 import { Dialog, DialogHeader, DialogBody, DialogFooter, Button } from '@material-tailwind/react';
-import { db, auth, storage } from '@config/firebase.js';
-import { collection, query, getDocs, getDoc, doc, deleteDoc, addDoc, updateDoc } from "firebase/firestore";
+import { db, auth } from '@config/firebase.js';
 import { onAuthStateChanged } from 'firebase/auth';
-import { ref, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
 import { AuthCheck } from '@components';
+import { adminApi } from '../services/adminApiService';
 
 
 const AEditPacakge = () => {
@@ -34,6 +33,7 @@ const AEditPacakge = () => {
     const location = useLocation();
     const { state } = location;
     const navigate = useNavigate();
+    const API_BASE = import.meta.env.VITE_API_BASE_URL || "";
     let PackageData = state && state.packageItem;
     console.log('Package', PackageData);
 
@@ -47,18 +47,8 @@ const AEditPacakge = () => {
     useEffect(() => {
         const fetchHolidays = async () => {
             try {
-                const q = query(collection(db, "test"));
-                const querySnapshot = await getDocs(q);
-
-                const locations = [];
-
-                querySnapshot.forEach((doc) => {
-                    const data = doc.data();
-                    // console.log(data);
-                    if (!locations.includes(data.location)) {
-                        locations.push(data.location);
-                    }
-                });
+                const result = await adminApi.listPackages();
+                const locations = (result.packages || []).map((item) => item.location).filter(Boolean);
                 setUniqueLocations(locations);
                 console.log(locations)
 
@@ -114,13 +104,10 @@ const AEditPacakge = () => {
     useEffect(() => {
         const fetchPackageData = async () => {
             try {
-                const docRef = doc(db, "test", docId);
-                const docSnap = await getDoc(docRef);
-
-                if (docSnap.exists()) {
-                    // Update state with fetched data
-                    setholidayData(docSnap.data());
-                    console.log('Updated', docSnap.data());
+                const result = await adminApi.getPackage(docId);
+                if (result.package) {
+                    setholidayData(result.package);
+                    console.log('Updated', result.package);
                 } else {
                     console.log("No such document!");
                 }
@@ -174,30 +161,6 @@ const AEditPacakge = () => {
     const [FileUploadUrl, setFileUploadUrl] = useState("https://media.istockphoto.com/id/1222357475/vector/image-preview-icon-picture-placeholder-for-website-or-ui-ux-design-vector-illustration.jpg?s=612x612&w=0&k=20&c=KuCo-dRBYV7nz2gbk4J9w1WtTAgpTdznHu55W9FjimE=");
 
 
-    const generateRandomName = () => {
-        return Math.random().toString(36).substring(2, 15);
-    };
-
-    const uploadImageToFirebaseStorage = async (file) => {
-        try {
-            // Create a storage reference
-            const randomName = generateRandomName();
-            const storageRef = ref(storage, `Holiday_Images/image_${randomName}`);
-
-            // Upload the file to Firebase Storage
-            await uploadBytes(storageRef, file);
-
-            // Get the download URL of the uploaded image
-            const downloadURL = await getDownloadURL(storageRef);
-
-            // Return the download URL
-            return downloadURL;
-        } catch (error) {
-            console.error("Error uploading image to Firebase Storage: ", error);
-            throw error; // Rethrow the error
-        }
-    };
-
     const [ImageGalleryDisabled, setImageGalleryDisabled] = useState(false);
 
     const handleFileUpload = async (event) => {
@@ -208,12 +171,18 @@ const AEditPacakge = () => {
         }
         else {
 
-            const files = event.target.files;
-            const uploadPromises = Array.from(files).map(file => uploadImageToFirebaseStorage(file));
-
             try {
                 setuploadData(true);
-                const urls = await Promise.all(uploadPromises);
+                const files = Array.from(event.target.files || []);
+                const formData = new FormData();
+                files.forEach((file) => formData.append("images", file));
+                const response = await fetch(`${API_BASE}/api/admin-storage/packages/${docId}/images`, {
+                    method: "POST",
+                    body: formData,
+                });
+                const result = await response.json();
+                if (!response.ok) throw new Error(result?.message || "Image upload failed");
+                const urls = (result.images || []).map((image) => image.url);
                 setFileUploadUrls(prevUrls => [...prevUrls, ...urls]);
                 setuploadData(false);
             } catch (error) {
@@ -455,20 +424,11 @@ const AEditPacakge = () => {
 
     //DELETE IMAGE FROM FIREBASE STARTS
 
-    const getPathFromUrl = (url) => {
-        const baseUrl = 'https://firebasestorage.googleapis.com/v0/b/carzi-00x.appspot.com/o/';
-        const pathWithParams = url.split(baseUrl)[1];
-        const path = pathWithParams.split('?')[0];
-        return decodeURIComponent(path);
-    };
-
-    const deleteFileFromFirebase = (filePath) => {
-        const storageRef = ref(storage, filePath);
-
-        deleteObject(storageRef).then(() => {
-            console.log('File deleted successfully');
-        }).catch((error) => {
-            console.error('Error deleting file:', error);
+    const deleteFileFromFirebase = async (imageUrl) => {
+        await fetch(`${API_BASE}/api/admin-storage/packages/images`, {
+            method: "DELETE",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ imageUrl }),
         });
     };
 
@@ -484,14 +444,8 @@ const AEditPacakge = () => {
         try {
 
             setPackageButton(true);
-            // Create a reference to the document
-
-
-
-            // Delete all images in the removed images array
             for (const imageLink of holidayData.images) {
-                const filePath = await getPathFromUrl(imageLink);
-                await deleteFileFromFirebase(filePath);
+                await deleteFileFromFirebase(imageLink);
             }
 
             // Reference to the specific document using its ID
@@ -499,10 +453,7 @@ const AEditPacakge = () => {
             // const newData = { ...holidayData };
 
 
-            const docRef = doc(db, "test", docId);
-
-            // Delete the document
-            await deleteDoc(docRef);
+            await adminApi.deletePackage(docId);
             console.log("Document successfully deleted");
 
             alert("Holiday Package successfully deleted");
@@ -601,24 +552,13 @@ const AEditPacakge = () => {
 
         // Delete all images in the removed images array
         for (const imageLink of removedImages) {
-            const filePath = await getPathFromUrl(imageLink);
-            await deleteFileFromFirebase(filePath);
+            await deleteFileFromFirebase(imageLink);
         }
 
-        // Reference to the specific document using its ID
-        const documentRef = doc(db, 'test', docId);
-        const newData = { ...holidayData };
-
         if (holidayData.vehicle.length > 0) {
-            // Update the document with the new data
-            return updateDoc(documentRef, newData)
-                .then(() => {
-                    console.log("Document successfully updated!");
-                    navigate('/admin/holiday/packages');
-                })
-                .catch((error) => {
-                    console.error("Error updating document: ", error);
-                });
+            await adminApi.updatePackage(docId, { ...holidayData });
+            console.log("Document successfully updated!");
+            navigate('/admin/holiday/packages');
         } else {
             alert("Package Should have at least 1 CAR");
         }

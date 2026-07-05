@@ -2,10 +2,9 @@ import React, { useEffect, useState, useContext } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { Plus, ArrowBigRightDash } from "lucide-react"
 import { Dialog, DialogHeader, DialogBody, DialogFooter, Button } from '@material-tailwind/react';
-import { db, auth, storage } from '@config/firebase.js';
+import { db, auth } from '@config/firebase.js';
 import { collection, query, getDocs, getDoc, doc, addDoc, updateDoc } from "firebase/firestore";
 import { onAuthStateChanged } from 'firebase/auth';
-import { ref, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
 import { AuthCheck } from '@components';
 
 // NOTIFICATION
@@ -38,6 +37,7 @@ const ANewPacakge = () => {
     const location = useLocation();
     const { state } = location;
     const navigate = useNavigate();
+    const API_BASE = import.meta.env.VITE_API_BASE_URL || "";
     const [UniqueLocations, setUniqueLocations] = useState([null])
 
 
@@ -169,30 +169,6 @@ const ANewPacakge = () => {
     const [FileUploadUrl, setFileUploadUrl] = useState("https://media.istockphoto.com/id/1222357475/vector/image-preview-icon-picture-placeholder-for-website-or-ui-ux-design-vector-illustration.jpg?s=612x612&w=0&k=20&c=KuCo-dRBYV7nz2gbk4J9w1WtTAgpTdznHu55W9FjimE=");
 
 
-    const generateRandomName = () => {
-        return Math.random().toString(36).substring(2, 15);
-    };
-
-    const uploadImageToFirebaseStorage = async (file) => {
-        try {
-            // Create a storage reference
-            const randomName = generateRandomName();
-            const storageRef = ref(storage, `Holiday_Images/image_${randomName}`);
-
-            // Upload the file to Firebase Storage
-            await uploadBytes(storageRef, file);
-
-            // Get the download URL of the uploaded image
-            const downloadURL = await getDownloadURL(storageRef);
-
-            // Return the download URL
-            return downloadURL;
-        } catch (error) {
-            console.error("Error uploading image to Firebase Storage: ", error);
-            throw error; // Rethrow the error
-        }
-    };
-
     const [ImageGalleryDisabled, setImageGalleryDisabled] = useState(false);
 
     const handleFileUpload = async (event) => {
@@ -203,12 +179,18 @@ const ANewPacakge = () => {
         }
         else {
 
-            const files = event.target.files;
-            const uploadPromises = Array.from(files).map(file => uploadImageToFirebaseStorage(file));
-
             try {
                 setuploadData(true);
-                const urls = await Promise.all(uploadPromises);
+                const files = Array.from(event.target.files || []);
+                const formData = new FormData();
+                files.forEach((file) => formData.append("images", file));
+                const response = await fetch(`${API_BASE}/api/admin-storage/packages/temp/images`, {
+                    method: "POST",
+                    body: formData,
+                });
+                const result = await response.json();
+                if (!response.ok) throw new Error(result?.message || "Image upload failed");
+                const urls = (result.images || []).map((image) => image.url);
                 setFileUploadUrls(prevUrls => [...prevUrls, ...urls]);
                 setuploadData(false);
             } catch (error) {
@@ -233,10 +215,7 @@ const ANewPacakge = () => {
             return;
         }
 
-        setholidayData(prevState => ({
-            ...prevState,
-            images: [...prevState.images, ...uniqueUrls]
-        }));
+        setholidayData(prevState => ({ ...prevState, images: [...prevState.images, ...uniqueUrls] }));
 
         setIsOpenImage(false);
         setFileUploadUrls([]);
@@ -518,27 +497,13 @@ const ANewPacakge = () => {
         }
 
         const collectionRef = collection(db, 'test');
-
-        // Data for the new document
-        // const newData = holidayData;
-        // Delete all images in the removed images array
-        for (const imageLink of removedImages) {
-            const filePath = await getPathFromUrl(imageLink);
-            await deleteFileFromFirebase(filePath);
-        }
-
         const newData = { ...holidayData };
 
-        // Add the document to the collection
         return addDoc(collectionRef, newData)
-            .then((docRef) => {
-                console.log("Document successfully added with ID: ", docRef.id);
-                updatePackageLocationId(docRef.id);
-            })
+            .then((docRef) => updatePackageLocationId(docRef.id))
             .catch((error) => {
                 console.error("Error adding document: ", error);
                 throw error;
-                setDisabledButton(false);
             });
     };
 
@@ -585,8 +550,8 @@ const ANewPacakge = () => {
 
     const updatePackageLocationId = async (docId) => {
         try {
-            const docRef = doc(db, 'test', docId);
-            await updateDoc(docRef, { location_id: docId });
+        const docRef = doc(db, 'test', docId);
+        await updateDoc(docRef, { location_id: docId });
             console.log("Document location_id updated successfully: ", docId);
             // alert("Package Created successfully ");
             addNotification("Package Created successfully ", "success")
@@ -602,20 +567,11 @@ const ANewPacakge = () => {
 
 
 
-    const getPathFromUrl = (url) => {
-        const baseUrl = 'https://firebasestorage.googleapis.com/v0/b/carzi-00x.appspot.com/o/';
-        const pathWithParams = url.split(baseUrl)[1];
-        const path = pathWithParams.split('?')[0];
-        return decodeURIComponent(path);
-    };
-
-    const deleteFileFromFirebase = (filePath) => {
-        const storageRef = ref(storage, filePath);
-
-        deleteObject(storageRef).then(() => {
-            console.log('File deleted successfully');
-        }).catch((error) => {
-            console.error('Error deleting file:', error);
+    const deleteFileFromFirebase = async (imageUrl) => {
+        await fetch(`${API_BASE}/api/admin-storage/packages/images`, {
+            method: "DELETE",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ imageUrl }),
         });
     };
 

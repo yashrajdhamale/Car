@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useEffect, useState, useCallback, useRef } from 'react';
 import { auth } from '../config/firebase';
-import { doc, getDoc } from 'firebase/firestore';
-import { db } from '../config/firebase';
+
+const BACKEND_BASE_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
 
 // Create the context
 export const UserContext = createContext();
@@ -29,7 +29,33 @@ export const UserProvider = ({ children }) => {
            (userData.vehicle && (userData.vehicle.type || userData.vehicle.vehicleType));
   }, [userData]);
 
-  // Fetch user data from Firestore with deduplication
+  const normalizeBackendUser = (backendUser, authUser) => {
+    const profile = backendUser || {};
+    const flattenedProfile = {
+      ...(profile.userData || {}),
+      ...(profile.driverData || {}),
+      ...profile,
+    };
+
+    return {
+      ...flattenedProfile,
+      uid: profile.uid || authUser.uid,
+      email: profile.email || authUser.email || '',
+      displayName:
+        profile.displayName ||
+        flattenedProfile.displayName ||
+        flattenedProfile.fullName ||
+        authUser.displayName ||
+        authUser.email?.split('@')[0] ||
+        'User',
+      role: String(profile.role || flattenedProfile.role || flattenedProfile.type || 'user').toLowerCase().trim(),
+      type: String(profile.type || flattenedProfile.type || profile.role || flattenedProfile.role || 'user').toLowerCase().trim(),
+      status: String(profile.status || flattenedProfile.status || 'active').toLowerCase().trim(),
+      emailVerified: Boolean(profile.emailVerified ?? flattenedProfile.emailVerified ?? authUser.emailVerified),
+      phoneNumber: profile.phoneNumber || flattenedProfile.phoneNumber || authUser.phoneNumber || '',
+    };
+  };
+
   const fetchUserData = useCallback(async (authUser, forceRefresh = false) => {
     if (!authUser) {
       if (isMounted.current) {
@@ -57,30 +83,58 @@ export const UserProvider = ({ children }) => {
     }
 
     try {
-      const userDocRef = doc(db, 'users', authUser.uid);
-      const userDoc = await getDoc(userDocRef);
-      
+      const idToken = await authUser.getIdToken(forceRefresh);
+      const response = await fetch(`${BACKEND_BASE_URL}/api/auth/me`, {
+        headers: {
+          Authorization: `Bearer ${idToken}`,
+        },
+      });
+
+      const payload = await response.json().catch(() => ({}));
+
       if (!isMounted.current) return;
-      
-      if (userDoc.exists()) {
-        const data = userDoc.data();
-        
-        if (isMounted.current) {
-          setUser(authUser);
-          setUserData(data);
-        }
+
+      if (response.ok && payload?.user) {
+        const normalizedUser = normalizeBackendUser(payload.user, authUser);
+
+        setUser(authUser);
+        setUserData(normalizedUser);
+        setError(null);
       } else {
-        if (isMounted.current) {
-          setUser(authUser);
-          setUserData({ role: 'unassigned' });
+        const fallbackUser = normalizeBackendUser(
+          {
+            uid: authUser.uid,
+            email: authUser.email,
+            displayName: authUser.displayName,
+            role: 'user',
+            status: 'active',
+          },
+          authUser
+        );
+
+        setUser(authUser);
+        setUserData(fallbackUser);
+        if (response.status !== 401) {
+          setError(new Error(payload?.message || 'Failed to load user profile from backend'));
         }
       }
     } catch (err) {
       console.error('Error fetching user data:', err);
       if (isMounted.current) {
         setError(err);
-        setUser(null);
-        setUserData(null);
+        setUser(authUser);
+        setUserData(
+          normalizeBackendUser(
+            {
+              uid: authUser.uid,
+              email: authUser.email,
+              displayName: authUser.displayName,
+              role: 'user',
+              status: 'active',
+            },
+            authUser
+          )
+        );
       }
     } finally {
       if (isMounted.current) {

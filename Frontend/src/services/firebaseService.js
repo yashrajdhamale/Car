@@ -1,249 +1,150 @@
-import { 
-  doc, 
-  updateDoc, 
-  onSnapshot,
-  serverTimestamp,
-  collection,
-  query,
-  where,
-  getDocs,
-  setDoc
-} from 'firebase/firestore';
-import { db } from '../config/firebase';
+const API_BASE = import.meta.env.VITE_API_BASE_URL || "";
 
-// Driver location service
+const jsonFetch = async (url, options = {}) => {
+  const response = await fetch(url, options);
+  const payload = await response.json().catch(() => ({}));
+  if (!response.ok) {
+    throw new Error(payload?.message || payload?.error || `HTTP ${response.status}`);
+  }
+  return payload;
+};
+
 export class DriverLocationService {
   static async updateDriverLocation(driverId, location) {
-    try {
-      const driverRef = doc(db, 'drivers', driverId);
-      
-      await updateDoc(driverRef, {
-        lastLocation: location,
-        locationEnabled: true,
-        lastUpdated: serverTimestamp(),
-        isOnline: true,
-        lastOnline: serverTimestamp()
-      });
-      
-      console.log(`📍 Driver ${driverId} location updated`);
-      return true;
-    } catch (error) {
-      console.error('Error updating driver location:', error);
-      throw error;
-    }
+    await jsonFetch(`${API_BASE}/api/driver-location/drivers/${driverId}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ location }),
+    });
+    return true;
   }
 
-  // Update driver location in all active rides
   static async updateLocationInAllRides(driverId, location) {
-    try {
-      // Find all active rides for this driver
-      const activeRidesQuery = query(
-        collection(db, 'airportTransfers'),
-        where('driverId', '==', driverId),
-        where('status', 'in', ['accepted', 'driver_arrived', 'in_progress'])
-      );
-      
-      const snapshot = await getDocs(activeRidesQuery);
-      const updatePromises = [];
-      
-      snapshot.forEach((docSnap) => {
-        const rideRef = doc(db, 'airportTransfers', docSnap.id);
-        updatePromises.push(
-          updateDoc(rideRef, {
-            driverLocation: location,
-            driverLocationUpdatedAt: serverTimestamp(),
-            lastUpdated: serverTimestamp()
-          })
-        );
-      });
-      
-      await Promise.all(updatePromises);
-      console.log(`📍 Updated location in ${updatePromises.length} active rides`);
-      
-      return updatePromises.length;
-    } catch (error) {
-      console.error('Error updating rides:', error);
-      return 0;
-    }
+    const result = await jsonFetch(`${API_BASE}/api/driver-location/drivers/${driverId}/rides`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ location }),
+    });
+    return result.updatedCount || 0;
   }
 
-  // Get real-time driver location
   static subscribeToDriverLocation(driverId, callback) {
-    if (!driverId) {
-      console.error('No driver ID provided');
-      return () => {};
-    }
-    
-    const driverRef = doc(db, 'drivers', driverId);
-    
-    const unsubscribe = onSnapshot(driverRef, (docSnap) => {
-      if (docSnap.exists()) {
-        const driverData = docSnap.data();
-        const location = driverData.lastLocation;
-        
-        if (location) {
+    if (!driverId) return () => {};
+    let active = true;
+
+    const poll = async () => {
+      try {
+        const payload = await jsonFetch(`${API_BASE}/api/driver-location/drivers/${driverId}`);
+        if (!active) return;
+        if (payload?.location) {
           callback({
-            ...location,
+            ...payload.location,
             driverId,
-            name: driverData.name || driverData.displayName || 'Driver',
-            isOnline: driverData.isOnline || false,
-            accuracy: location.accuracy || 100
+            name: payload.name || "Driver",
+            isOnline: Boolean(payload.isOnline),
+            accuracy: payload.location.accuracy || 100,
           });
         }
+      } catch (error) {
+        if (active) callback({ error: "Failed to fetch driver location" });
       }
-    }, (error) => {
-      console.error('Driver location subscription error:', error);
-      callback({ error: 'Failed to fetch driver location' });
-    });
-    
-    return unsubscribe;
+    };
+
+    poll();
+    const timer = setInterval(poll, 10000);
+    return () => {
+      active = false;
+      clearInterval(timer);
+    };
   }
 
-  // Force driver to share location
   static async enforceLocationSharing(driverId) {
-    const driverRef = doc(db, 'drivers', driverId);
-    
-    try {
-      await updateDoc(driverRef, {
-        locationRequired: true,
-        lastWarning: serverTimestamp(),
-        onlineUntil: null // Force offline until location shared
-      });
-      
-      return { success: true, message: 'Location sharing required' };
-    } catch (error) {
-      return { success: false, error: error.message };
-    }
+    return jsonFetch(`${API_BASE}/api/driver-location/drivers/${driverId}/enforce`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+    });
   }
 }
 
-// Customer location service
 export class CustomerLocationService {
   static async updateCustomerLocation(bookingId, location) {
-    try {
-      const bookingRef = doc(db, 'airportTransfers', bookingId);
-      
-      await updateDoc(bookingRef, {
-        userLocation: location,
-        userLocationUpdatedAt: serverTimestamp(),
-        lastUpdated: serverTimestamp(),
-        locationShared: true
-      });
-      
-      console.log(`📍 Customer location updated for booking ${bookingId}`);
-      return true;
-    } catch (error) {
-      console.error('Error updating customer location:', error);
-      throw error;
-    }
+    await jsonFetch(`${API_BASE}/api/driver-location/bookings/${bookingId}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ location }),
+    });
+    return true;
   }
 
-  // Get real-time ride tracking
   static subscribeToRideTracking(bookingId, callback) {
-    const bookingRef = doc(db, 'airportTransfers', bookingId);
-    
-    const unsubscribe = onSnapshot(bookingRef, (docSnap) => {
-      if (docSnap.exists()) {
-        const data = docSnap.data();
-        
-        // Get driver ID to also subscribe to driver location
+    let active = true;
+    let driverUnsubscribe = () => {};
+
+    const poll = async () => {
+      try {
+        const payload = await jsonFetch(`${API_BASE}/api/driver-location/bookings/${bookingId}`);
+        if (!active) return;
+        const data = payload.booking || payload;
         const driverId = data.driverId;
-        let driverUnsubscribe = () => {};
-        
+
+        driverUnsubscribe();
+        driverUnsubscribe = () => {};
+
         if (driverId) {
-          driverUnsubscribe = DriverLocationService.subscribeToDriverLocation(
-            driverId,
-            (driverLocation) => {
-              callback({
-                bookingData: data,
-                driverLocation,
-                customerLocation: data.userLocation,
-                status: data.status,
-                updatedAt: data.lastUpdated || data.updatedAt
-              });
-            }
-          );
+          driverUnsubscribe = DriverLocationService.subscribeToDriverLocation(driverId, (driverLocation) => {
+            callback({
+              bookingData: data,
+              driverLocation,
+              customerLocation: data.userLocation,
+              status: data.status,
+              updatedAt: data.lastUpdated || data.updatedAt,
+            });
+          });
         } else {
           callback({
             bookingData: data,
             driverLocation: data.driverLocation,
             customerLocation: data.userLocation,
-            status: data.status
+            status: data.status,
           });
         }
-        
-        // Return combined unsubscribe function
-        return () => {
-          unsubscribe();
-          driverUnsubscribe();
-        };
+      } catch (error) {
+        if (active) callback({ error: "Failed to track ride" });
       }
-    }, (error) => {
-      console.error('Ride tracking subscription error:', error);
-      callback({ error: 'Failed to track ride' });
-    });
-    
-    return unsubscribe;
+    };
+
+    poll();
+    const timer = setInterval(poll, 10000);
+    return () => {
+      active = false;
+      driverUnsubscribe();
+      clearInterval(timer);
+    };
   }
 }
 
-// Route matching service
 export class RouteMatchingService {
   static async findNearbyDrivers(customerLocation, radiusKm = 5) {
-    try {
-      // This is simplified - in production, use geohashes or Firebase Geoqueries
-      const driversQuery = query(
-        collection(db, 'drivers'),
-        where('isOnline', '==', true),
-        where('locationEnabled', '==', true)
-      );
-      
-      const snapshot = await getDocs(driversQuery);
-      const nearbyDrivers = [];
-      
-      snapshot.forEach((docSnap) => {
-        const driver = docSnap.data();
-        if (driver.lastLocation) {
-          const distance = this.calculateDistance(
-            customerLocation,
-            driver.lastLocation
-          );
-          
-          if (distance <= radiusKm) {
-            nearbyDrivers.push({
-              id: docSnap.id,
-              ...driver,
-              distance,
-              eta: this.calculateETA(distance, driver.lastLocation.speed || 30)
-            });
-          }
-        }
-      });
-      
-      // Sort by distance
-      return nearbyDrivers.sort((a, b) => a.distance - b.distance);
-    } catch (error) {
-      console.error('Error finding nearby drivers:', error);
-      return [];
-    }
+    const payload = await jsonFetch(`${API_BASE}/api/driver-location/nearby-drivers`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ customerLocation, radiusKm }),
+    });
+    return payload.drivers || [];
   }
 
   static calculateDistance(point1, point2) {
-    const R = 6371; // Earth's radius in km
+    const R = 6371;
     const dLat = this.toRad(point2.lat - point1.lat);
     const dLon = this.toRad(point2.lng - point1.lng);
-    
-    const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-              Math.cos(this.toRad(point1.lat)) * Math.cos(this.toRad(point2.lat)) *
-              Math.sin(dLon/2) * Math.sin(dLon/2);
-    
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-    return R * c;
+    const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(this.toRad(point1.lat)) * Math.cos(this.toRad(point2.lat)) *
+      Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    return R * (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)));
   }
 
   static calculateETA(distanceKm, speedKmph = 30) {
-    const timeHours = distanceKm / speedKmph;
-    return Math.ceil(timeHours * 60); // minutes
+    return Math.ceil((distanceKm / speedKmph) * 60);
   }
 
   static toRad(degrees) {

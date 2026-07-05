@@ -10,8 +10,7 @@ import { db } from "../config/firebase";
 import { FaArrowDown, FaCalendarAlt, FaClock, FaMapMarkerAlt, FaCrosshairs, FaMapPin, FaChevronDown, FaChevronUp, FaUsers } from "react-icons/fa";
 import { locationService } from "../utils/locationService";
 
-// Firebase Functions URLs
-const FIREBASE_FUNCTIONS_URL = "https://us-central1-carzi-holidays-f4be3.cloudfunctions.net";
+const API_BASE = import.meta.env.VITE_API_BASE_URL || "";
 
 // GST percentage
 const GST_PERCENTAGE = 5;
@@ -228,7 +227,7 @@ export default function OutstationPage() {
         }
 
         try {
-            let url = `${FIREBASE_FUNCTIONS_URL}/searchPlaces?q=${encodeURIComponent(searchQuery)}`;
+            let url = `${API_BASE}/api/places/autosuggest?q=${encodeURIComponent(searchQuery)}`;
             const isSublocality = type === 'pickupSublocality' || type === 'destinationSublocality';
 
             if (isSublocality && cityContext && typeof cityContext === 'object') {
@@ -327,19 +326,13 @@ export default function OutstationPage() {
         if ((!lat || !lng) && place.eLoc) {
             console.log(`🔄 Resolving eLoc: ${place.eLoc}`);
             try {
-                const resp = await fetch(`${FIREBASE_FUNCTIONS_URL}/resolveELoc`, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        eLoc: place.eLoc,
-                        placeAddress: place.placeAddress || displayAddress,
-                    }),
-                });
+                const resp = await fetch(`${API_BASE}/api/places/autosuggest?q=${encodeURIComponent(place.placeName || place.name || displayAddress)}`);
                 if (resp.ok) {
                     const data = await resp.json();
-                    if (data.success && data.latitude && data.longitude) {
-                        lat = data.latitude;
-                        lng = data.longitude;
+                    const resolved = data?.suggestions?.find((item) => item.eLoc === place.eLoc || item.placeID === place.placeID);
+                    if (resolved) {
+                        lat = resolved.latitude || resolved.lat || lat;
+                        lng = resolved.longitude || resolved.lng || lng;
                         console.log(`✅ Resolved: ${lat}, ${lng}`);
                     }
                 }
@@ -471,9 +464,7 @@ export default function OutstationPage() {
             const { latitude, longitude } = location;
             console.log("Got coordinates:", latitude, longitude);
 
-            const response = await fetch(
-                `${FIREBASE_FUNCTIONS_URL}/reverseGeocode?lat=${latitude}&lng=${longitude}`
-            );
+            const response = await fetch(`${API_BASE}/api/places/reverse-geocode?lat=${latitude}&lng=${longitude}`);
             if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
 
             const data = await response.json();
@@ -754,32 +745,28 @@ export default function OutstationPage() {
         };
 
         try {
-            const bookingRef = doc(collection(db, "bookings"));
+            const response = await fetch(`${API_BASE}/api/outstation-bookings`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(bookingData),
+            });
 
-            // Add bookingId so drivers can reference it when accepting
-            const bookingDataWithId = {
-            ...bookingData,
-            bookingId: bookingRef.id,
-            };
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}`);
+            }
 
-            await setDoc(bookingRef, bookingDataWithId);
+            const result = await response.json();
+            const bookingId = result.bookingId;
 
-            const assignedDrivers = await fetchDriversForRoute(
-            pickupCityForDriver, 
-            destinationCityForDriver, 
-            resolvedPickupCoords
-            );
-
-            if (assignedDrivers.length > 0) {
-            await sendRideRequestsToDrivers(bookingRef.id, bookingDataWithId, assignedDrivers);
+            if (bookingId) {
 
                 if (rideType === "now") {
-                    navigate("/booking-form", { state: { bookingId: bookingRef.id, ...bookingDataWithId } });
+                    navigate("/booking-form", { state: { bookingId, ...bookingData } });
                 } else {
                     navigate("/scheduled-confirmation", {
                         state: {
-                            bookingId: bookingRef.id,
-                            ...bookingDataWithId,
+                            bookingId,
+                            ...bookingData,
                             isScheduled: true,
                             rideDate,
                             rideTime,
@@ -787,10 +774,6 @@ export default function OutstationPage() {
                         },
                     });
                 }
-            } else {
-                await updateDoc(bookingRef, { status: "no_drivers_available" });
-                alert("We're sorry, but no drivers are currently available...");
-                setIsBooking(false); // allow retry
             }
         } catch (error) {
             alert("Booking failed, please try again.");

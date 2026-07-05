@@ -1281,7 +1281,7 @@ function BookingForm() {
       };
 
       const response = await fetch(
-        "https://us-central1-carzi-holidays-f4be3.cloudfunctions.net/sendOutstationInvoice",
+        `${import.meta.env.VITE_API_BASE_URL || ""}/api/outstation-invoice`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

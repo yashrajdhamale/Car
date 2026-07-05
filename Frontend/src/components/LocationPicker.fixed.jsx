@@ -5,6 +5,8 @@ import MaplibreGeocoder from '@maplibre/maplibre-gl-geocoder';
 import '@maplibre/maplibre-gl-geocoder/dist/maplibre-gl-geocoder.css';
 import './LocationPicker.css';
 
+const API_BASE = import.meta.env.VITE_API_BASE_URL || "";
+
 // Make maplibregl available globally for geocoder
 if (typeof window !== 'undefined') {
   window.maplibregl = maplibregl;
@@ -129,21 +131,13 @@ const LocationPicker = ({ onLocationSelect, city }) => {
         } : undefined,
         forwardGeocode: async (query) => {
           try {
-            const request = `https://nominatim.openstreetmap.org/search?q=${
-              encodeURIComponent(query + (city ? `, ${city}` : ''))
-            }&format=json&limit=5`;
-            
-            const response = await fetch(request, {
-              headers: {
-                'User-Agent': 'CarziHolidays/1.0 (your@email.com)'
-              }
-            });
-            
+            const request = `${API_BASE}/api/nominatim/search?q=${encodeURIComponent(query + (city ? `, ${city}` : ''))}`;
+            const response = await fetch(request);
             const data = await response.json();
             return {
-              features: data.map(feature => ({
+              features: (data.suggestions || data || []).map(feature => ({
                 type: 'Feature',
-                properties: { label: feature.display_name, id: feature.place_id },
+                properties: { label: feature.display_name, id: feature.place_id || feature.osm_id },
                 geometry: {
                   type: 'Point',
                   coordinates: [parseFloat(feature.lon), parseFloat(feature.lat)]

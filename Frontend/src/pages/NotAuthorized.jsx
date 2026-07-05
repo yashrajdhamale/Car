@@ -1,12 +1,11 @@
-import React, { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { auth, db } from '@config/firebase';
-import { doc, getDoc } from 'firebase/firestore';
+import { useUser } from '../context/UserContext';
 
 const NotAuthorized = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const from = location.state?.from?.pathname || '/';
+  const { user, userData, loading } = useUser();
 
   const [debugInfo, setDebugInfo] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -18,7 +17,9 @@ const NotAuthorized = () => {
     isMountedRef.current = true;
 
     const checkUserAndRedirect = async () => {
-      const user = auth.currentUser;
+      if (loading) {
+        return;
+      }
 
       if (!user) {
         console.log('No user found, redirecting to login');
@@ -29,68 +30,41 @@ const NotAuthorized = () => {
         return;
       }
 
-      try {
-        const [userDoc, driverDoc] = await Promise.all([
-          getDoc(doc(db, 'users', user.uid)),
-          getDoc(doc(db, 'drivers', user.uid))
-        ]);
+      const userRole = String(userData?.role || userData?.type || '').toLowerCase().trim();
+      const currentPath = window.location.pathname;
 
-        if (!isMountedRef.current) return;
-
-        const userData = userDoc.data() || {};
-        const driverData = driverDoc.exists() ? driverDoc.data() : null;
-        const userRole = userData.role || userData.type;
-        const currentPath = window.location.pathname;
-
-        console.log('User document:', userData);
-        console.log('Driver document:', driverData);
-
-        const debugData = {
-          userId: user.uid,
-          email: user.email,
-          userDoc: userData,
-          driverDoc: driverData,
-          locationState: location.state,
-          requiredRole: location.state?.requiredRole,
-          userRole: userRole,
-          timestamp: new Date().toISOString(),
-          authState: {
-            isAnonymous: user.isAnonymous,
-            emailVerified: user.emailVerified,
-            metadata: user.metadata
-          }
-        };
-
-        // Driver redirect logic
-        if (userRole === 'driver' && driverData?.status === 'active') {
-          if (!currentPath.startsWith('/driver-dashboard')) {
-            console.log('Driver is active, redirecting to dashboard');
-            navigate('/driver-dashboard', {
-              replace: true,
-              state: { from: location.pathname, skipAuthCheck: true }
-            });
-            return; // Important: Return after navigation
-          }
-          console.log('Already on dashboard, preventing redirect loop');
+      if (userRole === 'driver' && (userData?.status || 'active').toLowerCase() === 'active') {
+        if (!currentPath.startsWith('/driver-dashboard')) {
+          console.log('Driver is active, redirecting to dashboard');
+          navigate('/driver-dashboard', {
+            replace: true,
+            state: { from: location.pathname, skipAuthCheck: true }
+          });
           return;
         }
-
-        // Not authorized
-        setDebugInfo({
-          ...debugData,
-          error: 'User not authorized'
-        });
-        setIsLoading(false);
-      } catch (error) {
-        console.error('Error fetching documents:', error);
-        if (isMountedRef.current) {
-          setDebugInfo({
-            error: error.message,
-            timestamp: new Date().toISOString()
-          });
-          setIsLoading(false);
-        }
+        console.log('Already on dashboard, preventing redirect loop');
+        return;
       }
+
+      if (!isMountedRef.current) return;
+
+      setDebugInfo({
+        userId: user.uid,
+        email: user.email,
+        userDoc: userData || {},
+        driverDoc: null,
+        locationState: location.state,
+        requiredRole: location.state?.requiredRole,
+        userRole,
+        timestamp: new Date().toISOString(),
+        authState: {
+          isAnonymous: user.isAnonymous,
+          emailVerified: user.emailVerified,
+          metadata: user.metadata
+        },
+        error: 'User not authorized'
+      });
+      setIsLoading(false);
     };
 
     checkUserAndRedirect();
@@ -106,7 +80,7 @@ const NotAuthorized = () => {
     return () => {
       isMountedRef.current = false;
     };
-  }, [location.state, navigate, location.pathname]);
+  }, [location.state, navigate, location.pathname, loading, user, userData]);
 
   if (isLoading) {
     return (
@@ -126,7 +100,7 @@ const NotAuthorized = () => {
           Access Denied
         </h2>
         <p className="mt-2 text-center text-sm text-gray-600">
-          You don't have permission to access this page.
+          You don&apos;t have permission to access this page.
         </p>
         <div className="mt-4 text-center">
           <button

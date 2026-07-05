@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { useEffect, useRef } from 'react';
 import { 
   createBrowserRouter, 
   RouterProvider, 
@@ -10,13 +10,10 @@ import {
 import { HeaderHome } from '@components';
 import MainLayout from "./components/MainLayout";
 import DriverLayout from "./components/driver/DriverLayout";
-import ProtectedDriverRoute from "./components/driver/ProtectedDriverRoute";
 import { UserProvider } from './context/UserContext';
+import { useUser } from './context/UserContext';
 import { NotificationProvider } from './context/NotificationContext';
 import { NavigationProvider } from './context/NavigationContext';
-import { auth, db } from './config/firebase';
-import { doc, updateDoc, serverTimestamp } from 'firebase/firestore';
-import { getUserDocument } from './config/functions';
 import TestRideRequest from './components/TestRideRequest';
 import Home from './pages/Home';
 import About from './pages/About';
@@ -59,7 +56,6 @@ import OutstationPage from './components/OutstationPage';
 import Packages from './components/Packages';
 import BookingForm from './components/BookingForm';
 import CarForHolidayPage from './components/CarForHolidayPage';
-import { Search } from 'lucide-react';
 import SearchHolidaysPage from './components/SearchHolidaysPage';
 import DriverSignup from './pages/DriverSignup';
 import TermsAndConditions from './pages/driver/TermsAndConditions';
@@ -81,88 +77,38 @@ import AgencyDashboard from './pages/AgencyDashboard';
 // ✅ Language Selector
 import LanguageSelector from './components/LanguageSelector';
 
+const getAuthenticatedRedirectPath = (userRole) => {
+  const normalizedRole = (userRole || '').toLowerCase().trim();
+
+  if (normalizedRole === 'driver') {
+    return '/driver/dashboard';
+  }
+
+  if (normalizedRole === 'admin') {
+    return '/admin';
+  }
+
+  if (['agency', 'travelagency', 'travel_agency'].includes(normalizedRole)) {
+    return '/agency-dashboard';
+  }
+
+  return '/';
+};
+
 
 // ---- Custom hook for authentication ----
 function useAuthState() {
-  const [userData, setUserData] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const isMounted = useRef(true);
-  const userDocCache = useRef(null);
-  const authCheckInProgress = useRef(false);
-
-  const fetchUserData = useCallback(async (user) => {
-    if (!user) {
-      if (isMounted.current) {
-        setUserData(null);
-        setLoading(false);
-      }
-      sessionStorage.removeItem('driver_redirect');
-      return null;
-    }
-
-    if (authCheckInProgress.current) return userDocCache.current;
-
-    authCheckInProgress.current = true;
-    if (isMounted.current) setLoading(true);
-
-    try {
-      const userDoc = await getUserDocument(user.uid);
-      const normalizedUser = userDoc ? {
-        ...userDoc,
-        uid: user.uid,
-        role: (userDoc.role || userDoc.type || 'user').toLowerCase().trim(),
-        status: userDoc.status || 'active'
-      } : null;
-
-      userDocCache.current = normalizedUser;
-      if (isMounted.current) {
-        setUserData(normalizedUser);
-        setLoading(false);
-      }
-      return normalizedUser;
-    } catch (error) {
-      console.error('Error fetching user data:', error);
-      if (isMounted.current) {
-        setLoading(false);
-        if (error.code !== 'not-found') {
-          setUserData(null);
-          userDocCache.current = null;
-        }
-      }
-      return null;
-    } finally {
-      authCheckInProgress.current = false;
-    }
-  }, []);
-
-  useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged(async (user) => {
-      if (user) {
-        await fetchUserData(user);
-      } else if (isMounted.current) {
-        setUserData(null);
-        setLoading(false);
-        userDocCache.current = null;
-      }
-    });
-
-    return () => {
-      isMounted.current = false;
-      unsubscribe();
-    };
-  }, [fetchUserData]);
-
-  return { userData, loading };
+  const { user, userData, loading, error } = useUser();
+  return { user, userData, loading, error };
 }
 
 // ---- Protected Route ----
 const ProtectedRoute = ({ children, requiredRole = null }) => {
-  const { userData, loading } = useAuthState();
+  const { user: currentUser, userData, loading } = useAuthState();
   const location = useLocation();
   const navigate = useNavigate();
   const hasNavigated = useRef(false);
 
-  const currentUser = auth.currentUser;
   const userRole = userData ? (userData.role || 'user').toLowerCase().trim() : 'guest';
   const requiredRoleLower = requiredRole ? requiredRole.toLowerCase().trim() : null;
   const isDriverRoute = location.pathname.startsWith('/driver-dashboard');
@@ -205,30 +151,11 @@ const ProtectedRoute = ({ children, requiredRole = null }) => {
   return children;
 };
 
-const getAuthenticatedRedirectPath = (userRole) => {
-  const normalizedRole = (userRole || '').toLowerCase().trim();
-
-  if (normalizedRole === 'driver') {
-    return '/driver/dashboard';
-  }
-
-  if (normalizedRole === 'admin') {
-    return '/admin';
-  }
-
-  if (['agency', 'travelagency', 'travel_agency'].includes(normalizedRole)) {
-    return '/agency-dashboard';
-  }
-
-  return '/';
-};
-
 const GuestRoute = ({ children }) => {
-  const { userData, loading } = useAuthState();
+  const { user: currentUser, userData, loading } = useAuthState();
   const navigate = useNavigate();
   const hasNavigated = useRef(false);
 
-  const currentUser = auth.currentUser;
   const redirectPath = getAuthenticatedRedirectPath(userData?.role || userData?.type);
 
   useEffect(() => {

@@ -1,8 +1,28 @@
-import { addDoc, collection, serverTimestamp, updateDoc, doc } from 'firebase/firestore';
-import { db } from '../config/firebase';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { useUser } from '../context/UserContext';
+
+const BACKEND_BASE_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
+
+const apiRequest = async (path, { method = 'GET', body } = {}, user) => {
+  const idToken = user?.getIdToken ? await user.getIdToken() : null;
+  const response = await fetch(`${BACKEND_BASE_URL}/api${path}`, {
+    method,
+    headers: {
+      ...(body ? { 'Content-Type': 'application/json' } : {}),
+      ...(idToken ? { Authorization: `Bearer ${idToken}` } : {}),
+    },
+    body: body ? JSON.stringify(body) : undefined,
+  });
+
+  const data = await response.json().catch(() => ({}));
+
+  if (!response.ok) {
+    throw new Error(data?.message || data?.error || 'Request failed');
+  }
+
+  return data;
+};
 
 const BookingPage = () => {
   const { state } = useLocation();
@@ -39,37 +59,26 @@ const BookingPage = () => {
 
     setIsLoading(true);
     try {
-      // Save to Firestore
-      const docRef = await addDoc(collection(db, 'airportTransfers'), {
-        ...transferDetails,
-        vehicleDetails,
-        status: 'searching_driver',
-        userId: user.uid,
-        createdAt: serverTimestamp(),
-        bookingType: 'airport',
-        paymentStatus: 'pending',
-        driverId: '',
-        updatedAt: serverTimestamp()
-      });
-
-      // Also update another bookings collection if present
-      if (transferDetails.bookingId) {
-        await updateDoc(doc(db, 'bookings', transferDetails.bookingId), {
-          status: 'searching_driver',
-          updatedAt: serverTimestamp()
-        });
-      }
+      const response = await apiRequest('/airport-bookings', {
+        method: 'POST',
+        body: {
+          transferDetails,
+          vehicleDetails,
+          userId: user.uid,
+          bookingId: transferDetails.bookingId,
+        },
+      }, user);
 
       // Always put ALL details needed for later pages in bookingDetails:
       navigate('/find-driver', {
         state: {
-          bookingId: docRef.id,
+          bookingId: response.bookingId,
           bookingType: 'airport',
           bookingDetails: {
             ...transferDetails,
             ...vehicleDetails,
-            id: docRef.id,
-            status: 'searching_driver', // Ensures status for later screens
+            id: response.bookingId,
+            status: response.status || 'searching_driver',
             vehicleDetails // Keep the nested object for easy reference in PaymentPage
           }
         }

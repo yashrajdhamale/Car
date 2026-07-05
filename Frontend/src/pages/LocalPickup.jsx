@@ -2,6 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Loader, MapPin, Navigation, X, Clock, User, Car, ArrowRight } from 'lucide-react';
 
+const BACKEND_BASE_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
+
 const LocalPickup = () => {
   const navigate = useNavigate();
   const mapContainer = useRef(null);
@@ -116,7 +118,7 @@ const LocalPickup = () => {
   const reverseGeocode = async (position) => {
     try {
       const response = await fetch(
-        `https://apis.mapmyindia.com/advancedmaps/v1/${import.meta.env.VITE_MAPMYINDIA_KEY}/rev_geocode?lat=${position[0]}&lng=${position[1]}`
+        `${BACKEND_BASE_URL}/api/places/reverse-geocode?lat=${encodeURIComponent(position[0])}&lng=${encodeURIComponent(position[1])}`
       );
       const data = await response.json();
       
@@ -148,12 +150,7 @@ const LocalPickup = () => {
 
     try {
       const response = await fetch(
-        `https://atlas.mapmyindia.com/api/places/search_json?query=${encodeURIComponent(query)}`,
-        {
-          headers: {
-            'Authorization': `Bearer ${import.meta.env.VITE_MAPMYINDIA_KEY}`
-          }
-        }
+        `${BACKEND_BASE_URL}/api/places/autosuggest?q=${encodeURIComponent(query)}`
       );
       const data = await response.json();
       setSuggestions(data.suggestedLocations || []);

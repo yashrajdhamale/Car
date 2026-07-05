@@ -23,13 +23,13 @@ import HolidayRideRequestCard from '../../components/driver/HolidayRideRequestCa
 import InterestedRoutesSection from './components/InterestedRoutesSection';
 import DriverTrackingMap from '../../pages/driver/components/DriverTrackingMap';
 import MyRidesTab from '../../components/driver/MyRidesTab';
+import { acceptLocalRide, sendScheduledConfirmation } from '../../services/driverActionsService';
 
 import OtpVerificationPanel from '../../components/driver/OtpVerificationPanel';
 
 // Distance Calculator Import
 import { isWithinRadius, calculateDistance, extractCoordinates } from '../../utils/distanceCalculator';
 
-const CLOUD_FN_BASE = "https://us-central1-carzi-holidays-f4be3.cloudfunctions.net";
 // Debounce utility function
 const debounce = (func, delay) => {
   let timeoutId;
@@ -292,17 +292,7 @@ const isRequestWithinRadius = useCallback((request) => {
         confirmationLink: `${window.location.origin}/scheduled-confirmation/${bookingId}`
       };
       
-      // Call cloud function to send confirmation email
-      const response = await fetch(
-        'https://us-central1-carzi-holidays-f4be3.cloudfunctions.net/sendScheduledConfirmation',
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(emailData)
-        }
-      );
-      
-      const result = await response.json();
+      const result = await sendScheduledConfirmation(emailData);
       if (result.success) {
         console.log('✅ Scheduled ride confirmation email sent');
         return true;
@@ -1541,35 +1531,22 @@ const isRequestWithinRadius = useCallback((request) => {
             driverId: user.uid,
             driverLocation
           });
-          const response = await fetch(
-            "https://us-central1-carzi-holidays-f4be3.cloudfunctions.net/acceptLocalRide",
-            {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                rideId: requestId,
-                driverId: user.uid,
-                driverName: userData?.fullName || userData?.displayName || "Driver",
-                driverPhone: userData?.phone || userData?.phoneNumber || "",
-                vehicleType: userData?.vehicleType || "car",
-                vehicleNumber: userData?.vehicleNumber || "",
-                driverLocation: {
-                  lat: Number(driverLocation.lat),
-                  lng: Number(driverLocation.lng),
-                  accuracy: driverLocation.accuracy || 0,
-                  heading: driverLocation.heading || null,
-                  speed: driverLocation.speed || 0,
-                  timestamp: Date.now()
-                }
-              })
+          const result = await acceptLocalRide({
+            rideId: requestId,
+            driverId: user.uid,
+            driverName: userData?.fullName || userData?.displayName || "Driver",
+            driverPhone: userData?.phone || userData?.phoneNumber || "",
+            vehicleType: userData?.vehicleType || "car",
+            vehicleNumber: userData?.vehicleNumber || "",
+            driverLocation: {
+              lat: Number(driverLocation.lat),
+              lng: Number(driverLocation.lng),
+              accuracy: driverLocation.accuracy || 0,
+              heading: driverLocation.heading || null,
+              speed: driverLocation.speed || 0,
+              timestamp: Date.now()
             }
-          );
-
-          if (!response.ok) {
-            throw new Error("Server error while accepting ride");
-          }
-
-          const result = await response.json();
+          });
 
           if (!result.success) {
             throw new Error(result.error || "Failed to accept ride");
@@ -1734,20 +1711,20 @@ const isRequestWithinRadius = useCallback((request) => {
             request.type === 'localPickup' ? 'localPickup' :
             'outstation';
       
-          const otpRes = await fetch(`${CLOUD_FN_BASE}/generateRideOtp`, {
-            method:  'POST',
+          const otpResponse = await fetch(`${import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000'}/api/driver-otp/generate`, {
+            method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-              bookingId:     bookingDocId,
-              rideType:      rideTypeForOtp,
-              driverName:    userData?.fullName || userData?.displayName || 'Driver',
-              driverPhone:   userData?.phone   || userData?.phoneNumber  || '',
-              vehicleType:   userData?.vehicleType   || '',
+              bookingId: bookingDocId,
+              rideType: rideTypeForOtp,
+              driverName: userData?.fullName || userData?.displayName || 'Driver',
+              driverPhone: userData?.phone || userData?.phoneNumber || '',
+              vehicleType: userData?.vehicleType || '',
               vehicleNumber: userData?.vehicleNumber || '',
             }),
           });
-      
-          const otpData = await otpRes.json();
+
+          const otpData = await otpResponse.json();
           if (otpData.success) {
             console.log(`✅ OTP generated and sent to customer for ${bookingDocId}`);
           } else {

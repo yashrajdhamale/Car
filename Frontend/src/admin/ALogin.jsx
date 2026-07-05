@@ -1,10 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { db, auth } from '@config/firebase.js';
-import { signInWithEmailAndPassword, sendPasswordResetEmail } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import { ArrowRight, Fingerprint } from 'lucide-react'
-import { getUserDocument } from "@config/functions.js"
-import { collection, query, where, getDocs } from "firebase/firestore";
 import { Alert } from '@material-tailwind/react';
 import { useForm } from 'react-hook-form';
 
@@ -12,6 +8,7 @@ import { useForm } from 'react-hook-form';
 import { UserContext } from '../context/UserContext';
 
 function ALogin() {
+    const API_BASE = import.meta.env.VITE_API_BASE_URL || "";
 
     // USER CONTEXT
     const { userDataContext, setUserDataContext } = useContext(UserContext);
@@ -77,12 +74,18 @@ function ALogin() {
             // e.preventDefault();
             try {
                 setButtonContent("Authenticating Credential ");
-                const userCredential = await signInWithEmailAndPassword(auth, email, password);
-                const userData = await getUserDocument(userCredential.user.uid);
-                console.log('Login successful:', userCredential);
+                const response = await fetch(`${API_BASE}/api/auth/login`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ email, password, role: selectedType.value }),
+                });
+                const result = await response.json();
+                if (!response.ok) throw new Error(result?.message || "Login failed");
+                console.log('Login successful:', result);
+                localStorage.setItem("auth_custom_token", result.customToken || "");
+                localStorage.setItem("auth_user", JSON.stringify(result.user || {}));
 
-                // Await the result of handleSubmitVerifyAdmin
-                const isAdmin = await handleSubmitVerifyAdmin();
+                const isAdmin = await handleSubmitVerifyAdmin(result.user);
 
 
                 if (isAdmin) {
@@ -95,8 +98,7 @@ function ALogin() {
                 }
             } catch (error) {
                 console.error('Login error:', error);
-                const error1 = error;
-                alert('Login error:' + error1);
+                alert('Login error:' + error.message);
 
 
                 setTimeout(() => {
@@ -111,37 +113,16 @@ function ALogin() {
 
     };
 
-    const handleSubmitVerifyAdmin = async () => {
+    const handleSubmitVerifyAdmin = async (user) => {
         try {
-            const q = query(collection(db, "users"), where("role", "==", "SUPPERADMIN"), where("email", "==", email));
-            const querySnapshot = await getDocs(q);
-
-            if (!querySnapshot.empty) {
-                // console.log("User with email", email, "and role ADMIN found.");
-
-                // querySnapshot.forEach((doc) => {
-                //     console.log(doc.id, "=>", doc.data());
-                // });
-
-                const userData = querySnapshot.docs.map(doc => ({
-                    id: doc.id,
-                    data: doc.data()
-                }));
-
-                // console.log(userData);
-                setUserDataContext(userData[0]);
-
-                // localStorage.setItem('userData', JSON.stringify(userData[0]));
-
+            if (user && (user.role === "admin" || user.role === "superadmin" || user.role === "supperadmin")) {
+                setUserDataContext({ id: user.uid, data: user });
                 return true;
-
-            } else {
-                console.log("No user found with email", email, "and role ADMIN.");
-                return false;
             }
+            console.log("No user found with email", email, "and role ADMIN.");
+            return false;
         } catch (error) {
-            console.error("Error querying Firestore:", error);
-            // Handle error or rethrow it
+            console.error("Error verifying admin:", error);
             setTimeout(() => {
                 window.location.reload();
             }, 2000);
@@ -163,8 +144,14 @@ function ALogin() {
         setForgotPasswordDisbale(true);
         e.preventDefault();
         try {
-            await sendPasswordResetEmail(auth, email);
-            alert('Reset link sent to your email address!');
+            const response = await fetch(`${API_BASE}/api/auth/password-reset`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email }),
+            });
+            const result = await response.json();
+            if (!response.ok) throw new Error(result?.message || "Password reset failed");
+            alert(result.message || 'Reset link sent to your email address!');
             setEmail('');
         } catch (error) {
             console.error(error);

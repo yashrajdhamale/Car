@@ -1,5 +1,4 @@
-const AUTOCOMPLETE_API = 'https://atlas.mapmyindia.com/api/places/autosuggest';
-const API_KEY = import.meta.env.VITE_MAPMYINDIA_API_KEY || '';
+const BACKEND_BASE_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
 
 let debounceTimer;
 
@@ -14,12 +13,7 @@ export const fetchSuggestions = async (query, options = {}) => {
   if (!query || query.trim().length < 2) return [];
   
   try {
-    if (!API_KEY) {
-      console.error('MapmyIndia API key is not configured');
-      return [];
-    }
-
-    const url = new URL(AUTOCOMPLETE_API);
+    const url = new URL(`${BACKEND_BASE_URL}/api/places/autosuggest`);
     const params = {
       query,
       region: 'IND',
@@ -33,12 +27,7 @@ export const fetchSuggestions = async (query, options = {}) => {
       }
     });
     
-    const response = await fetch(url.toString(), {
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${API_KEY}`,
-      },
-    });
+    const response = await fetch(url.toString());
     
     if (!response.ok) {
       throw new Error(`API request failed with status ${response.status}`);

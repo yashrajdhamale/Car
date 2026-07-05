@@ -3,8 +3,7 @@
  * Handles forward and reverse geocoding
  */
 
-const MAPMYINDIA_API_KEY = import.meta.env.VITE_MAPMYINDIA_API_KEY;
-const MAPMYINDIA_BASE_URL = 'https://atlas.mapmyindia.com/api/places';
+const BACKEND_BASE_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
 
 /**
  * Reverse geocode coordinates to get address
@@ -14,19 +13,8 @@ const MAPMYINDIA_BASE_URL = 'https://atlas.mapmyindia.com/api/places';
  */
 export const reverseGeocode = async (lat, lng) => {
   try {
-    if (!MAPMYINDIA_API_KEY) {
-      console.warn('MapmyIndia API key is missing');
-      return 'Current Location';
-    }
-
     const response = await fetch(
-      `${MAPMYINDIA_BASE_URL}/reverse_geocode?lng=${lng}&lat=${lat}`, 
-      {
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${MAPMYINDIA_API_KEY}`
-        }
-      }
+      `${BACKEND_BASE_URL}/api/places/reverse-geocode?lng=${encodeURIComponent(lng)}&lat=${encodeURIComponent(lat)}`
     );
 
     if (!response.ok) {
@@ -36,7 +24,7 @@ export const reverseGeocode = async (lat, lng) => {
     const data = await response.json();
     
     // Extract formatted address from response
-    return data?.results?.[0]?.formatted_address || `${lat.toFixed(4)}, ${lng.toFixed(4)}`;
+    return data?.results?.[0]?.formatted_address || data?.suggestedLocations?.[0]?.placeAddress || `${lat.toFixed(4)}, ${lng.toFixed(4)}`;
   } catch (error) {
     console.error('Reverse geocoding error:', error);
     return `${lat.toFixed(4)}, ${lng.toFixed(4)}`;
@@ -53,13 +41,7 @@ export const searchLocations = async (query) => {
     if (!query.trim()) return [];
     
     const response = await fetch(
-      `${MAPMYINDIA_BASE_URL}/search/json?query=${encodeURIComponent(query)}`,
-      {
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${MAPMYINDIA_API_KEY}`
-        }
-      }
+      `${BACKEND_BASE_URL}/api/places/autosuggest?q=${encodeURIComponent(query)}`
     );
 
     if (!response.ok) {

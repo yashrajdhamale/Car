@@ -67,6 +67,51 @@ const normalizeRole = (role) => {
 
 const resolveStatus = (userData = {}) => String(userData.status || userData.approvalStatus || "active").toLowerCase().trim();
 
+const getBearerToken = (req) => {
+  const header = req.headers.authorization || "";
+  if (!header.startsWith("Bearer ")) return null;
+  const token = header.slice(7).trim();
+  return token || null;
+};
+
+const buildUserProfileResponse = async (uid) => {
+  const [authUser, userDoc, driverDoc] = await Promise.all([
+    firebaseAdmin.auth().getUser(uid),
+    firestore.collection("users").doc(uid).get(),
+    firestore.collection("drivers").doc(uid).get(),
+  ]);
+
+  const userData = userDoc.exists ? userDoc.data() : {};
+  const driverData = driverDoc.exists ? driverDoc.data() : null;
+  const sourceData = driverData || userData || {};
+  const role = normalizeRole(sourceData.role || sourceData.type || userData.role || userData.type || "customer");
+  const status = resolveStatus(sourceData);
+
+  return {
+    uid: authUser.uid,
+    email: authUser.email || sourceData.email || "",
+    displayName:
+      sourceData.displayName ||
+      sourceData.fullName ||
+      authUser.displayName ||
+      authUser.email?.split("@")[0] ||
+      "User",
+    photoURL: authUser.photoURL || sourceData.photoURL || "",
+    phoneNumber: authUser.phoneNumber || sourceData.phoneNumber || sourceData.primaryContact || sourceData.contactNumber1 || "",
+    role,
+    type: sourceData.type || role,
+    status,
+    emailVerified: authUser.emailVerified || !!sourceData.emailVerified,
+    isDriver: role === "driver",
+    source: {
+      hasUserDocument: userDoc.exists,
+      hasDriverDocument: driverDoc.exists,
+    },
+    userData: userData,
+    driverData: driverData,
+  };
+};
+
 
 export const registerUser = async (req, res, next) => {
   try {
@@ -589,6 +634,73 @@ export const loginUser = async (req, res, next) => {
         role: normalizedRole,
       },
     });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getCurrentUser = async (req, res, next) => {
+  try {
+    const token = getBearerToken(req);
+
+    if (!token) {
+      return res.status(401).json({
+        success: false,
+        message: "Authorization token is required",
+      });
+    }
+
+    const decodedToken = await firebaseAdmin.auth().verifyIdToken(token);
+    const profile = await buildUserProfileResponse(decodedToken.uid);
+
+    return res.status(200).json({
+      success: true,
+      user: profile,
+    });
+  } catch (error) {
+    if (error?.code === "auth/id-token-expired" || error?.code === "auth/argument-error") {
+      return res.status(401).json({
+        success: false,
+        message: "Invalid or expired session",
+      });
+    }
+
+    next(error);
+  }
+};
+
+export const updateCurrentUserProfile = async (req, res, next) => {
+  try {
+    const token = getBearerToken(req);
+    if (!token) {
+      return res.status(401).json({ success: false, message: "Authorization token is required" });
+    }
+
+    const decodedToken = await firebaseAdmin.auth().verifyIdToken(token);
+    const { displayName, photoURL, phoneNumber } = req.body || {};
+
+    const authUpdate = {};
+    if (displayName) authUpdate.displayName = displayName;
+    if (photoURL) authUpdate.photoURL = photoURL;
+    if (phoneNumber) authUpdate.phoneNumber = String(phoneNumber).trim();
+
+    if (Object.keys(authUpdate).length > 0) {
+      await firebaseAdmin.auth().updateUser(decodedToken.uid, authUpdate);
+    }
+
+    const userRef = firestore.collection("users").doc(decodedToken.uid);
+    await userRef.set(
+      {
+        ...(displayName ? { displayName } : {}),
+        ...(photoURL ? { photoURL } : {}),
+        ...(phoneNumber ? { phoneNumber: String(phoneNumber).trim() } : {}),
+        updatedAt: FieldValue.serverTimestamp(),
+      },
+      { merge: true }
+    );
+
+    const profile = await buildUserProfileResponse(decodedToken.uid);
+    return res.status(200).json({ success: true, user: profile });
   } catch (error) {
     next(error);
   }

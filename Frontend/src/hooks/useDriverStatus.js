@@ -1,62 +1,60 @@
 import { useEffect } from 'react';
-import { doc, updateDoc, serverTimestamp, onSnapshot } from 'firebase/firestore';
-import { db, auth } from '../config/firebase';
+import { onAuthStateChanged } from 'firebase/auth';
+import { auth } from '../config/firebase';
+
+const BACKEND_BASE_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
+
+const updateStatus = async (token, status) => {
+  const response = await fetch(`${BACKEND_BASE_URL}/api/driver-status`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    },
+    body: JSON.stringify({ status }),
+    keepalive: status === 'offline',
+  });
+
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok) {
+    throw new Error(data.message || data.error || 'Failed to update driver status');
+  }
+  return data;
+};
 
 export const useDriverStatus = () => {
   useEffect(() => {
-    const user = auth.currentUser;
-    if (!user) return;
+    const unsubscribeAuth = onAuthStateChanged(auth, async (user) => {
+      if (!user) return;
 
-    // Check if user is a driver
-    const userDocRef = doc(db, 'users', user.uid);
-    const unsubscribe = onSnapshot(userDocRef, (doc) => {
-      const userData = doc.data();
-      if (userData?.type === 'driver') {
-        // Set status to online when component mounts
-        const driverRef = doc(db, 'drivers', user.uid);
-        updateDoc(driverRef, {
-          status: 'active',
-          lastOnline: serverTimestamp()
-        }).catch(console.error);
+      try {
+        const token = await user.getIdToken();
+        await updateStatus(token, 'active');
 
-        // Set up window close handler
-        const handleBeforeUnload = async () => {
-          try {
-            await updateDoc(driverRef, {
-              status: 'offline',
-              lastOnline: serverTimestamp()
-            });
-          } catch (error) {
-            console.error('Error updating driver status on unload:', error);
-          }
+        const handleBeforeUnload = () => {
+          user.getIdToken().then((freshToken) => {
+            updateStatus(freshToken, 'offline').catch(console.error);
+          }).catch(console.error);
         };
 
         window.addEventListener('beforeunload', handleBeforeUnload);
-        
-        // Set up auth state change handler
-        const unsubscribeAuth = auth.onAuthStateChanged((user) => {
-          if (!user) {
-            // User signed out
-            updateDoc(driverRef, {
-              status: 'offline',
-              lastOnline: serverTimestamp()
-            }).catch(console.error);
-          }
-        });
 
-        // Cleanup function
         return () => {
           window.removeEventListener('beforeunload', handleBeforeUnload);
-          unsubscribeAuth();
-          // Update status to offline when component unmounts
-          updateDoc(driverRef, {
-            status: 'offline',
-            lastOnline: serverTimestamp()
-          }).catch(console.error);
         };
+      } catch (error) {
+        console.error('Error updating driver status:', error);
       }
     });
 
-    return () => unsubscribe();
+    return () => {
+      unsubscribeAuth();
+      const currentUser = auth.currentUser;
+      if (currentUser) {
+        currentUser.getIdToken().then((token) => {
+          updateStatus(token, 'offline').catch(console.error);
+        }).catch(console.error);
+      }
+    };
   }, []);
 };

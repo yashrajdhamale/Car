@@ -23,11 +23,11 @@ import {
 import { MagnifyingGlassIcon, ChevronUpDownIcon, } from "@heroicons/react/24/outline";
 import { PencilIcon, UserPlusIcon } from "@heroicons/react/24/solid";
 import { Bell, ArrowRightSquare, Diff } from 'lucide-react'
-import { db, auth } from '@config/firebase.js';
-import { collection, query, where, getDocs } from "firebase/firestore";
+import { auth } from '@config/firebase.js';
 import { format } from 'date-fns'; // Import format function from date-fns
 import { onAuthStateChanged } from 'firebase/auth';
 import { AuthCheck } from '@components';
+import { adminApi } from '../services/adminApiService';
 
 const APackages = () => {
 
@@ -67,20 +67,8 @@ const APackages = () => {
 
     const fetchPackagesData = async () => {
         try {
-            const q = query(collection(db, "users"), where("role", "==", "SUPPERADMIN"),);
-            const querySnapshot = await getDocs(q);
-
-
-
-            const locations = [];
-
-            querySnapshot.forEach((doc) => {
-                const data = doc.data();
-                // console.log(data);
-
-                locations.push(data);
-
-            });
+            const result = await adminApi.getSuperAdmin(email || "");
+            const locations = result.users || [];
             console.log(locations);
             setDataPrepared(true);
         } catch (error) {

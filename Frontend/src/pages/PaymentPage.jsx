@@ -1,9 +1,27 @@
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { getAuth } from "firebase/auth";
-import { doc, updateDoc, serverTimestamp, getDoc } from "firebase/firestore";
-import { db } from "../config/firebase";
 import QrPayment from "../assets/images/Qrpayment.jpg";
+
+const BACKEND_BASE_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
+
+const apiRequest = async (path, { method = 'GET', body } = {}, user) => {
+  const idToken = user?.getIdToken ? await user.getIdToken() : null;
+  const response = await fetch(`${BACKEND_BASE_URL}/api${path}`, {
+    method,
+    headers: {
+      ...(body ? { 'Content-Type': 'application/json' } : {}),
+      ...(idToken ? { Authorization: `Bearer ${idToken}` } : {}),
+    },
+    body: body ? JSON.stringify(body) : undefined,
+  });
+
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok) {
+    throw new Error(data?.message || data?.error || 'Request failed');
+  }
+  return data;
+};
 
 const PaymentPage = () => {
   const { state } = useLocation();
@@ -70,15 +88,6 @@ const PaymentPage = () => {
         return;
       }
 
-      const bookingRef = doc(db, 'airportTransfers', actualBookingId);
-      const bookingDoc = await getDoc(bookingRef);
-      
-      if (!bookingDoc.exists()) {
-        alert("Booking not found. Please contact support.");
-        setIsLoading(false);
-        return;
-      }
-
       // Get phone number from user or local storage or booking details
       const getUserPhoneNumber = () => {
         // Check Firebase Auth first
@@ -107,131 +116,32 @@ const PaymentPage = () => {
       const customerEmail = user.email || details.email || '';
 
       // Prepare update data
-      const updateData = {
-        // Payment status
-        paymentStatus: 'paid',
-        paidAt: serverTimestamp(),
-        updatedAt: serverTimestamp(),
-        
-        // Customer info
-        customerName: customerName,
-        userName: customerName,
-        
-        customerEmail: customerEmail,
-        userEmail: customerEmail,
-        
-        // PHONE NUMBER
-        customerPhone: customerPhone,
-        userPhone: customerPhone,
-        phoneNumber: customerPhone,
-        
-        // Location sharing status
-        waitingForLocation: true,
-        locationShared: false,
-        locationSkipped: false,
-        
-        // Meta fields
-        customerInfoAvailable: true,
-        customerInfoSavedAt: serverTimestamp(),
-        
-        // Terms acceptance
-        termsAccepted: true,
-        termsAcceptedAt: serverTimestamp(),
-        
-        // Cancellation policy acceptance
-        cancellationPolicyAccepted: true,
-        cancellationPolicyAcceptedAt: serverTimestamp()
+      const paymentPayload = {
+        customerName,
+        customerEmail,
+        customerPhone,
+        pickup,
+        dropoff,
+        travelDate,
+        hour,
+        minute,
+        adults,
+        children,
+        price: Number(vehicleDetails?.price || 0),
+        vehicleType: vehicleDetails?.name || 'Vehicle',
+        time: `${hour || '12'}:${minute || '00'}`,
       };
 
-      // Preserve existing status if driver is already assigned
-      const currentBookingData = bookingDoc.data();
-      if (currentBookingData.driverId && currentBookingData.status === 'accepted') {
-        updateData.status = 'accepted';
-      } else {
-        updateData.status = 'searching_driver';
-      }
-      
-      await updateDoc(bookingRef, updateData);
+      await apiRequest(`/airport-bookings/${actualBookingId}/payment-confirmation`, {
+        method: 'POST',
+        body: paymentPayload,
+      }, user);
       
       console.log('✅ Payment confirmed. Customer phone saved:', customerPhone);
 
       // ========== INVOICE SENDING ==========
       
-      // Validate critical fields before sending invoice
-      if (!customerEmail || customerEmail.trim() === '') {
-        console.warn('⚠️ Customer email is empty. Invoice will not be sent.');
-        alert("Payment successful! But we couldn't send invoice because email is missing.");
-        setShowLocationPopup(true);
-        setIsLoading(false);
-        return;
-      }
-
-      // Create safe payload with fallback values
-      const invoicePayload = {
-        to: customerEmail.trim(),
-        customerName: customerName || 'Customer',
-        bookingId: actualBookingId || `TEMP_${Date.now()}`,
-        vehicleType: vehicleDetails?.name || 'Vehicle',
-        pickup: (pickup?.name || pickup?.address || 'Unknown pickup location'),
-        dropoff: (dropoff?.name || dropoff?.address || 'Unknown dropoff location'),
-        travelDate: travelDate ? new Date(travelDate).toLocaleDateString('en-US') : new Date().toLocaleDateString('en-US'),
-        time: `${hour || '12'}:${minute || '00'}`,
-        adults: adults || 1,
-        children: children || 0,
-        price: Number(vehicleDetails?.price || 0)
-      };
-
-      console.log('📤 Sending invoice payload:', invoicePayload);
-
-      try {
-        const response = await fetch("https://sendairportinvoice-fhq2rwxr2a-uc.a.run.app", {
-          method: "POST",
-          headers: { 
-            "Content-Type": "application/json",
-            "Accept": "application/json"
-          },
-          body: JSON.stringify(invoicePayload),
-        });
-
-        console.log('📨 Invoice response status:', response.status, response.statusText);
-
-        // First try to get response as text
-        const responseText = await response.text();
-        console.log('📨 Raw response text:', responseText);
-
-        let data;
-        try {
-          data = JSON.parse(responseText);
-        } catch (parseError) {
-          console.error('❌ Failed to parse JSON from invoice service:', parseError);
-          console.log('Raw response was:', responseText);
-          
-          // Check if it's HTML or error page
-          if (responseText.includes('Method Not Allowed')) {
-            alert("Payment successful! But invoice service returned: Method Not Allowed. Please contact support.");
-          } else if (responseText.includes('Error')) {
-            alert(`Payment successful! But invoice service error: ${responseText.substring(0, 100)}`);
-          } else {
-            alert("Payment successful! Invoice status unknown. Please check your email or contact support.");
-          }
-          setShowLocationPopup(true);
-          setIsLoading(false);
-          return;
-        }
-
-        console.log('📨 Parsed response data:', data);
-
-        if (response.ok && data.success) {
-          alert("✅ Payment successful! Invoice sent to your email.");
-        } else {
-          console.error('Invoice service returned error:', data);
-          alert(`Payment processed but invoice failed: ${data.error || data.message || 'Unknown error'}`);
-        }
-
-      } catch (fetchError) {
-        console.error('❌ Network error sending invoice:', fetchError);
-        alert("Payment successful! But we encountered a network issue while sending invoice. Please contact support with your booking ID.");
-      }
+      alert("✅ Payment successful! Invoice sent to your email.");
 
       // Show location popup regardless of invoice result
       setShowLocationPopup(true);
@@ -302,25 +212,16 @@ const PaymentPage = () => {
       };
 
       // Update booking with user location
-      const bookingRef = doc(db, 'airportTransfers', bookingId);
-      
-      const bookingDoc = await getDoc(bookingRef);
-      if (!bookingDoc.exists()) {
-        console.log('❌ Booking document not found');
-        alert("Booking not found. Location cannot be saved.");
-        return;
-      }
-
-      const currentData = bookingDoc.data();
-      await updateDoc(bookingRef, {
-        userLocation: userLocation,
-        locationShared: true,
-        waitingForLocation: false,
-        locationSkipped: false,
-        locationSharedAt: serverTimestamp(),
-        updatedAt: serverTimestamp(),
-        status: currentData.status === 'accepted' ? 'accepted' : 'searching_driver'
-      });
+      await apiRequest(`/airport-bookings/${bookingId}/location`, {
+        method: 'POST',
+        body: {
+          userLocation,
+          locationShared: true,
+          waitingForLocation: false,
+          locationSkipped: false,
+          status: 'searching_driver'
+        }
+      }, user);
 
       console.log('✅ Location shared successfully with driver!');
       alert("✅ Location shared successfully with your driver!\n\n" +

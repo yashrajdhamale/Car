@@ -1,83 +1,111 @@
-import { db } from '../config/firebase';
-import { collection, query, where, onSnapshot, addDoc, doc, updateDoc, deleteDoc } from 'firebase/firestore';
+const BACKEND_BASE_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
 
-// Routes Collection
-const getRoutesCollection = () => collection(db, 'routes');
+const getJson = async (path) => {
+  const response = await fetch(`${BACKEND_BASE_URL}/api${path}`);
+  const data = await response.json().catch(() => ({}));
 
-// Subscribe to routes changes for a specific driver
-const subscribeToRoutes = (driverId, callback) => {
-  if (typeof callback !== 'function') {
-    console.error('Callback must be a function');
-    throw new Error('Invalid callback function');
+  if (!response.ok) {
+    const error = new Error(data.error || data.message || "Request failed");
+    error.data = data;
+    throw error;
   }
-  
-  try {
-    const q = query(
-      getRoutesCollection(),
-      where('driverId', '==', driverId)
-    );
-    
-    return onSnapshot(q, (snapshot) => {
-      try {
-        const routes = snapshot.docs.map(doc => ({
-          id: doc.id,
-          ...doc.data()
-        }));
-        callback(routes);
-      } catch (err) {
-        console.error('Error processing routes:', err);
-        callback([]);
-      }
-    }, (error) => {
-      console.error('Error in routes subscription:', error);
-      callback([]);
-    });
-  } catch (err) {
-    console.error('Error setting up routes subscription:', err);
-    return () => {};
-  }
+
+  return data;
 };
 
-// Add a new route
+const postJson = async (path, body, method = "POST") => {
+  const response = await fetch(`${BACKEND_BASE_URL}/api${path}`, {
+    method,
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body || {}),
+  });
+
+  const data = await response.json().catch(() => ({}));
+
+  if (!response.ok) {
+    const error = new Error(data.error || data.message || "Request failed");
+    error.data = data;
+    throw error;
+  }
+
+  return data;
+};
+
+const getRoutesCollection = () => "/routes";
+
+const subscribeToRoutes = (driverId, callback) => {
+  if (typeof callback !== "function") {
+    throw new Error("Invalid callback function");
+  }
+
+  let cancelled = false;
+
+  const load = async () => {
+    try {
+      const data = await getJson(`${getRoutesCollection()}?driverId=${encodeURIComponent(driverId)}`);
+      if (!cancelled) {
+        callback((data.routes || []).sort((a, b) => {
+          const aTime = a.createdAt?.seconds || 0;
+          const bTime = b.createdAt?.seconds || 0;
+          return bTime - aTime;
+        }));
+      }
+    } catch (error) {
+      if (!cancelled) callback([]);
+    }
+  };
+
+  load();
+  const intervalId = setInterval(load, 15000);
+
+  return () => {
+    cancelled = true;
+    clearInterval(intervalId);
+  };
+};
+
 const addRoute = async (driverId, routeData) => {
-  const docRef = await addDoc(getRoutesCollection(), {
+  const result = await postJson("/routes", {
     driverId,
+    driverName: routeData.driverName,
     from: routeData.from,
     to: routeData.to,
-    rate: Number(routeData.rate),
-    radiusKm: Number(routeData.radiusKm) || 30,
-    active: routeData.active !== false, // Default to true if not specified
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString()
+    rate: routeData.rate,
+    radiusKm: routeData.radiusKm,
+    active: routeData.active,
+    vehicle: routeData.vehicle,
   });
-  return docRef.id;
+  return result.routeId;
 };
 
-// Update an existing route
 const updateRoute = async (driverId, routeId, updates) => {
-  const routeRef = doc(getRoutesCollection(), routeId);
-  await updateDoc(routeRef, {
-    ...updates,
-    // Ensure rate and radiusKm are numbers
-    ...(updates.rate && { rate: Number(updates.rate) }),
-    ...(updates.radiusKm && { radiusKm: Number(updates.radiusKm) }),
-    updatedAt: new Date().toISOString()
-  });
+  await postJson(`/routes/${routeId}`, { ...updates, driverId }, "PATCH");
 };
 
-// Delete a route
 const deleteRoute = async (routeId) => {
-  const routeRef = doc(getRoutesCollection(), routeId);
-  await deleteDoc(routeRef);
+  await postJson(`/routes/${routeId}`, {}, "DELETE");
 };
 
-// Get cities for autocomplete
 const subscribeToCities = (callback) => {
-  const q = query(collection(db, 'cities'));
-  return onSnapshot(q, (snapshot) => {
-    const cities = snapshot.docs.map(doc => doc.data().name);
-    callback(cities);
-  });
+  if (typeof callback !== "function") {
+    throw new Error("Invalid callback function");
+  }
+
+  let cancelled = false;
+
+  const load = async () => {
+    try {
+      const data = await getJson("/routes/cities");
+      if (!cancelled) callback(data.cities || []);
+    } catch {
+      if (!cancelled) callback([]);
+    }
+  };
+
+  load();
+  return () => {
+    cancelled = true;
+  };
 };
 
 export {

@@ -1,9 +1,10 @@
-import { useState, useEffect, useRef } from "react";
+
+import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { LogIn, LogOut, Menu, X, ChevronDown, Car, History } from "lucide-react";
-import { auth, db } from "@config/firebase";
-import { doc, getDoc } from "firebase/firestore";
+import { auth } from "@config/firebase";
 import { useNotification } from "../context/NotificationContext";
+import { useUser } from "../context/UserContext";
 import logoimg from "../assets/images/cabroute.png";
 import { Capacitor } from '@capacitor/core';
 
@@ -31,9 +32,8 @@ const userMenuItems = [
 
 const HeaderHome = () => {
   const { addNotification } = useNotification();
+  const { user, userData, loading } = useUser();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [user, setUser] = useState(null);
-  const [userData, setUserData] = useState(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
@@ -41,78 +41,22 @@ const HeaderHome = () => {
   const menuItems = user ? userMenuItems : guestMenuItems;
   const isApp = Capacitor.isNativePlatform();
 
-  // Auth Listener
-  useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged(async (currentUser) => {
-      setUser(currentUser);
-
-      if (currentUser) {
-        const defaultUserData = {
-          displayName:
-            currentUser.displayName ||
-            currentUser.email?.split("@")[0] ||
-            "User",
-          role: "customer",
-          status: "active",
-        };
-        setUserData(defaultUserData);
-
-        try {
-          // First try to get user data from the users collection
-          const userDoc = await getDoc(doc(db, "users", currentUser.uid));
-          
-          if (userDoc.exists()) {
-            const data = userDoc.data();
-            setUserData({
-              ...data,
-              displayName:
-                currentUser.displayName ||
-                data.displayName ||
-                defaultUserData.displayName,
-              role: (data.role || data.type || defaultUserData.role).toLowerCase(),
-              status: data.status || defaultUserData.status,
-            });
-          } else {
-            // If not found in users collection, try the drivers collection
-            const driverDoc = await getDoc(doc(db, "drivers", currentUser.uid));
-            if (driverDoc.exists()) {
-              const data = driverDoc.data();
-              setUserData({
-                ...data,
-                displayName:
-                  currentUser.displayName ||
-                  data.displayName ||
-                  data.name ||
-                  defaultUserData.displayName,
-                role: 'driver',
-                status: data.status || defaultUserData.status,
-              });
-            }
-          }
-        } catch (error) {
-          console.error("Error fetching user data:", error);
-          // fallback from cache
-          const cachedUserData = localStorage.getItem(
-            `user_${currentUser.uid}`
-          );
-          if (cachedUserData) {
-            setUserData(JSON.parse(cachedUserData));
-          }
-        }
-      } else {
-        setUserData(null);
-      }
-    });
-
-    return () => unsubscribe();
-  }, []);
-
-  // Cache user data
-  useEffect(() => {
-    if (user?.uid && userData) {
-      localStorage.setItem(`user_${user.uid}`, JSON.stringify(userData));
-    }
-  }, [userData, user?.uid]);
+  if (loading) {
+    return (
+      <header className="bg-brown-800 text-white shadow-md fixed w-full z-50">
+        <div className="w-full px-4 py-3 flex items-center justify-between">
+          <button onClick={() => navigate("/")} className="p-1 rounded-full">
+            <img
+              src={logoimg}
+              alt="Logo"
+              className="h-10 md:h-12 w-auto object-contain"
+            />
+          </button>
+          <div className="h-10 w-24 rounded-lg bg-white/15 animate-pulse" />
+        </div>
+      </header>
+    );
+  }
 
   const handleNavigation = (e, link) => {
     e.preventDefault();
@@ -127,8 +71,6 @@ const HeaderHome = () => {
   const handleLogout = async () => {
     try {
       await auth.signOut();
-      setUser(null);
-      setUserData(null);
       setIsDropdownOpen(false);
       addNotification("Logged out successfully", "success");
       navigate("/");
@@ -146,15 +88,13 @@ const HeaderHome = () => {
       case "admin":
       case "agency":
       case "travelagency":
-        return `/${userData.role}-dashboard`;
+      case "travel_agency":
+        return "/agency-dashboard";
       default:
         return "/user-dashboard"; // Changed to user dashboard for regular users
     }
   };
 
-  const handleBookNow = () => {
-    navigate('/local-pickup');
-  };
   // If running as native app, render bottom tab bar instead of header
 if (isApp) {
   return (

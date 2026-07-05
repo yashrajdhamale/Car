@@ -1,20 +1,35 @@
-import React, { useState, useRef, useCallback, useEffect, useMemo } from 'react';
+import { useState, useRef, useCallback, useEffect, useMemo } from 'react';
+import PropTypes from 'prop-types';
 import CarSelection from './CarSelection';
-import { collection, addDoc, serverTimestamp, doc, onSnapshot, updateDoc } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
-import { db, app } from "../../config/firebase";
+import { app } from "../../config/firebase";
 import QrImage from "../../assets/images/Qrpayment.jpg";
 import LocalRideTrackingPage from "../../pages/LocalRideTrackingPage";
 import { Capacitor } from '@capacitor/core';
 
 const auth = getAuth(app);
 
-const BASE_URL            = "https://us-central1-carzi-holidays-f4be3.cloudfunctions.net";
-const SEARCH_API          = `${BASE_URL}/searchPlaces`;
-const DISTANCE_API        = `${BASE_URL}/calculateDistance`;
-const DETAILS_API         = `${BASE_URL}/resolveELoc`;
-const REVERSE_GEOCODE_API = `${BASE_URL}/reverseGeocode`;
-const INVOICE_API         = `${BASE_URL}/sendLocalPickupInvoice`;
+const BACKEND_BASE_URL    = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
+const SEARCH_API          = `${BACKEND_BASE_URL}/api/local-pickups/search`;
+const DISTANCE_API        = `${BACKEND_BASE_URL}/api/local-pickups/distance`;
+const DETAILS_API         = `${BACKEND_BASE_URL}/api/local-pickups/resolve-eloc`;
+const REVERSE_GEOCODE_API = `${BACKEND_BASE_URL}/api/local-pickups/reverse-geocode`;
+
+const apiRequest = async (path, { method = 'GET', body } = {}) => {
+  const currentUser = auth.currentUser;
+  const idToken = currentUser?.getIdToken ? await currentUser.getIdToken() : null;
+  const response = await fetch(`${BACKEND_BASE_URL}/api${path}`, {
+    method,
+    headers: {
+      ...(body ? { 'Content-Type': 'application/json' } : {}),
+      ...(idToken ? { Authorization: `Bearer ${idToken}` } : {}),
+    },
+    body: body ? JSON.stringify(body) : undefined,
+  });
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(data?.message || data?.error || 'Request failed');
+  return data;
+};
 
 const PRICING = { gstPercentage: 5, perKmRate: 12 };
 
@@ -170,6 +185,24 @@ function LocationInput({
   );
 }
 
+LocationInput.propTypes = {
+  icon: PropTypes.node.isRequired,
+  placeholder: PropTypes.string.isRequired,
+  value: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
+  onSelectGPS: PropTypes.func,
+  suggestions: PropTypes.arrayOf(PropTypes.object).isRequired,
+  loading: PropTypes.bool,
+  confirmed: PropTypes.bool,
+  disabled: PropTypes.bool,
+  inputRef: PropTypes.oneOfType([
+    PropTypes.func,
+    PropTypes.shape({ current: PropTypes.any }),
+  ]),
+  onClear: PropTypes.func,
+  onSelect: PropTypes.func.isRequired,
+};
+
 // ═══════════════════════════════════════════════════════════
 export default function LocalPickupPage() {
   const [selectedCity, setSelectedCity]     = useState({ placeId: '', name: 'Pune', address: '', lat: 18.5204, lng: 73.8567 });
@@ -264,7 +297,7 @@ export default function LocalPickupPage() {
     return null;
   }, []);
 
-  const getAccurateLocation = (attempt = 1) => new Promise((resolve, reject) => {
+  const getAccurateLocation = useCallback((attempt = 1) => new Promise((resolve, reject) => {
     navigator.geolocation.getCurrentPosition(
       ({ coords: { latitude, longitude, accuracy } }) => {
         if (accuracy <= 2500 || attempt >= 3) resolve({ latitude, longitude });
@@ -273,46 +306,59 @@ export default function LocalPickupPage() {
       reject,
       { enableHighAccuracy: true, timeout: 20000, maximumAge: 0 }
     );
-  });
+  }), []);
 
-  // ─── Firestore listener ───────────────────────────────────
+  // ─── Backend polling ──────────────────────────────────────
   useEffect(() => {
     if (!rideId || flowStep !== "SEARCHING") return;
-    const unsub = onSnapshot(doc(db, "localRides", rideId), (snap) => {
-      if (!snap.exists()) return;
-      const r = snap.data();
-      if (r.status === "accepted") {
-        setDriverInfo({
-          name:          r.driverName     || "Driver",
-          phone:         r.driverPhone    || "",
-          vehicleType:   r.vehicleType    || "",
-          vehicleNumber: r.vehicleNumber  || "",
-          location:      r.driverLocation || null,
-          driverId:      r.driverId       || "",
-          acceptedAt:    r.acceptedAt     || null,
-        });
-        searchingActiveRef.current = false;
-        clearTimeout(searchVoiceTimeoutRef.current);
-        clearTimeout(searchFailTimeoutRef.current);
-        if (window.speechSynthesis) window.speechSynthesis.cancel();
-        speak("Your driver has been assigned. Please proceed to payment.");
-        setFlowStep("PAYMENT");
+    let cancelled = false;
+
+    const pollRideStatus = async () => {
+      try {
+        const data = await apiRequest(`/local-pickups/rides/${rideId}`);
+        if (cancelled) return;
+        const r = data.ride || {};
+        if (r.status === "accepted") {
+          setDriverInfo({
+            name:          r.driverName     || "Driver",
+            phone:         r.driverPhone    || "",
+            vehicleType:   r.vehicleType    || r.vehicle?.type || "",
+            vehicleNumber: r.vehicleNumber  || "",
+            location:      r.driverLocation || null,
+            driverId:      r.driverId       || "",
+            acceptedAt:    r.acceptedAt     || null,
+          });
+          searchingActiveRef.current = false;
+          clearTimeout(searchVoiceTimeoutRef.current);
+          clearTimeout(searchFailTimeoutRef.current);
+          if (window.speechSynthesis) window.speechSynthesis.cancel();
+          speak("Your driver has been assigned. Please proceed to payment.");
+          setFlowStep("PAYMENT");
+        }
+        if (r.status === "no_driver_found") {
+          searchingActiveRef.current = false;
+          clearTimeout(searchVoiceTimeoutRef.current);
+          clearTimeout(searchFailTimeoutRef.current);
+          if (window.speechSynthesis) window.speechSynthesis.cancel();
+          speak("Sorry, no drivers are available right now. Please try again.");
+          setFlowStep("FORM");
+          setError("No driver found nearby.");
+        }
+      } catch (pollError) {
+        if (!cancelled) console.warn("Local pickup polling failed:", pollError.message);
       }
-      if (r.status === "no_driver_found") {
-        searchingActiveRef.current = false;
-        clearTimeout(searchVoiceTimeoutRef.current);
-        clearTimeout(searchFailTimeoutRef.current);
-        // REPLACE WITH:
-        if (window.speechSynthesis) window.speechSynthesis.cancel();
-        speak("Sorry, no drivers are available right now. Please try again.");
-        setFlowStep("FORM");
-        setError("No driver found nearby.");
-      }
-    });
-    return () => unsub();
+    };
+
+    pollRideStatus();
+    const intervalId = setInterval(pollRideStatus, 4000);
+
+    return () => {
+      cancelled = true;
+      clearInterval(intervalId);
+    };
   }, [rideId, flowStep]);
 
-  const stopSearching = async (message) => {
+  const stopSearching = useCallback(async (message) => {
     if (!searchingActiveRef.current) return;
     searchingActiveRef.current = false;
     clearTimeout(searchVoiceTimeoutRef.current);
@@ -323,9 +369,12 @@ speak(message, { rate: 0.95 });
     setFlowStep("FORM");
     setError(message);
     try {
-      await updateDoc(doc(db, "localRides", rideId), { status: "no_driver_found", endedAt: serverTimestamp() });
+      await apiRequest(`/local-pickups/rides/${rideId}`, {
+        method: "PATCH",
+        body: { status: "no_driver_found", endedAt: new Date().toISOString() },
+      });
     } catch (e) { console.warn("Firestore update failed:", e.message); }
-  };
+  }, [rideId]);
 
   const startSearchAnnouncements = useCallback(() => {
     searchingActiveRef.current = true;
@@ -339,7 +388,7 @@ speak(message, { rate: 0.95 });
       if (!searchingActiveRef.current) return;
       stopSearching("⚠️ No drivers accepted your request. Please try again.");
     }, 3 * 60 * 1000);
-  }, []);
+  }, [stopSearching]);
 
   useEffect(() => {
     return () => {
@@ -367,7 +416,7 @@ speak(message, { rate: 0.95 });
       setTimeout(() => dropInputRef.current?.focus(), 100);
     } catch { setError("Unable to detect your location."); }
     finally { setPickupLoading(false); }
-  }, [getLocationDetails]);
+  }, [getAccurateLocation, getLocationDetails]);
 
   // ─── User live location detection (for sharing with driver) ─────────
   const detectUserLiveLocation = useCallback(async () => {
@@ -386,7 +435,7 @@ speak(message, { rate: 0.95 });
     } finally {
       setDetectingUserLoc(false);
     }
-  }, [getLocationDetails]);
+  }, [getAccurateLocation, getLocationDetails]);
 
   // ─── User location manual search ────────────────────────────────────
   const handleUserLocQueryChange = useCallback((val) => {
@@ -430,16 +479,19 @@ speak(message, { rate: 0.95 });
     if (!userLocation || !rideId) return;
     setSavingUserLoc(true); setUserLocError('');
     try {
-      await updateDoc(doc(db, "localRides", rideId), {
-        userLocation: {
-          lat:       userLocation.lat,
-          lng:       userLocation.lng,
-          address:   userLocAddress,
-          timestamp: Date.now(),
-          sharedAt:  serverTimestamp(),
-        },
-        locationShared:     true,
-        waitingForLocation: false,
+      await apiRequest(`/local-pickups/rides/${rideId}`, {
+        method: 'PATCH',
+        body: {
+          userLocation: {
+            lat:       userLocation.lat,
+            lng:       userLocation.lng,
+            address:   userLocAddress,
+            timestamp: Date.now(),
+            sharedAt:  new Date().toISOString(),
+          },
+          locationShared:     true,
+          waitingForLocation: false,
+        }
       });
       speak("Your location has been shared with the driver.");
       setFlowStep("LIVE_TRACK");
@@ -454,10 +506,13 @@ speak(message, { rate: 0.95 });
   const skipLocationSharing = useCallback(async () => {
     if (!rideId) { setFlowStep("LIVE_TRACK"); return; }
     try {
-      await updateDoc(doc(db, "localRides", rideId), {
-        locationShared:     false,
-        locationSkipped:    true,
-        waitingForLocation: false,
+      await apiRequest(`/local-pickups/rides/${rideId}`, {
+        method: 'PATCH',
+        body: {
+          locationShared:     false,
+          locationSkipped:    true,
+          waitingForLocation: false,
+        }
       });
     } catch (e) { console.warn("Skip location update failed:", e.message); }
     setFlowStep("LIVE_TRACK");
@@ -710,11 +765,11 @@ speak(message, { rate: 0.95 });
         totalFare:  priceDetails.totalFare,
         isScheduled: false
       };
-      const res     = await fetch(`${BASE_URL}/createLocalPickupRide`, { method: "POST", headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-      const rawText = await res.text();
-      let data;
-      try { data = JSON.parse(rawText); } catch { throw new Error("Invalid response from server"); }
-      if (!res.ok || !data.success) throw new Error(data.error || "Failed to create ride");
+      const data = await apiRequest('/local-pickups/rides', {
+        method: 'POST',
+        body: payload,
+      });
+      if (!data.success) throw new Error(data.error || "Failed to create ride");
       setRideId(data.rideId);
       setFlowStep("SEARCHING");
       startSearchAnnouncements();
@@ -731,13 +786,11 @@ speak(message, { rate: 0.95 });
     if (!email) { setInvoiceError("No email found. Please login with email."); return; }
     setSendingInvoice(true); setInvoiceError('');
     try {
-      const res = await fetch(INVOICE_API, {
-        method:  'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
+      const data = await apiRequest(`/local-pickups/rides/${rideId}/invoice`, {
+        method: 'POST',
+        body: {
           to:           email,
           customerName: currentUser.displayName || currentUser.email || "Guest",
-          bookingId:    rideId || "",
           vehicleType:  priceDetails?.car?.name || priceDetails?.carName || "Car",
           pickup:       priceDetails?.pickup?.address  || priceDetails?.pickup?.name  || "",
           drop:         priceDetails?.dropoff?.address || priceDetails?.dropoff?.name || "",
@@ -746,9 +799,8 @@ speak(message, { rate: 0.95 });
           duration:     typeof priceDetails?.duration === 'number' ? Math.round(priceDetails.duration) : 0,
           driverName:   driverInfo?.name  || "",
           driverPhone:  driverInfo?.phone || "",
-        })
+        }
       });
-      const data = await res.json();
       if (!data.success) throw new Error(data.error || "Failed to send invoice");
       setInvoiceSent(true);
       speak("Invoice sent to your email. Have a safe journey!");
@@ -1370,7 +1422,7 @@ speak(message, { rate: 0.95 });
 
             {/* Driver hint */}
             <div className="loc-driver-hint">
-              🚗 <span><strong>{driverInfo?.name || 'Your driver'}</strong> is on the way. Share your live location or confirm your pickup point so they don't have to search for you.</span>
+              🚗 <span><strong>{driverInfo?.name || 'Your driver'}</strong> is on the way. Share your live location or confirm your pickup point so they don&apos;t have to search for you.</span>
             </div>
 
             {/* GPS detect button */}

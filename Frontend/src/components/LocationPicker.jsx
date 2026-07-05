@@ -5,6 +5,8 @@ import MaplibreGeocoder from '@maplibre/maplibre-gl-geocoder';
 import '@maplibre/maplibre-gl-geocoder/dist/maplibre-gl-geocoder.css';
 import './LocationPicker.css';
 
+const API_BASE = import.meta.env.VITE_API_BASE_URL || "";
+
 // Make maplibregl available globally for geocoder
 if (typeof window !== 'undefined' && !window.maplibregl) {
   window.maplibregl = maplibregl;
@@ -77,16 +79,12 @@ const LocationPicker = ({ onLocationSelect, city }) => {
     const coords = [e.lngLat.lng, e.lngLat.lat];
     
     // Reverse geocode to get address
-    const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${coords[1]}&lon=${coords[0]}&zoom=18&addressdetails=1`;
-    
-    fetch(url, {
-      headers: {
-        'User-Agent': 'CarziHolidays/1.0 (your@email.com)'
-      }
-    })
+    const url = `${API_BASE}/api/nominatim/reverse?lat=${coords[1]}&lng=${coords[0]}`;
+
+    fetch(url)
     .then(response => response.json())
     .then(data => {
-      const address = data.display_name || 'Selected Location';
+      const address = data.display_name || data?.place?.display_name || 'Selected Location';
       
       // Remove existing marker if it exists
       if (markers.current[activeMarker]) {
@@ -232,21 +230,13 @@ const LocationPicker = ({ onLocationSelect, city }) => {
       } : undefined,
       forwardGeocode: async (query) => {
         try {
-          const request = `https://nominatim.openstreetmap.org/search?q=${
-            encodeURIComponent(query + (city ? `, ${city}` : ''))
-          }&format=json&limit=5`;
-          
-          const response = await fetch(request, {
-            headers: {
-              'User-Agent': 'CarziHolidays/1.0 (your@email.com)'
-            }
-          });
-          
+          const request = `${API_BASE}/api/nominatim/search?q=${encodeURIComponent(query + (city ? `, ${city}` : ''))}`;
+          const response = await fetch(request);
           const data = await response.json();
           return {
-            features: data.map(feature => ({
+            features: (data.suggestions || data || []).map(feature => ({
               type: 'Feature',
-              properties: { label: feature.display_name, id: feature.place_id },
+              properties: { label: feature.display_name || feature.display_name, id: feature.place_id || feature.osm_id },
               geometry: {
                 type: 'Point',
                 coordinates: [parseFloat(feature.lon), parseFloat(feature.lat)]
@@ -365,17 +355,14 @@ const LocationPicker = ({ onLocationSelect, city }) => {
     
     // If user presses Enter, try to geocode the input
     const query = city ? `${value}, ${city}` : value;
-    const request = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query)}&format=json&limit=1`;
-    
-    fetch(request, {
-      headers: {
-        'User-Agent': 'CarziHolidays/1.0 (your@email.com)'
-      }
-    })
+    const request = `${API_BASE}/api/nominatim/search?q=${encodeURIComponent(query)}`;
+
+    fetch(request)
     .then(response => response.json())
     .then(data => {
-      if (data && data.length > 0) {
-        const feature = data[0];
+      const results = data.suggestions || data || [];
+      if (results && results.length > 0) {
+        const feature = results[0];
         const coords = [parseFloat(feature.lon), parseFloat(feature.lat)];
         
         // Remove existing marker if it exists

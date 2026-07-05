@@ -1,15 +1,24 @@
-import { httpsCallable } from 'firebase/functions';
-import { functions } from '../config/firebase';
+const BACKEND_BASE_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
 
-export const sendEmail = async (emailData) => {
-  try {
-    const sendEmailFunction = httpsCallable(functions, 'sendEmail');
-    await sendEmailFunction(emailData);
-    return { success: true };
-  } catch (error) {
-    console.error('Error sending email:', error);
+const sendEmailRequest = async (emailData) => {
+  const response = await fetch(`${BACKEND_BASE_URL}/api/email`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(emailData || {}),
+  });
+
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok) {
+    const error = new Error(data.error || data.message || "Failed to send email");
+    error.data = data;
     throw error;
   }
+
+  return data;
+};
+
+export const sendEmail = async (emailData) => {
+  return sendEmailRequest(emailData);
 };
 
 export const sendHolidayBookingConfirmation = async ({ to, customerName, bookingDetails }) => {
@@ -31,10 +40,10 @@ export const sendHolidayBookingConfirmation = async ({ to, customerName, booking
   return sendEmail(emailData);
 };
 
-export const sendDriverAssignedEmail = async ({ 
-  to, 
-  customerName, 
-  driverName, 
+export const sendDriverAssignedEmail = async ({
+  to,
+  customerName,
+  driverName,
   vehicleDetails,
   bookingDetails,
   bookingId

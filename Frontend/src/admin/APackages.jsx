@@ -23,11 +23,11 @@ import {
 import { MagnifyingGlassIcon, ChevronUpDownIcon, } from "@heroicons/react/24/outline";
 import { PencilIcon, UserPlusIcon } from "@heroicons/react/24/solid";
 import { Bell, ArrowRightSquare, Diff } from 'lucide-react'
-import { db, auth } from '@config/firebase.js';
-import { collection, query, where, getDocs } from "firebase/firestore";
+import { auth } from '@config/firebase.js';
 import { format } from 'date-fns';
 import { onAuthStateChanged } from 'firebase/auth';
 import { AuthCheck } from '@components';
+import { adminApi } from '../services/adminApiService';
 
 
 const APackages = () => {
@@ -68,45 +68,10 @@ const APackages = () => {
 
     const fetchPackagesData = async () => {
         try {
-            const q = query(collection(db, "test"));
-            const querySnapshot = await getDocs(q);
-
-            const PackagesDataData = [];
-            const confirmedBookingsData = [];
-
-            querySnapshot.forEach((doc) => {
-                // Extract data from each document along with document ID
-                const bookingDataWithId = { id: doc.id, ...doc.data() };
-
-                const currentDate = new Date();
-                const tenDaysAgo = new Date(currentDate.getTime() - 10 * 24 * 60 * 60 * 1000); // Calculate the date 10 days ago
-                const confirmationDate = new Date(bookingDataWithId.confirmation_Date);
-                console.log(confirmationDate);
-
-                // MM/DD/YYYY
-
-                // Check if the booking is pending or confirmed based on its status
-                if (bookingDataWithId.apporval === "pending") {
-                    PackagesDataData.push(bookingDataWithId);
-                } else if (bookingDataWithId.apporval === "Confirmed") {
-                    // confirmedBookingsData.push(bookingDataWithId);
-                    if (confirmationDate >= tenDaysAgo && confirmationDate <= currentDate) {
-                        confirmedBookingsData.push(bookingDataWithId);
-                    }
-                }
-
-
-
-
-
-
-            });
-
-
-            // console.log(PackagesDataData);
-            // Set the pending bookings array in state
-            setPackagesData(PackagesDataData);
-            setConfirmedBookings(confirmedBookingsData);
+            const result = await adminApi.listPackages();
+            const packages = result.packages || [];
+            setPackagesData(packages.filter((pkg) => pkg.apporval === "pending"));
+            setConfirmedBookings(packages.filter((pkg) => pkg.apporval === "Confirmed"));
 
             setDataPrepared(true);
         } catch (error) {

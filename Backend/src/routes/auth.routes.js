@@ -1,6 +1,6 @@
 import { Router } from "express";
 import multer from "multer";
-import { loginUser, registerUser, registerDriver, registerAgency, sendPasswordReset, startPhoneLogin, verifyPhoneLogin } from "../controllers/auth.controller.js";
+import { loginUser, registerUser, registerDriver, registerAgency, sendPasswordReset, startPhoneLogin, verifyPhoneLogin, getCurrentUser, updateCurrentUserProfile } from "../controllers/auth.controller.js";
 import { handleGoogleCallback, startGoogleAuth } from "../controllers/googleAuth.controller.js";
 
 const router = Router();
@@ -31,6 +31,8 @@ router.post(
   registerAgency
 );
 router.post("/login", loginUser);
+router.get("/me", getCurrentUser);
+router.patch("/me", updateCurrentUserProfile);
 router.post("/password-reset", sendPasswordReset);
 router.post("/phone/start", startPhoneLogin);
 router.post("/phone/verify", verifyPhoneLogin);

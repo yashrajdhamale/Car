@@ -1,18 +1,36 @@
 // holiday book page 
-import React, { useState, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
-import {
-  collection, addDoc, doc, updateDoc, serverTimestamp, onSnapshot, query, where, limit,
-} from "firebase/firestore";
-import { db } from "../config/firebase";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "../config/firebase";
+import PropTypes from "prop-types";
 import BgCar from "../assets/images/BgCar.jpg";
 import PaymentQR from "../assets/images/Qrpayment.jpg";
-import { findDriversForHoliday, sendHolidayRideRequests } from "../utils/holidayBooking";
 import { formatVehicleInfo, formatPackageInfo, formatPrice } from "../utils/formatUtils";
 
-const HOLIDAY_INVOICE_URL =
-  "https://us-central1-carzi-holidays-f4be3.cloudfunctions.net/sendHolidayInvoice";
+const BACKEND_BASE_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
+
+const apiRequest = async (path, { method = "GET", body } = {}) => {
+  const currentUser = auth.currentUser;
+  const idToken = currentUser ? await currentUser.getIdToken() : null;
+
+  const response = await fetch(`${BACKEND_BASE_URL}/api${path}`, {
+    method,
+    headers: {
+      ...(body ? { "Content-Type": "application/json" } : {}),
+      ...(idToken ? { Authorization: `Bearer ${idToken}` } : {}),
+    },
+    body: body ? JSON.stringify(body) : undefined,
+  });
+
+  const data = await response.json().catch(() => ({}));
+
+  if (!response.ok) {
+    throw new Error(data?.message || data?.error || "Request failed");
+  }
+
+  return data;
+};
 
 const getStateFromPackage = (pkg) => {
   if (!pkg) return "";
@@ -54,9 +72,6 @@ export default function Holidaybookpage() {
   const [paymentConfirmed, setPaymentConfirmed] = useState(false);
   const [sendingInvoice,   setSendingInvoice]   = useState(false);
 
-  const unsubscribeRef   = useRef(null);
-  const fallbackUnsubRef = useRef(null);
-  const bookingDataRef   = useRef(null);
   const countdownRef     = useRef(null);
   const driverInfoRef    = useRef(null); // store for use in payment confirm
 
@@ -65,13 +80,10 @@ export default function Holidaybookpage() {
   });
 
   useEffect(() => () => {
-    unsubscribeRef.current?.();
-    fallbackUnsubRef.current?.();
     if (countdownRef.current) clearInterval(countdownRef.current);
   }, []);
 
   useEffect(() => {
-    const auth = getAuth();
     const unsub = onAuthStateChanged(auth, (u) => { setUser(u); setLoadingUser(false); });
     return () => unsub();
   }, []);
@@ -79,11 +91,11 @@ export default function Holidaybookpage() {
   useEffect(() => {
     if (!booking?.package) { alert("No package selected."); navigate("/holidays"); }
     if (!booking?.vehicle) { alert("No vehicle selected."); navigate(-1); }
-  }, []);
+  }, [booking, navigate]);
 
   useEffect(() => {
     if (!loadingUser && !user) navigate("/login", { state: { from: location } });
-  }, [loadingUser, user]);
+  }, [loadingUser, user, location, navigate]);
 
   useEffect(() => {
     if (bookingStatus !== "finding_driver") return;
@@ -92,13 +104,6 @@ export default function Holidaybookpage() {
       setCountdown((prev) => {
         if (prev <= 1) {
           clearInterval(countdownRef.current);
-          unsubscribeRef.current?.();
-          fallbackUnsubRef.current?.();
-          if (currentBookingId) {
-            updateDoc(doc(db, "holidayBookings", currentBookingId), {
-              status: "no_driver_available", updatedAt: serverTimestamp(),
-            }).catch(console.error);
-          }
           setError("No driver accepted your request in time. Please try again.");
           setBookingStatus("error");
           return 0;
@@ -108,6 +113,61 @@ export default function Holidaybookpage() {
     }, 1000);
     return () => clearInterval(countdownRef.current);
   }, [bookingStatus]);
+
+  const handleDriverAssigned = useCallback((data, bookingId) => {
+    console.log("✅ Driver assigned:", data);
+    const info = data.driverInfo || {
+      name:          data.driverName    || "Your Driver",
+      phone:         data.driverPhone   || "",
+      vehicle:       data.driverVehicle || booking.vehicle?.name || "",
+      vehicleNumber: data.vehicleNumber || "",
+      rating:        data.driverRating  || 4.8,
+      rides:         100,
+    };
+    driverInfoRef.current = { info, bookingId: bookingId || currentBookingId };
+    setDriverInfo(info);
+    setBookingStatus("driver_confirmed");
+    clearInterval(countdownRef.current);
+    // Do NOT send invoice yet — wait for payment confirmation
+  }, [booking.vehicle?.name, currentBookingId]);
+
+  useEffect(() => {
+    if (!currentBookingId || bookingStatus !== "finding_driver") return;
+
+    let cancelled = false;
+
+    const pollBookingStatus = async () => {
+      try {
+        const data = await apiRequest(`/holiday-bookings/${currentBookingId}`);
+        if (cancelled) return;
+
+        const bookingData = data.booking || {};
+
+        if (bookingData.status === "driver_assigned" && bookingData.driverInfo) {
+          handleDriverAssigned(bookingData, bookingData.id);
+          return;
+        }
+
+        if (bookingData.status === "no_driver_available" || bookingData.status === "error") {
+          setError(bookingData.error || "No drivers available at this time.");
+          setBookingStatus("error");
+          clearInterval(countdownRef.current);
+        }
+      } catch (pollError) {
+        if (!cancelled) {
+          console.warn("Holiday booking poll failed:", pollError.message);
+        }
+      }
+    };
+
+    pollBookingStatus();
+    const intervalId = setInterval(pollBookingStatus, 4000);
+
+    return () => {
+      cancelled = true;
+      clearInterval(intervalId);
+    };
+  }, [currentBookingId, bookingStatus, handleDriverAssigned]);
 
   if (loadingUser) return (
     <div className="min-h-screen flex items-center justify-center">
@@ -135,15 +195,11 @@ export default function Holidaybookpage() {
         driverPhone:   dInfo?.phone || "",
         itinerary:     Array.isArray(booking.package?.itinerary) ? booking.package.itinerary : [],
       };
-      if (!payload.to?.includes("@")) throw new Error(`Invalid email: "${payload.to}"`);
-      const res = await fetch(HOLIDAY_INVOICE_URL, {
+      const result = await apiRequest(`/holiday-bookings/${bookingId}/invoice`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
+        body: payload,
       });
-      if (!res.ok) { const t = await res.text(); throw new Error(`HTTP ${res.status}: ${t}`); }
-      const result = await res.json();
-      if (!result.success) throw new Error(result.error || "CF error");
+      if (!result.success) throw new Error(result.error || "Invoice request failed");
       setInvoiceStatus("sent");
     } catch (err) {
       console.error("❌ Invoice failed:", err.message);
@@ -153,42 +209,10 @@ export default function Holidaybookpage() {
     }
   };
 
-  const handleDriverAssigned = (data, bookingId) => {
-    console.log("✅ Driver assigned:", data);
-    const info = data.driverInfo || {
-      name:          data.driverName    || "Your Driver",
-      phone:         data.driverPhone   || "",
-      vehicle:       data.driverVehicle || booking.vehicle?.name || "",
-      vehicleNumber: data.vehicleNumber || "",
-      rating:        data.driverRating  || 4.8,
-      rides:         100,
-    };
-    driverInfoRef.current = { info, bookingId: bookingId || currentBookingId };
-    setDriverInfo(info);
-    setBookingStatus("driver_confirmed");
-    clearInterval(countdownRef.current);
-    unsubscribeRef.current?.();
-    fallbackUnsubRef.current?.();
-    // Do NOT send invoice yet — wait for payment confirmation
-  };
-
   // Called when customer clicks "I've Paid"
   const handlePaymentDone = async () => {
     setPaymentConfirmed(true);
     const { info, bookingId } = driverInfoRef.current || {};
-
-    // Mark payment done in Firestore
-    if (bookingId || currentBookingId) {
-      try {
-        await updateDoc(doc(db, "holidayBookings", bookingId || currentBookingId), {
-          paymentStatus: "paid",
-          paymentConfirmedAt: serverTimestamp(),
-          updatedAt: serverTimestamp(),
-        });
-      } catch (e) {
-        console.warn("Could not update payment status:", e.message);
-      }
-    }
 
     // Now send invoice
     await sendInvoiceEmail(bookingId || currentBookingId, info);
@@ -212,108 +236,37 @@ export default function Holidaybookpage() {
 
     try {
       const pkgState = getStateFromPackage(booking.package);
-      const pkgName  = booking.package?.name || "";
       const normalizedPhone = phone.replace(/\D/g, "");
-      const bookingData = {
-        userId:    user?.uid   || "guest",
-        userName:  name,
-        userEmail: user?.email || "",
-        userPhone: normalizedPhone,
-        travelDate: date,
-        package:   booking.package,
-        vehicle:   booking.vehicle,
-        guests:    booking.guests || 1,
-        price:     booking.price,
-        state:     pkgState,
-        status:    "searching_driver",
-        createdAt: serverTimestamp(),
-        updatedAt: serverTimestamp(),
-      };
+      const response = await apiRequest("/holiday-bookings", {
+        method: "POST",
+        body: {
+          userName: name,
+          userEmail: user?.email || "",
+          userPhone: normalizedPhone,
+          travelDate: date,
+          package: booking.package,
+          vehicle: booking.vehicle,
+          guests: booking.guests || 1,
+          price: booking.price,
+          state: pkgState,
+        },
+      });
 
-      const docRef = await addDoc(collection(db, "holidayBookings"), bookingData);
-      bookingId = docRef.id;
+      bookingId = response.bookingId;
       setCurrentBookingId(bookingId);
-      bookingDataRef.current = { ...bookingData, id: bookingId };
 
       setConfirmed(false);
-      setBookingStatus("finding_driver");
-      setLoading(false);
+      setBookingStatus(response.status === "no_driver_available" ? "error" : "finding_driver");
 
-      const primaryUnsub = onSnapshot(
-        doc(db, "holidayBookings", bookingId),
-        (snap) => {
-          if (!snap.exists()) return;
-          const data = snap.data();
-          console.log("[Holiday] Doc status:", data.status, "| driverInfo:", !!data.driverInfo);
-          if (data.status === "driver_assigned" && data.driverInfo) {
-            handleDriverAssigned(data, snap.id);
-          } else if (data.status === "searching_driver") {
-            // Just log that we're still searching - don't assign driver yet
-            console.log("[Holiday] Still searching for driver...");
-          }
-          if (data.status === "no_driver_available" || data.status === "error") {
-            unsubscribeRef.current?.();
-            fallbackUnsubRef.current?.();
-            setError(data.error || "No drivers available at this time.");
-            setBookingStatus("error");
-          }
-        },
-        (err) => console.error("Primary snapshot error:", err)
-      );
-      unsubscribeRef.current = primaryUnsub;
-
-      if (user?.uid) {
-        const fallbackUnsub = onSnapshot(
-          query(
-            collection(db, "holidayBookings"),
-            where("userId", "==", user.uid),
-            where("status", "==", "driver_assigned"),
-            limit(1)
-          ),
-          (snap) => {
-            if (snap.empty) return;
-            const assignedDoc = snap.docs[0];
-            const data = assignedDoc.data();
-            if (assignedDoc.id === currentBookingId && 
-                data.status === "driver_assigned" && 
-                data.driverInfo) {
-              handleDriverAssigned(data, assignedDoc.id);
-            }
-          },
-          (err) => console.warn("Fallback snapshot error:", err.message)
-        );
-        fallbackUnsubRef.current = fallbackUnsub;
+      if (response.status === "no_driver_available") {
+        setError(response.message || "No drivers available at this time.");
       }
-
-      const drivers = await findDriversForHoliday(pkgState, pkgName);
-      if (!drivers || drivers.length === 0) {
-        await updateDoc(doc(db, "holidayBookings", bookingId), {
-          status: "no_driver_available", updatedAt: serverTimestamp(),
-        });
-        return;
-      }
-
-      const result = await sendHolidayRideRequests(bookingId, drivers, {
-        ...bookingDataRef.current, state: pkgState,
-      });
-      if (!result?.success) throw new Error(result?.error || "Broadcast failed");
-
-      await updateDoc(doc(db, "holidayBookings", bookingId), {
-        status: "searching_driver",
-        totalDriversNotified: drivers.length,
-        driverSearchStartedAt: serverTimestamp(),
-        updatedAt: serverTimestamp(),
-      });
     } catch (err) {
       console.error("❌ Booking error:", err);
       setError("Failed to process your booking. Please try again.");
       setBookingStatus("error");
+    } finally {
       setLoading(false);
-      if (bookingId) {
-        updateDoc(doc(db, "holidayBookings", bookingId), {
-          status: "error", error: err.message, updatedAt: serverTimestamp(),
-        }).catch(console.error);
-      }
     }
   };
 
@@ -454,7 +407,7 @@ export default function Holidaybookpage() {
                     Sending Invoice…
                   </>
                 ) : (
-                  <>✅ I've Completed the Payment</>
+                  <>✅ I&apos;ve Completed the Payment</>
                 )}
               </button>
               <p className="text-xs text-gray-400 text-center mb-2">
@@ -545,7 +498,7 @@ export default function Holidaybookpage() {
             <SummaryRow label="Travel Date" value={date} />
           </div>
           <div className="bg-blue-50 border border-blue-200 rounded-xl px-4 py-3 mb-5 text-sm text-blue-700">
-            ℹ️ After confirming, we'll search for an available driver in <strong>{getStateFromPackage(booking.package) || "your area"}</strong>.
+            ℹ️ After confirming, we&apos;ll search for an available driver in <strong>{getStateFromPackage(booking.package) || "your area"}</strong>.
           </div>
           {error && <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">{error}</div>}
           <button
@@ -671,3 +624,9 @@ function SummaryRow({ label, value, highlight }) {
     </div>
   );
 }
+
+SummaryRow.propTypes = {
+  label: PropTypes.node.isRequired,
+  value: PropTypes.node.isRequired,
+  highlight: PropTypes.bool,
+};

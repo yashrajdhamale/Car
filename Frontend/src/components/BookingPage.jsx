@@ -1,18 +1,30 @@
-import React, { useState, useEffect } from "react";
-import { 
-  collection, 
-  addDoc, 
-  serverTimestamp, 
-  doc, 
-  onSnapshot,
-  updateDoc,
-  getDoc,
-  setDoc
-} from "firebase/firestore";
-import { db, auth } from "@config/firebase";
+import { useState } from "react";
+import { auth } from "@config/firebase";
 import { toast } from "react-toastify";
 import { useLocation } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
+
+const BACKEND_BASE_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
+
+const apiRequest = async (path, { method = 'GET', body } = {}) => {
+  const currentUser = auth.currentUser;
+  const idToken = currentUser?.getIdToken ? await currentUser.getIdToken() : null;
+  const response = await fetch(`${BACKEND_BASE_URL}/api${path}`, {
+    method,
+    headers: {
+      ...(body ? { 'Content-Type': 'application/json' } : {}),
+      ...(idToken ? { Authorization: `Bearer ${idToken}` } : {}),
+    },
+    body: body ? JSON.stringify(body) : undefined,
+  });
+
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok) {
+    throw new Error(data?.message || data?.error || 'Request failed');
+  }
+
+  return data;
+};
 
 // Country codes data
 const countryCodes = [
@@ -70,63 +82,7 @@ const BookingPage = () => {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccessPopup, setShowSuccessPopup] = useState(false);
-  const [bookingDetails, setBookingDetails] = useState(null);
-
-  // Test Firestore connection
-  const testFirestore = async () => {
-    try {
-      console.log('Testing Firestore connection...');
-      const testData = {
-        testField: 'testValue',
-        timestamp: new Date().toISOString(),
-        message: 'This is a test document from BookingPage'
-      };
-      
-      const docRef = await addDoc(collection(db, 'test_connection'), testData);
-      console.log('Test document written with ID: ', docRef.id);
-      
-      // Verify the document was saved
-      const docSnap = await getDoc(docRef);
-      if (docSnap.exists()) {
-        console.log('Test document verified:', docSnap.data());
-        toast.success('Firestore connection test successful!');
-      } else {
-        console.log('Test document not found after save');
-        toast.error('Failed to verify test document');
-      }
-    } catch (error) {
-      console.error('Firestore test failed:', error);
-      toast.error(`Firestore test failed: ${error.message}`);
-    }
-  };
-
-  const validateForm = () => {
-    if (!form.fullName.trim()) {
-      toast.error("Please enter your full name");
-      return false;
-    }
-    if (!/^\+?[0-9\s-]{10,}$/.test(form.contact)) {
-      toast.error("Please enter a valid contact number");
-      return false;
-    }
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
-      toast.error("Please enter a valid email address");
-      return false;
-    }
-    if (!form.pickup) {
-      toast.error("Please enter pickup location");
-      return false;
-    }
-    if (!form.drop) {
-      toast.error("Please enter drop location");
-      return false;
-    }
-    if (!form.agree) {
-      toast.error("You must accept the terms and conditions");
-      return false;
-    }
-    return true;
-  };
+  const [, setBookingDetails] = useState(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -144,139 +100,51 @@ const BookingPage = () => {
     console.log('🚗 Vehicle data:', vehicle);
     console.log('📍 Transfer details:', transferDetails);
     
-    // Verify Firebase initialization
-    if (!db) {
-      console.error('❌ Firestore not initialized');
-      toast.error('Database connection error. Please refresh the page.');
-      setIsSubmitting(false);
-      return;
-    }
-
-    let unsubscribe;
-    let rideDocRef = null;
-    
     try {
-      console.log('📝 Preparing booking data...');
-      const bookingData = {
-        customerName: form.fullName,
-        contact: form.contact,
-        email: form.email,
-        pickup: form.pickup,
-        drop: form.drop,
-        travelDate: form.travelDate,
-        travelTime: form.travelTime,
-        numberOfPassengers: form.numberOfPassengers,
-        vehicle: form.vehicle ? {
-          id: form.vehicle.id || '',
-          name: form.vehicle.name || '',
-          type: form.vehicle.type || 'standard',
-          price: form.vehicle.price || 0,
-          passengers: form.vehicle.passengers || 4
-        } : null,
-        transferDetails: {
-          pickup: transferDetails.pickup || {},
-          dropoff: transferDetails.dropoff || {},
-          destination: transferDetails.destination || {},
-          adults: transferDetails.adults || 1,
-          children: transferDetails.children || 0,
-          nationality: transferDetails.nationality || 'Indian'
-        },
-        status: 'pending',
-        bookingDate: new Date().toISOString(),
-        createdAt: serverTimestamp(),
-        updatedAt: serverTimestamp(),
-        to: form.email,
-        template: {
-          name: 'booking_confirmation',
-          data: {
-            name: form.fullName,
+      const response = await apiRequest('/airport-bookings', {
+        method: 'POST',
+        body: {
+          transferDetails: {
+            ...transferDetails,
+            customerName: form.fullName,
             contact: form.contact,
             email: form.email,
             pickup: form.pickup,
             drop: form.drop,
             travelDate: form.travelDate,
             travelTime: form.travelTime,
-            vehicle: form.vehicle?.name || 'Not specified',
-            bookingDate: new Date().toLocaleDateString(),
-            bookingId: ''
-          }
+            numberOfPassengers: form.numberOfPassengers,
+            vehicle: form.vehicle ? {
+              id: form.vehicle.id || '',
+              name: form.vehicle.name || '',
+              type: form.vehicle.type || 'standard',
+              price: form.vehicle.price || 0,
+              passengers: form.vehicle.passengers || 4
+            } : null,
+            status: 'searching_driver',
+            bookingType: 'airport',
+            paymentStatus: 'pending',
+            driverId: '',
+          },
+          vehicleDetails: form.vehicle ? {
+            id: form.vehicle.id || '',
+            name: form.vehicle.name || '',
+            type: form.vehicle.type || 'standard',
+            price: form.vehicle.price || 0,
+            passengers: form.vehicle.passengers || 4
+          } : null,
+          bookingId: transferDetails.bookingId || null,
+          userId: auth.currentUser?.uid || 'guest',
+          userEmail: form.email,
         }
-      };
-
-      console.log('📤 Attempting to save booking to Firestore...');
-      console.log('📄 Booking data:', JSON.stringify(bookingData, null, 2));
-      
-      // Call the Firebase Function to handle the booking
-      console.log('📡 Calling submitBooking Cloud Function...');
-      const functionUrl = 'https://us-central1-carzi-holidays-f4be3.cloudfunctions.net/submitBooking';
-      
-      // Add a timestamp to prevent caching
-      const timestamp = new Date().getTime();
-      const url = `${functionUrl}?_t=${timestamp}`;
-      
-      const response = await fetch(url, {
-        method: 'POST',
-        mode: 'cors',
-        cache: 'no-cache',
-        credentials: 'same-origin',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-        },
-        body: JSON.stringify(bookingData)
       });
-      
-      const result = await response.json();
-      
-      if (!response.ok) {
-        throw new Error(result.error || 'Failed to process booking');
-      }
-      
-      console.log('✅ Booking processed successfully:', result);
-      
-      // Create ride document in Firestore
-      try {
-        console.log('🚕 Creating ride document...');
-        const rideData = {
-          customerName: form.fullName,
-          customerEmail: form.email,
-          pickup: form.pickup,
-          drop: form.drop,
-          pickupTime: form.travelDate + ' ' + form.travelTime,
-          status: 'pending',
-          createdAt: serverTimestamp(),
-          updatedAt: serverTimestamp()
-        };
-        
-        rideDocRef = await addDoc(collection(db, 'rides'), rideData);
-        console.log('🚖 Ride created with ID:', rideDocRef.id);
-        
-        // Show success message to user
-        toast.success('Ride requested. Waiting for a driver to accept...');
-        
-        // Update the booking with the ride ID if booking exists
-        if (result.bookingId) {
-          try {
-            await updateDoc(doc(db, 'bookings', result.bookingId), {
-              rideId: rideDocRef.id,
-              updatedAt: serverTimestamp()
-            });
-            console.log('📝 Updated booking with ride ID');
-          } catch (updateError) {
-            console.error('⚠️ Failed to update booking with ride ID:', updateError);
-            // Non-critical error, continue
-          }
-        }
-      } catch (rideError) {
-        console.error('❌ Failed to create ride:', rideError);
-        toast.error('Ride request created, but there was an error processing additional details.');
-        // Continue to show success since the main booking was successful
-      }
+
+      toast.success('Ride requested. Waiting for a driver to accept...');
       
       // Set booking details for the success popup
       setBookingDetails({
-        bookingId: result.bookingId || 'N/A',
-        rideId: rideDocRef?.id || 'N/A',
+        bookingId: response.bookingId || 'N/A',
+        rideId: response.bookingId || 'N/A',
         email: form.email,
         vehicle: form.vehicle?.name || 'Selected Vehicle',
         pickup: form.pickup,
@@ -461,7 +329,7 @@ const renderTripSummary = () => {
                 />
               </div>
               <p className="mt-1 text-xs text-gray-500">
-                We'll use this to contact you about your booking
+                We&apos;ll use this to contact you about your booking
               </p>
             </div>
 
@@ -557,7 +425,7 @@ const renderTripSummary = () => {
           </div>
           <h3 className="text-2xl font-bold text-gray-900 mb-2">Ride Requested!</h3>
           <p className="text-gray-600 mb-6">
-            We're finding you the best driver. You'll be notified once your ride is confirmed.
+            We&apos;re finding you the best driver. You&apos;ll be notified once your ride is confirmed.
           </p>
           <div className="bg-blue-50 p-4 rounded-lg mb-6">
             <p className="text-sm text-blue-800 text-center">

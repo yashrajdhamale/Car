@@ -6,8 +6,7 @@
 
 import { useState, useRef } from "react";
 import { toast } from "react-toastify";
-
-const CLOUD_FN_BASE = "https://us-central1-carzi-holidays-f4be3.cloudfunctions.net";
+import { generateRideOtp, verifyRideOtp } from "../../services/driverOtpService";
 
 /**
  * Maps the ride's `type` field to the rideType expected by the OTP Cloud Function.
@@ -91,12 +90,7 @@ export default function OtpVerificationPanel({ ride, driverId, onVerified }) {
       const bookingId = resolveBookingId(ride);
       const rideType  = resolveRideType(ride);
 
-      const res  = await fetch(`${CLOUD_FN_BASE}/verifyRideOtp`, {
-        method:  "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ bookingId, rideType, otp, driverId }),
-      });
-      const data = await res.json();
+      const data = await verifyRideOtp({ bookingId, rideType, otp, driverId });
 
       if (data.success) {
         setSuccess(true);
@@ -123,19 +117,14 @@ export default function OtpVerificationPanel({ ride, driverId, onVerified }) {
       const bookingId   = resolveBookingId(ride);
       const rideType    = resolveRideType(ride);
 
-      const res  = await fetch(`${CLOUD_FN_BASE}/generateRideOtp`, {
-        method:  "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          bookingId,
-          rideType,
-          driverName:    ride.driverName   || "",
-          driverPhone:   ride.driverPhone  || "",
-          vehicleType:   ride.vehicleType  || ride.car?.name || "",
-          vehicleNumber: ride.vehicleNumber || "",
-        }),
+      const data = await generateRideOtp({
+        bookingId,
+        rideType,
+        driverName:    ride.driverName   || "",
+        driverPhone:   ride.driverPhone  || "",
+        vehicleType:   ride.vehicleType  || ride.car?.name || "",
+        vehicleNumber: ride.vehicleNumber || "",
       });
-      const data = await res.json();
 
       if (data.success) {
         toast.info("📧 A new OTP has been sent to the customer's email.");

@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import { doc, getDoc, updateDoc, serverTimestamp } from 'firebase/firestore';
-import { db } from '../config/firebase';
 import { 
   FaUser, FaCarAlt, FaMapMarkerAlt, FaCheckCircle, FaInfoCircle, FaPhone, FaEnvelope, FaRupeeSign, FaSync 
 } from 'react-icons/fa';
 import { format } from 'date-fns';
+
+const API_BASE = import.meta.env.VITE_API_BASE_URL || "";
 
 const Payment = () => {
   const location = useLocation();
@@ -26,32 +26,12 @@ const Payment = () => {
 
       try {
         console.log('Fetching booking with ID:', bookingId);
-        const bookingRef = doc(db, 'holidayBookings', bookingId);
-        const bookingDoc = await getDoc(bookingRef);
-        
-        if (!bookingDoc.exists()) {
+        const bookingRes = await fetch(`${API_BASE}/api/holiday-bookings/${bookingId}`);
+        if (!bookingRes.ok) {
           throw new Error('Booking not found');
         }
-
-        let bookingData = { id: bookingDoc.id, ...bookingDoc.data() };
-        console.log('Raw booking data:', JSON.stringify(bookingData, null, 2));
-        
-        // Check if we need to fetch driver details separately
-        if (bookingData.driverId && !bookingData.driverInfo) {
-          console.log('Fetching driver details for driverId:', bookingData.driverId);
-          try {
-            const driverDoc = await getDoc(doc(db, 'drivers', bookingData.driverId));
-            if (driverDoc.exists()) {
-              bookingData = {
-                ...bookingData,
-                driverInfo: { id: driverDoc.id, ...driverDoc.data() }
-              };
-              console.log('Fetched driver info:', bookingData.driverInfo);
-            }
-          } catch (driverError) {
-            console.error('Error fetching driver details:', driverError);
-          }
-        }
+        const bookingPayload = await bookingRes.json();
+        let bookingData = bookingPayload.booking;
         
         setBooking(bookingData);
 
@@ -86,14 +66,7 @@ const Payment = () => {
         // Fetch package details if not already loaded
         if (bookingData.packageId && !packageDetails) {
           console.log('Fetching package details for ID:', bookingData.packageId);
-          const packageDoc = await getDoc(doc(db, 'holidayPackages', bookingData.packageId));
-          if (packageDoc.exists()) {
-            const packageData = { id: packageDoc.id, ...packageDoc.data() };
-            console.log('Package details:', packageData);
-            setPackageDetails(packageData);
-          } else {
-            console.log('No package found with ID:', bookingData.packageId);
-          }
+          setPackageDetails(bookingData.package || null);
         }
 
         // Set payment status
@@ -198,12 +171,10 @@ const Payment = () => {
     try {
       await new Promise(resolve => setTimeout(resolve, 2000));
       
-      const bookingRef = doc(db, 'holidayBookings', bookingId);
-      await updateDoc(bookingRef, {
-        status: 'payment_completed',
-        paymentStatus: 'completed',
-        paymentDate: serverTimestamp(),
-        updatedAt: serverTimestamp()
+      await fetch(`${API_BASE}/api/holiday-bookings/${bookingId}/payment`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ transactionId: `PAY_${Date.now()}` })
       });
       
       setPaymentStatus('completed');
@@ -239,24 +210,8 @@ const Payment = () => {
     // If we have driverId but no driverInfo, try to fetch it
     if (booking.driverId) {
       console.log('Found driverId, attempting to fetch driver info');
-      getDoc(doc(db, 'drivers', booking.driverId))
-        .then(driverDoc => {
-          if (driverDoc.exists()) {
-            const driverData = { id: driverDoc.id, ...driverDoc.data() };
-            console.log('Fetched driver data:', driverData);
-            setBooking(prev => ({
-              ...prev,
-              driverInfo: driverData,
-              driver: driverData // For backward compatibility
-            }));
-            return driverData;
-          }
-          return null;
-        })
-        .catch(error => {
-          console.error('Error fetching driver info:', error);
-          return null;
-        });
+      fetch(`${API_BASE}/api/airport-bookings/${booking.driverId}`)
+        .catch(() => null);
     }
     
     return null;
@@ -332,21 +287,7 @@ const Payment = () => {
   useEffect(() => {
     if (booking?.driverId && (!driverInfo || Object.keys(driverInfo).length === 0)) {
       console.log('Driver ID found but no driver info, attempting to fetch...');
-      getDoc(doc(db, 'drivers', booking.driverId))
-        .then(driverDoc => {
-          if (driverDoc.exists()) {
-            const driverData = { id: driverDoc.id, ...driverDoc.data() };
-            console.log('Fetched driver data:', driverData);
-            setBooking(prev => ({
-              ...prev,
-              driverInfo: driverData,
-              driver: driverData // For backward compatibility
-            }));
-          }
-        })
-        .catch(error => {
-          console.error('Error fetching driver info:', error);
-        });
+      fetch(`${API_BASE}/api/airport-bookings/${booking.driverId}`).catch(() => null);
     }
   }, [booking?.driverId, driverInfo]);
 
@@ -364,11 +305,10 @@ const Payment = () => {
   const refreshBooking = async () => {
     try {
       setLoading(true);
-      const bookingRef = doc(db, 'holidayBookings', bookingId);
-      const bookingDoc = await getDoc(bookingRef);
-      if (bookingDoc.exists()) {
-        const updatedBooking = { id: bookingDoc.id, ...bookingDoc.data() };
-        setBooking(updatedBooking);
+      const response = await fetch(`${API_BASE}/api/holiday-bookings/${bookingId}`);
+      if (response.ok) {
+        const payload = await response.json();
+        setBooking(payload.booking);
       }
     } catch (error) {
       console.error('Error refreshing booking:', error);
