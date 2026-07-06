@@ -35,6 +35,7 @@ function ScheduledRideConfirmation() {
   const [acceptedTerms, setAcceptedTerms] = useState(false);
   const [userEmail, setUserEmail] = useState('');
   const [userName, setUserName] = useState('');
+  const [bookingCollection, setBookingCollection] = useState('bookings');
 
   // Fetch booking data
   useEffect(() => {
@@ -47,14 +48,17 @@ function ScheduledRideConfirmation() {
         }
 
         // Try to get from bookings collection first
+        let currentCollection = 'bookings';
         let bookingRef = doc(db, 'bookings', bookingId);
         let bookingSnap = await getDoc(bookingRef);
 
         if (!bookingSnap.exists()) {
           // Try airport transfers
+          currentCollection = 'airportTransfers';
           bookingRef = doc(db, 'airportTransfers', bookingId);
           bookingSnap = await getDoc(bookingRef);
         }
+        setBookingCollection(currentCollection);
 
         if (!bookingSnap.exists()) {
           toast.error('Booking not found');
@@ -144,9 +148,9 @@ function ScheduledRideConfirmation() {
                 <p>Dear ${invoiceData.customerName},</p>
                 <p>Here is your ride invoice for booking <strong>#${invoiceData.bookingId}</strong>.</p>
                 <table style="width: 100%; border-collapse: collapse; margin-top: 15px;">
-                  <tr><td style="padding: 8px; border-bottom: 1px solid #eee;"><strong>From:</strong></td><td style="padding: 8px; border-bottom: 1px solid #eee;">${invoiceData.pickup}</td></tr>
-                  <tr><td style="padding: 8px; border-bottom: 1px solid #eee;"><strong>To:</strong></td><td style="padding: 8px; border-bottom: 1px solid #eee;">${invoiceData.drop}</td></tr>
-                  <tr><td style="padding: 8px; border-bottom: 1px solid #eee;"><strong>Date:</strong></td><td style="padding: 8px; border-bottom: 1px solid #eee;">${invoiceData.date}</td></tr>
+                  <tr><td style="padding: 8px; border-bottom: 1px solid #eee;"><strong>From:</strong></td><td style="padding: 8px; border-bottom: 1px solid #eee;">${invoiceData.pickupLocation}</td></tr>
+                  <tr><td style="padding: 8px; border-bottom: 1px solid #eee;"><strong>To:</strong></td><td style="padding: 8px; border-bottom: 1px solid #eee;">${invoiceData.dropoffLocation}</td></tr>
+                  <tr><td style="padding: 8px; border-bottom: 1px solid #eee;"><strong>Date:</strong></td><td style="padding: 8px; border-bottom: 1px solid #eee;">${invoiceData.travelDate} ${invoiceData.pickupTime ? `at ${invoiceData.pickupTime}` : ''}</td></tr>
                   <tr><td style="padding: 8px; border-bottom: 1px solid #eee;"><strong>Driver:</strong></td><td style="padding: 8px; border-bottom: 1px solid #eee;">${invoiceData.driverName} (${invoiceData.driverPhone})</td></tr>
                   <tr><td style="padding: 8px; border-bottom: 1px solid #eee;"><strong>Vehicle:</strong></td><td style="padding: 8px; border-bottom: 1px solid #eee;">${invoiceData.driverVehicle}</td></tr>
                   <tr><td style="padding: 8px; border-bottom: 1px solid #eee;"><strong>Distance:</strong></td><td style="padding: 8px; border-bottom: 1px solid #eee;">${invoiceData.distance} km</td></tr>
@@ -165,7 +169,7 @@ function ScheduledRideConfirmation() {
         setInvoiceSent(true);
         
         // Update booking with invoice sent status
-        const bookingRef = doc(db, 'bookings', bookingData.id);
+        const bookingRef = doc(db, bookingCollection, bookingData.id);
         await updateDoc(bookingRef, {
           invoiceSent: true,
           invoiceSentAt: serverTimestamp(),
@@ -198,7 +202,7 @@ function ScheduledRideConfirmation() {
       
       if (invoiceSent) {
         // Update booking status
-        const bookingRef = doc(db, 'bookings', bookingData.id);
+        const bookingRef = doc(db, bookingCollection, bookingData.id);
         await updateDoc(bookingRef, {
           status: 'confirmed',
           paymentStatus: 'paid',
@@ -214,9 +218,11 @@ function ScheduledRideConfirmation() {
         // Also send confirmation to driver
         if (driverDetails?.id) {
           const driverRef = doc(db, 'drivers', driverDetails.id);
+          const pickupStr = bookingData.pickupLocation?.name || bookingData.pickupLocation || '';
+          const dropoffStr = bookingData.dropoffLocation?.name || bookingData.dropoffLocation || '';
           await updateDoc(driverRef, {
             hasNewNotification: true,
-            notificationMessage: `Scheduled ride confirmed: ${bookingData.pickupLocation} to ${bookingData.dropoffLocation}`,
+            notificationMessage: `Scheduled ride confirmed: ${pickupStr} to ${dropoffStr}`,
             notificationTime: serverTimestamp()
           });
         }
@@ -234,7 +240,7 @@ function ScheduledRideConfirmation() {
     }
 
     try {
-      const bookingRef = doc(db, 'bookings', bookingData.id);
+      const bookingRef = doc(db, bookingCollection, bookingData.id);
       await updateDoc(bookingRef, {
         status: 'cancelled',
         cancelledAt: serverTimestamp(),
