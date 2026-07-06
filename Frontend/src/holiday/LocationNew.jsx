@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
-import { collection, query, where, getDocs } from "firebase/firestore";
-import { db } from '@config/firebase.js';
 import { useLocation } from 'react-router-dom';
+import { fetchHolidaysByLocation } from '@config/functions.js';
 import { TruncatedText } from '../components/index.js'
 import { useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
@@ -33,19 +32,11 @@ export default function LocationNew() {
         console.log("setSelectedLocation = " + selectedLocation);
         const fetchLocationData = async () => {
             try {
-                let data = []
-                const q = query(collection(db, "test"), where("location", "==", selectedLocation));
-
-                const querySnapshot = await getDocs(q);
-                querySnapshot.forEach((doc) => {
-                    // data.push(doc.data())
-                    data.push({ location_id: doc.id, ...doc.data() });
-                });
+                if (!selectedLocation) return;
+                const data = await fetchHolidaysByLocation(selectedLocation);
                 setLocationData(data);
-                return [];
             } catch (error) {
                 console.error('Error fetching holidays:', error);
-                throw error;
             }
         };
 

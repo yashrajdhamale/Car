@@ -1,21 +1,14 @@
-import { db } from "./firebase";
-import { doc, getDoc, setDoc, getDocs, collection, query, where } from "firebase/firestore";
-
+const BACKEND_BASE_URL = import.meta.env.VITE_BACKEND_URL || import.meta.env.VITE_BACKEND || "http://localhost:5000";
 
 const fetchAllTestData = async () => {
-    const q = query(collection(db, "test"));
     try {
-        const querySnapshot = await getDocs(q);
-        const locations = [];
-        querySnapshot.forEach((doc) => {
-            const data = doc.data();
-            // if (!locations.includes(data.location)) {
-            locations.push(data);
-            // }
-        });
-        return locations;
+        const response = await fetch(`${BACKEND_BASE_URL}/api/admin/packages`);
+        if (!response.ok) throw new Error("Failed to fetch packages");
+        const data = await response.json();
+        return data.packages || [];
     } catch (error) {
-        console.error('Error fetching holidays:', error);
+        console.error('Error fetching holidays from backend:', error);
+        return [];
     }
 }
 

@@ -1,80 +1,103 @@
-import { doc, getDoc, getDocs, collection, query, addDoc, setDoc } from "firebase/firestore";
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { db, storage } from '@config/firebase';
+import { auth } from './firebase';
+
+const BACKEND_BASE_URL = import.meta.env.VITE_BACKEND_URL || import.meta.env.VITE_BACKEND || "http://localhost:5000";
 
 // ---------------------- FETCH FUNCTIONS ---------------------------------
-// ---add comment to check 
 
 export const fetchUniqueHolidays = async () => {
     try {
-        const q = query(collection(db, "test"));
-        const querySnapshot = await getDocs(q);
-
+        const response = await fetch(`${BACKEND_BASE_URL}/api/admin/packages`);
+        if (!response.ok) throw new Error("Failed to fetch packages");
+        const data = await response.json();
+        const packages = data.packages || [];
+        
         const locations = [];
-
-        querySnapshot.forEach((doc) => {
-            const data = doc.data();
-
-            if (!locations.includes(data.location)) {
-                locations.push(data.location);
+        packages.forEach((pkg) => {
+            if (pkg.location && !locations.includes(pkg.location)) {
+                locations.push(pkg.location);
             }
         });
         return locations;
     } catch (error) {
         console.error('Error fetching holidays:', error);
+        return [];
     }
 };
 
 export const fetchHolidayData = async (location_id) => {
-    const docRef = doc(db, "test", location_id);
     try {
-        const docSnap = await getDoc(docRef);
-        if (docSnap.exists) {
-            return docSnap.data();
-        } else {
-            console.log('Document does not exist!');
-        }
+        const response = await fetch(`${BACKEND_BASE_URL}/api/admin/packages/${encodeURIComponent(location_id)}`);
+        if (!response.ok) throw new Error("Failed to fetch package data");
+        const data = await response.json();
+        return data.package;
     } catch (error) {
         console.error('Error fetching document:', error);
+        return null;
     }
-}
+};
 
 export const fetchAllHolidayData = async () => {
-    const q = query(collection(db, "test"));
     try {
-        const querySnapshot = await getDocs(q);
-        const locations = [];
-        querySnapshot.forEach((doc) => {
-            const data = doc.data();
-            // if (!locations.includes(data.location)) {
-            locations.push(data);
-            // }
-        });
-        return locations;
+        const response = await fetch(`${BACKEND_BASE_URL}/api/admin/packages`);
+        if (!response.ok) throw new Error("Failed to fetch packages");
+        const data = await response.json();
+        return data.packages || [];
     } catch (error) {
         console.error('Error fetching holidays:', error);
+        return [];
     }
-}
+};
+
+export const fetchHolidaysByLocation = async (locationName) => {
+    try {
+        const response = await fetch(`${BACKEND_BASE_URL}/api/admin/packages`);
+        if (!response.ok) throw new Error("Failed to fetch packages");
+        const data = await response.json();
+        const packages = data.packages || [];
+        return packages.filter(pkg => pkg.location === locationName);
+    } catch (error) {
+        console.error('Error fetching holidays by location:', error);
+        return [];
+    }
+};
 
 export const getUserDocument = async (userId) => {
     try {
-        const docSnap = await getDoc(doc(db, 'users', userId));
-
-        if (!docSnap.exists()) {
-            console.log('No user document found for ID:', userId);
+        const currentUser = auth.currentUser;
+        if (!currentUser) {
+            console.log('No current user authenticated in Firebase SDK');
+            return null;
+        }
+        
+        const token = await currentUser.getIdToken();
+        if (!token) {
+            console.log('No ID token available');
             return null;
         }
 
-        const userData = docSnap.data();
-        // Ensure we have required fields with defaults
+        const response = await fetch(`${BACKEND_BASE_URL}/api/auth/me`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+
+        if (!response.ok) {
+            console.log('Error retrieving user document from backend status:', response.status);
+            return null;
+        }
+
+        const data = await response.json();
+        const profile = data.user;
+        if (!profile) return null;
+
+        // Ensure we have required fields with defaults to match expected format
         const userWithDefaults = {
-            // Default values
-            status: 'active',
-            createdAt: new Date().toISOString(),
-            // Spread existing data (will override defaults if present)
-            ...userData,
-            // Ensure role is always set and normalized
-            role: (userData.role || userData.type || 'user').toLowerCase().trim()
+            status: profile.status || 'active',
+            createdAt: profile.createdAt || new Date().toISOString(),
+            ...profile,
+            ...(profile.userData || {}),
+            ...(profile.driverData || {}),
+            role: (profile.role || profile.type || 'user').toLowerCase().trim()
         };
         
         // Clean up any undefined or null values
@@ -84,48 +107,30 @@ export const getUserDocument = async (userId) => {
             }
         });
         
-        console.log('User document retrieved successfully:', {
-            ...userWithDefaults,
-            password: userWithDefaults.password ? '***' : undefined
-        });
-        
         return userWithDefaults;
     } catch (error) {
         console.error('Error retrieving user document:', error);
-        throw error; // Re-throw to be handled by the caller
-    }
-}
-
-// ---------------------- CREATE / ADD FUNCTIONS ---------------------------------
-
-export const addDocument = async (collectionPath, data) => {
-    try {
-        const docRef = await addDoc(collection(db, collectionPath), data);
-        console.log("Document written with ID: ", docRef.id);
-        return docRef.id;
-    } catch (error) {
-        console.error("Error adding document: ", error);
         throw error;
     }
 };
 
+// ---------------------- CREATE / ADD FUNCTIONS (Unused but kept for API stability) ---------------------------------
+
+export const addDocument = async (collectionPath, data) => {
+    console.warn("addDocument is deprecated. Please use specific backend APIs instead.");
+    return null;
+};
+
 export const setDocument = async (collectionPath, documentId, data) => {
-    try {
-        await setDoc(doc(db, collectionPath, documentId), data);
-        console.log("Document written with ID: ", documentId);
-    } catch (error) {
-        console.error("Error setting document: ", error);
-        throw error;
-    }
+    console.warn("setDocument is deprecated. Please use specific backend APIs instead.");
 };
 
 // ---------------------- CHECK FUNCTIONS ---------------------------------
 
 export const checkIfUserExists = async (userId) => {
     try {
-        const userDocRef = doc(db, 'users', userId);
-        const userDocSnapshot = await getDoc(userDocRef);
-        return userDocSnapshot.exists();
+        const userDoc = await getUserDocument(userId);
+        return !!userDoc;
     } catch (error) {
         console.error('Error checking user existence:', error);
         return false;
@@ -135,14 +140,6 @@ export const checkIfUserExists = async (userId) => {
 // ---------------------- STORAGE FUNCTIONS ---------------------------------
 
 export const uploadFileToStorage = async (folderName, fileName, file) => {
-    try {
-        const filePath = `${folderName}/${fileName}`;
-        const storageRef = ref(storage, filePath);
-        await uploadBytes(storageRef, file);
-        const downloadURL = await getDownloadURL(storageRef);
-        return downloadURL;
-    } catch (error) {
-        console.error("Error uploading file to Firebase Storage: ", error);
-        throw error;
-    }
+    console.warn("uploadFileToStorage is deprecated. Please use backend file upload routes instead.");
+    return "";
 };

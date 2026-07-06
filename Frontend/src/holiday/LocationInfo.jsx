@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
-import { collection, getDocs, query, where } from "firebase/firestore";
-import { db } from '@config/firebase.js';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { fetchHolidaysByLocation } from '@config/functions.js';
 import { useParams } from 'react-router-dom';
 import { Home, ChevronRight } from 'lucide-react';
 import { Card, Typography } from "@material-tailwind/react";
@@ -70,12 +69,8 @@ const LocationInfo = () => {
     useEffect(() => {
         const fetchAllTestData = async () => {
             try {
-                const q = query(collection(db, "test"), where("location", "==", selectedLocation));
-                const querySnapshot = await getDocs(q);
-                const locations = [];
-                querySnapshot.forEach((doc) => {
-                    locations.push({ location_id: doc.id, ...doc.data() });
-                });
+                if (!selectedLocation) return;
+                const locations = await fetchHolidaysByLocation(selectedLocation);
 
                 setlocationData(locations);
 

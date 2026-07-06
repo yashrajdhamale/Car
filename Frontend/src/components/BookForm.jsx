@@ -1,7 +1,5 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
-import { db } from '@config/firebase.js';
-import { collection, query, getDocs } from "firebase/firestore";
 import { useNavigate } from 'react-router-dom';
 import { Option, Input } from "@material-tailwind/react";
 import { fetchUniqueHolidays } from '@config/functions.js';
@@ -10,30 +8,6 @@ const BookForm = () => {
     const navigate = useNavigate();
     const [uniqueLocationsSet, setUniqueLocations] = useState([]);
     const [selectedLocation, setSelectedLocation] = useState('');
-
-    useEffect(() => {
-        const fetchHolidays = async () => {
-            try {
-                const q = query(collection(db, "test"));
-                const querySnapshot = await getDocs(q);
-
-                const locations = [];
-
-                querySnapshot.forEach((doc) => {
-                    const data = doc.data();
-
-                    if (!locations.includes(data.location)) {
-                        locations.push(data.location);
-                    }
-                });
-                setUniqueLocations(locations);
-
-            } catch (error) {
-                console.error('Error fetching holidays:', error);
-            }
-        };
-        fetchHolidays();
-    }, []);
 
     useEffect(() => {
         const fetchData = async () => {
