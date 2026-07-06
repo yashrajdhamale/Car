@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-// Your Firebase Cloud Function endpoint
-const SEARCH_API = "https://us-central1-carzi-holidays-f4be3.cloudfunctions.net/searchPlaces";
+// Your Express Backend endpoint
+const SEARCH_API = `${import.meta.env.VITE_BACKEND_URL || "http://localhost:5000"}/api/places/autosuggest`;
 
 /* ---------------------- Main Component ---------------------- */
 const LocalTransferPage = () => {

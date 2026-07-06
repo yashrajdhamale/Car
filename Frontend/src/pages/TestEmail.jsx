@@ -16,19 +16,25 @@ export const TestEmail = () => {
     setMessage({ text: '', type: '' });
 
     try {
-      const response = await fetch('https://us-central1-carzi-holidays-f4be3.cloudfunctions.net/submitBooking', {
+      const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
+      const response = await fetch(`${backendUrl}/api/email`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          name: 'Test User',
-          email: email,
-          phone: '1234567890',
-          destination: 'Test Destination',
-          travelDates: '2025-12-15 to 2025-12-22',
-          travelers: 2,
-          specialRequests: 'This is a test email'
+          to: email,
+          subject: 'Test Booking Confirmation',
+          template: 'holidayBookingConfirmation',
+          data: {
+            customerName: 'Test User',
+            bookingDetails: {
+              bookingId: 'TEST-123',
+              packageName: 'Test Package',
+              travelDate: '2025-12-15',
+              totalAmount: '9999'
+            }
+          }
         }),
       });
 

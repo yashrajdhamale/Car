@@ -1,37 +1,11 @@
 import { FieldValue, firestore } from "./firebase.js";
-
-const CLOUD_FUNCTION_BASE = process.env.LOCAL_PICKUP_FUNCTION_BASE || "https://us-central1-carzi-holidays-f4be3.cloudfunctions.net";
-
-const PROXIED_URLS = {
-  searchPlaces: `${CLOUD_FUNCTION_BASE}/searchPlaces`,
-  reverseGeocode: `${CLOUD_FUNCTION_BASE}/reverseGeocode`,
-  resolveELoc: `${CLOUD_FUNCTION_BASE}/resolveELoc`,
-  calculateDistance: `${CLOUD_FUNCTION_BASE}/calculateDistance`,
-  sendLocalPickupInvoice: `${CLOUD_FUNCTION_BASE}/sendLocalPickupInvoice`,
-};
-
-const getJson = async (response) => {
-  const text = await response.text();
-  try {
-    return text ? JSON.parse(text) : {};
-  } catch {
-    return { raw: text };
-  }
-};
-
-const forwardJsonRequest = async (url, options = {}) => {
-  const response = await fetch(url, options);
-  const payload = await getJson(response);
-
-  if (!response.ok) {
-    const error = new Error(payload?.error || payload?.message || `HTTP ${response.status}`);
-    error.statusCode = response.status;
-    error.payload = payload;
-    throw error;
-  }
-
-  return payload;
-};
+import {
+  autosuggestProxy,
+  reverseGeocodeProxy,
+  resolveELocProxy,
+  calculateDistanceProxy,
+} from "./mapmyindia.service.js";
+import { sendEmailThroughBackend } from "./emailProxy.service.js";
 
 const getRideDoc = async (rideId) => {
   const snapshot = await firestore.collection("localRides").doc(rideId).get();
@@ -63,28 +37,21 @@ const requireOwnerOrGuest = async (rideId, user) => {
 };
 
 export const searchPlaces = async (query) => {
-  return forwardJsonRequest(`${PROXIED_URLS.searchPlaces}?q=${encodeURIComponent(query)}`);
+  return autosuggestProxy(query);
 };
 
 export const reverseGeocode = async (lat, lng) => {
-  return forwardJsonRequest(`${PROXIED_URLS.reverseGeocode}?lat=${encodeURIComponent(lat)}&lng=${encodeURIComponent(lng)}`);
+  return reverseGeocodeProxy(lat, lng);
 };
 
 export const resolveELoc = async ({ eLoc, placeAddress }) => {
-  return forwardJsonRequest(PROXIED_URLS.resolveELoc, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ eLoc: eLoc || null, placeAddress: placeAddress || null }),
-  });
+  return resolveELocProxy({ eLoc, placeAddress });
 };
 
 export const calculateDistance = async ({ originLat, originLng, destinationLat, destinationLng }) => {
-  return forwardJsonRequest(PROXIED_URLS.calculateDistance, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ originLat, originLng, destinationLat, destinationLng }),
-  });
+  return calculateDistanceProxy({ originLat, originLng, destinationLat, destinationLng });
 };
+
 
 export const createLocalPickupRide = async ({ user, body }) => {
   const payload = {
@@ -180,10 +147,10 @@ export const sendLocalPickupInvoice = async ({ rideId, user, body }) => {
     { merge: true }
   );
 
-  const result = await forwardJsonRequest(invoiceUrl, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload),
+  const result = await sendEmailThroughBackend({
+    ...payload,
+    subject: `Invoice for Ride #${rideId}`,
+    template: "localPickupInvoice",
   });
 
   return {

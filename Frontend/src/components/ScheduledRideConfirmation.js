@@ -127,15 +127,35 @@ function ScheduledRideConfirmation() {
         scheduledAt: bookingData.scheduledDateTime || bookingData.createdAt || new Date().toISOString()
       };
 
-      // Call your cloud function to send invoice
+      const backendUrl = window.location.origin.includes('localhost') ? 'http://localhost:5000' : '';
       const response = await fetch(
-        "https://us-central1-your-project.cloudfunctions.net/sendScheduledRideInvoice",
+        `${backendUrl}/api/email`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(invoiceData),
+          body: JSON.stringify({
+            to: invoiceData.customerEmail || invoiceData.to,
+            subject: `Invoice for Scheduled Ride #${invoiceData.bookingId}`,
+            html: `
+              <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px;">
+                <h2 style="color: #333; text-align: center;">Ride Invoice</h2>
+                <p>Dear ${invoiceData.customerName},</p>
+                <p>Here is your ride invoice for booking <strong>#${invoiceData.bookingId}</strong>.</p>
+                <table style="width: 100%; border-collapse: collapse; margin-top: 15px;">
+                  <tr><td style="padding: 8px; border-bottom: 1px solid #eee;"><strong>From:</strong></td><td style="padding: 8px; border-bottom: 1px solid #eee;">${invoiceData.pickup}</td></tr>
+                  <tr><td style="padding: 8px; border-bottom: 1px solid #eee;"><strong>To:</strong></td><td style="padding: 8px; border-bottom: 1px solid #eee;">${invoiceData.drop}</td></tr>
+                  <tr><td style="padding: 8px; border-bottom: 1px solid #eee;"><strong>Date:</strong></td><td style="padding: 8px; border-bottom: 1px solid #eee;">${invoiceData.date}</td></tr>
+                  <tr><td style="padding: 8px; border-bottom: 1px solid #eee;"><strong>Driver:</strong></td><td style="padding: 8px; border-bottom: 1px solid #eee;">${invoiceData.driverName} (${invoiceData.driverPhone})</td></tr>
+                  <tr><td style="padding: 8px; border-bottom: 1px solid #eee;"><strong>Vehicle:</strong></td><td style="padding: 8px; border-bottom: 1px solid #eee;">${invoiceData.driverVehicle}</td></tr>
+                  <tr><td style="padding: 8px; border-bottom: 1px solid #eee;"><strong>Distance:</strong></td><td style="padding: 8px; border-bottom: 1px solid #eee;">${invoiceData.distance} km</td></tr>
+                  <tr style="font-size: 16px; font-weight: bold; background-color: #f9f9f9;"><td style="padding: 10px;">Total Price:</td><td style="padding: 10px; color: #2e7d32;">₹${invoiceData.price}</td></tr>
+                </table>
+                <p style="text-align: center; margin-top: 20px; font-size: 12px; color: #888;">Thank you for riding with Cabroute!</p>
+              </div>
+            `
+          }),
         }
       );
 
