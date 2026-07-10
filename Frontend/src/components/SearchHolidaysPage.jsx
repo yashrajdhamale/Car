@@ -1,9 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { Search, MapPin, Sparkles } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import {
+  getHolidayStates,
+  getPackagesByState,
+} from "../utils/holidayPackages";
+
+
 
 export default function SearchHolidaysPage() {
   const [search, setSearch] = useState("");
+  const [popularDestinations, setPopularDestinations] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -34,16 +41,36 @@ export default function SearchHolidaysPage() {
     });
   };
 
-  // Popular destinations mapped to REAL package availability
-  const popularDestinations = [
-    { label: "Kerala", value: "kerala", packages: 2 },
-    { label: "Himachal", value: "himachal", packages: 2 },
-    { label: "Meghalaya", value: "meghalaya", packages: 4 },
-    { label: "Sikkim", value: "sikkim", packages: 4 },
-    { label: "Assam", value: "assam", packages: 3 },
-    { label: "West Bengal", value: "west bengal", packages: 4 },
-    { label: "Maharashtra", value: "maharashtra", packages: 4 }
-  ];
+  useEffect(() => {
+    const loadStates = async () => {
+      try {
+        const states = await getHolidayStates();
+
+        const result = [];
+
+        for (const state of states) {
+          const packages = await getPackagesByState(state.name);
+
+          // Only show states that actually have packages
+          if (packages.length > 0) {
+            result.push({
+              label: state.name,
+              value: state.name.toLowerCase(),
+              packages: packages.length,
+            });
+          }
+        }
+
+        result.sort((a, b) => a.label.localeCompare(b.label));
+
+        setPopularDestinations(result);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    loadStates();
+  }, []);
 
   return (
     <div

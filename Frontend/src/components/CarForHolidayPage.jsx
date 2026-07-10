@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import packagesData from "../packages.json";
+import {
+  getState,
+  getPackagesByState,
+} from "../utils/holidayPackages";
 import vehicles from "../vehicles.json";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { X, ChevronDown } from "lucide-react";
@@ -17,7 +20,7 @@ function ItineraryModal({ open, onClose, pkg, showAll, setShowAll }) {
 
   return (
     <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center px-4">
-      <div className="bg-white rounded-xl shadow-2xl w-full max-w-xl p-6 relative border border-gray-100">
+      <div className="bg-white rounded-xl shadow-2xl w-full max-w-4xl p-6 relative border border-gray-100">
         <button
           type="button"
           onClick={() => { setShowAll(false); onClose(); }}
@@ -40,16 +43,27 @@ function ItineraryModal({ open, onClose, pkg, showAll, setShowAll }) {
                   {item.day}
                 </p>
 
-                {item.image && (
-                  <img
-                    src={item.image}
-                    alt={item.day}
-                    className="w-full h-52 object-cover rounded-lg mt-3 mb-3 border"
-                  />
+                {item.images?.length > 0 && (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-3 mb-3">
+                    {item.images.map((img, index) => (
+                      <img
+                        key={index}
+                        src={img}
+                        alt={`${item.day}-${index}`}
+                        className="w-full h-52 object-cover rounded-lg border shadow-sm"
+                      />
+                    ))}
+                  </div>
                 )}
 
-                {item.details && (
-                  <p className="text-gray-500 text-xs mt-1 leading-6 whitespace-pre-line">
+                {Array.isArray(item.details) ? (
+                  <ul className="list-disc pl-5 space-y-2 text-gray-600 text-sm leading-6">
+                    {item.details.map((point, index) => (
+                      <li key={index}>{point}</li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p className="text-gray-500 text-sm leading-6 whitespace-pre-line">
                     {item.details}
                   </p>
                 )}
@@ -74,7 +88,10 @@ export default function CarForHolidayPage() {
   const location = useLocation();
   const searchQuery = location.state?.searchQuery || "";
 
-  const [selectedState, setSelectedState] = useState(null);
+  const [selectedState, setSelectedState] = useState({
+    bgImage: "",
+    packages: [],
+  });
   const [guestCounts, setGuestCounts] = useState({});
   const [tooltip, setTooltip] = useState({ visible: false, x: 0, y: 0, text: "" });
   const [loggedIn, setLoggedIn] = useState(false);
@@ -90,14 +107,42 @@ export default function CarForHolidayPage() {
   }, []);
 
   useEffect(() => {
-    if (searchQuery) {
-      const foundState = Object.keys(packagesData).find((stateName) =>
-        packagesData[stateName]?.keywords?.some(
-          (k) => k.toLowerCase() === searchQuery.toLowerCase()
-        )
-      );
-      setSelectedState(foundState ? packagesData[foundState] : null);
-    }
+
+    const loadPackages = async () => {
+
+      if (!searchQuery) return;
+
+      try {
+
+        const stateName = searchQuery
+          .split(" ")
+          .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+          .join(" ");
+
+        const state = await getState(stateName);
+
+        const packages = await getPackagesByState(stateName);
+
+        setSelectedState({
+          bgImage: state?.bgImage || "",
+          packages,
+        });
+
+      } catch (err) {
+
+        console.error(err);
+
+        setSelectedState({
+          bgImage: "",
+          packages: [],
+        });
+
+      }
+
+    };
+
+    loadPackages();
+
   }, [searchQuery]);
 
   const updateGuestCount = (pkgIndex, value) => {
@@ -145,7 +190,7 @@ export default function CarForHolidayPage() {
     }
   };
 
-  if (!selectedState) {
+  if (selectedState.packages.length === 0) {
     return (
       <div
         className="min-h-screen flex items-center justify-center"

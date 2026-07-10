@@ -1,0 +1,624 @@
+{
+  "name": "Rajasthan",
+  "keywords": [
+    "rajasthan",
+    "jaipur",
+    "udaipur",
+    "jodhpur",
+    "jaisalmer",
+    "bikaner"
+  ],
+  "bgImage": "https://s7ap1.scene7.com/is/image/incredibleindia/hawa-mahal-jaipur-rajasthan-city-1-hero?qlt=82&ts=1742200253577",
+
+  "packages": [
+
+    {
+      "name": "Jaipur Break",
+      "duration": "3 Days / 2 Nights",
+      "kmLimit": "300 Km Limit",
+      "kiloLimits": [80, 80, 30],
+
+      "rates": [
+        { "vehicle": "A/C Swift Dzire / Etios", "price": 12600 },
+        { "vehicle": "Innova Crysta", "price": 16200 },
+        { "vehicle": "SUV(ertiga)", "price": 14500 },
+        { "vehicle": "A/C 12-Seater Tempo Traveler", "price": 22000 },
+        { "vehicle": "Force Urbania 13 seater van", "price": 24000 },
+        { "vehicle": "A/C 17-Seater Tempo Traveler", "price": 28000 },
+        { "vehicle": "A/C 25-Seater Tempo Traveler", "price": 36000 },
+        { "vehicle": "A/C 45-Seater Tempo Traveler", "price": 58000 }
+      ],
+
+      "itinerary": [
+        {
+            "day": "Day 01 : Arrival at Jaipur – Amber Fort – Birla Mandir – Chokhi Dhani",
+
+            "images": [
+                "/holiday-images/rajasthan/jaipur-break/image.png",
+                "/holiday-images/rajasthan/jaipur-break/image copy.png",
+                "/holiday-images/rajasthan/jaipur-break/image copy 2.png"
+            ],
+
+            "details": [
+            "✈️ Arrive at Jaipur Airport or Railway Station, where our representative will warmly welcome you and assist with your transfer to the hotel.",
+            "🏨 Check in to your hotel, relax for a while and prepare to explore the Pink City.",
+            "🏰 Visit the magnificent Amber Fort (Amer Fort), a UNESCO World Heritage Site renowned for its grand courtyards, artistic mirror work, Rajput architecture and breathtaking views of Maota Lake.",
+            "🛕 Continue to the beautiful Laxminarayan Temple (Birla Mandir), built entirely of white marble and dedicated to Lord Vishnu and Goddess Lakshmi.",
+            "🎭 In the evening, experience the vibrant culture of Rajasthan at Chokhi Dhani, a traditional village resort offering folk dance performances, puppet shows, camel rides, local handicrafts and an authentic Rajasthani dinner.",
+            "🏨 Return to the hotel for a comfortable overnight stay in Jaipur."
+            ]
+        },
+
+        {
+            "day": "Day 02 : Jaipur Heritage Sightseeing",
+
+            "images": [
+                "/holiday-images/rajasthan/jaipur-break/image copy 3.png",
+                "/holiday-images/rajasthan/jaipur-break/image copy 4.png"
+            ],
+
+            "details": [
+            "🍽️ Enjoy a delicious breakfast before beginning a full day of sightseeing in Jaipur.",
+            "🌬️ Visit the iconic Hawa Mahal (Palace of Winds), famous for its unique honeycomb façade with 953 intricately designed windows built for the royal ladies.",
+            "🏛️ Explore the majestic City Palace, home to beautiful courtyards, royal museums, ancient weapons, costumes and priceless artifacts of Jaipur's royal family.",
+            "🔭 Visit Jantar Mantar, a UNESCO World Heritage Site featuring the world's largest stone sundial and several astronomical instruments still capable of making accurate observations.",
+            "🌊 Stop at the picturesque Jal Mahal, a beautiful palace located in the middle of Man Sagar Lake, offering excellent photography opportunities.",
+            "🏯 Proceed to Nahargarh Fort, perched on the Aravalli Hills, offering panoramic views of the entire Pink City.",
+            "📸 Visit the colourful Patrika Gate, one of Jaipur's most photographed landmarks, admired for its vibrant artwork depicting Rajasthan's rich culture and heritage.",
+            "🛍️ Spend the evening exploring local markets or relaxing at your leisure before returning to the hotel.",
+            "🏨 Overnight stay in Jaipur."
+            ]
+        },
+
+        {
+            "day": "Day 03 : Albert Hall Museum – Local Shopping – Departure",
+
+            "images": [
+                "/holiday-images/rajasthan/jaipur-break/image copy 5.png",
+                "/holiday-images/rajasthan/jaipur-break/image copy 6.png"
+            ],
+
+            "details": [
+            "🍽️ After breakfast, complete the hotel check-out formalities.",
+            "🏛️ Visit the historic Albert Hall Museum, Rajasthan's oldest museum, showcasing an impressive collection of royal artifacts, sculptures, paintings, carpets, coins and ancient manuscripts.",
+            "💎 Explore Johari Bazaar, one of Jaipur's oldest shopping streets, famous for exquisite gemstones, traditional jewellery and handcrafted souvenirs.",
+            "🛍️ Visit Bapu Bazaar to shop for colourful textiles, handicrafts, leather products, lac bangles and the famous Rajasthani mojari footwear.",
+            "🚖 Later, you will be transferred to Jaipur Airport or Railway Station for your onward journey.",
+            "❤️ Depart with unforgettable memories of Rajasthan's royal heritage, colourful culture and warm hospitality."
+            ]
+        },
+        {
+            "day": "Inclusions & Exclusions",
+
+            "images": [
+                "/holiday-images/rajasthan/jaipur-break/image copy 7.png"
+            ],
+
+            "details": [
+            "✅ Accommodation in a well-appointed hotel for 2 nights.",
+            "✅ Daily breakfast at the hotel.",
+            "✅ All sightseeing and transfers by a comfortable air-conditioned vehicle.",
+            "✅ Services of an experienced driver and local guides at major attractions.",
+            "✅ Entry fees to all monuments and attractions as per the itinerary.",
+            "❌ Airfare or train fare to Jaipur and back.",
+            "❌ Personal expenses such as laundry, telephone calls, tips, and gratuities.",
+            "❌ Any additional meals or beverages not mentioned in the itinerary.",
+            "❌ Travel insurance, if required."
+            ]
+        }
+        ]
+        },
+        {
+        "name": "Colours of Rajasthan",
+            "duration": "9 Days / 8 Nights",
+            "kmLimit": "1800 Km Limit",
+            "kiloLimits": [330, 330, 350, 300, 120, 300, 300, 120, 100],
+
+            "rates": [
+                { "vehicle": "A/C Swift Dzire / Etios", "price": 37800 },
+                { "vehicle": "Innova Crysta", "price": 48600 },
+                { "vehicle": "SUV(ertiga)", "price": 43500 },
+                { "vehicle": "A/C 12-Seater Tempo Traveler", "price": 66000 },
+                { "vehicle": "Force Urbania 13 seater van", "price": 72000 },
+                { "vehicle": "A/C 17-Seater Tempo Traveler", "price": 84000 },
+                { "vehicle": "A/C 25-Seater Tempo Traveler", "price": 108000 },
+                { "vehicle": "A/C 45-Seater Tempo Traveler", "price": 174000 }
+            ],
+
+            "itinerary": [
+
+                {
+                "day": "Day 01 : Arrival at Jaipur – Amber Fort – Birla Mandir – Chokhi Dhani",
+
+                "images": [
+                    "/holiday-images/rajasthan/colours of rajasthan/image.png",
+                    "/holiday-images/rajasthan/colours of rajasthan/image copy.png",
+                    "/holiday-images/rajasthan/colours of rajasthan/image copy 2.png",
+                    "/holiday-images/rajasthan/colours of rajasthan/image copy 3.png"
+                ],
+
+                "details": [
+                    "✈️ Meet & greet on arrival at Jaipur Airport or Railway Station and transfer to your hotel.",
+                    "🏨 Complete hotel check-in and relax before beginning the sightseeing tour.",
+                    "🏰 Visit the magnificent Amber Fort (Amer Fort), a UNESCO World Heritage Site famous for its Rajput-Mughal architecture, Sheesh Mahal, beautiful courtyards and panoramic views of Maota Lake.",
+                    "🛕 Visit the beautiful Laxminarayan Temple (Birla Mandir), built entirely with white marble.",
+                    "🎭 Spend the evening at Chokhi Dhani, Rajasthan's famous ethnic village resort showcasing folk dances, puppet shows, camel rides, magic shows and authentic Rajasthani cuisine.",
+                    "🍽️ Enjoy traditional Rajasthani cultural performances and dinner.",
+                    "🏨 Overnight stay at Jaipur."
+                ]
+                },
+
+                {
+                    "day": "Day 02 : Jaipur Local Sightseeing",
+
+                    "images": [
+                        "/holiday-images/rajasthan/colours of rajasthan/image copy 4.png",
+                        "/holiday-images/rajasthan/colours of rajasthan/image copy 5.png",
+                        "/holiday-images/rajasthan/colours of rajasthan/image copy 6.png",
+                        "/holiday-images/rajasthan/colours of rajasthan/image copy 7.png",
+                        "/holiday-images/rajasthan/colours of rajasthan/image copy 8.png",
+                        "/holiday-images/rajasthan/colours of rajasthan/image copy 9.png"
+                    ],
+
+                    "details": [
+                        "🍽️ Enjoy breakfast at the hotel.",
+                        "🌬️ Visit the iconic Hawa Mahal (Palace of Winds), built in 1799 by Maharaja Sawai Pratap Singh with its famous 953 windows.",
+                        "🏛️ Explore the grand City Palace, home to royal courtyards, museums, palaces and priceless royal collections.",
+                        "🔭 Visit Jantar Mantar, a UNESCO World Heritage Site featuring nineteen astronomical instruments used to study celestial movements.",
+                        "🌊 Stop at Jal Mahal, the beautiful Water Palace located in the middle of Man Sagar Lake.",
+                        "🏯 Visit Nahargarh Fort and Jaigarh Fort, offering breathtaking panoramic views of Jaipur city and the Aravalli Hills.",
+                        "📸 Visit the colourful Patrika Gate, one of Jaipur's most photographed landmarks decorated with vibrant Rajasthani artwork.",
+                        "🛍️ Evening free for shopping or leisure.",
+                        "🏨 Overnight stay at Jaipur."
+                    ]
+                }
+                ,
+                {
+                "day": "Day 03 : Jaipur → Bikaner",
+
+                "images": [
+                    "/holiday-images/rajasthan/colours of rajasthan/image copy 10.png",
+                    "/holiday-images/rajasthan/colours of rajasthan/image copy 11.png"
+                ],
+
+                "details": [
+                    "🍽️ Enjoy breakfast at the hotel and check out.",
+                    "🚗 Drive towards Bikaner through the scenic landscapes of Rajasthan.",
+                    "🏨 Arrive in Bikaner and check in to the hotel.",
+                    "🏰 Visit the magnificent Junagarh Fort, one of Rajasthan's finest forts that was never conquered. Explore its beautifully decorated palaces, courtyards, museums and royal chambers.",
+                    "🐪 If time permits, explore the local markets famous for traditional handicrafts, camel leather products and Bikaneri snacks.",
+                    "🌆 Enjoy the peaceful evening in the desert city.",
+                    "🏨 Overnight stay at Bikaner."
+                ]
+                },
+
+                {
+                "day": "Day 04 : Bikaner → Jaisalmer",
+
+                "images": [
+                    "/holiday-images/rajasthan/colours of rajasthan/image copy 12.png",
+                    "/holiday-images/rajasthan/colours of rajasthan/image copy 13.png"
+                ],
+
+                "details": [
+                    "🍽️ Breakfast at the hotel followed by check-out.",
+                    "🚗 Proceed towards the Golden City of Jaisalmer.",
+                    "🏜️ Enjoy the changing desert landscapes during the journey.",
+                    "🏨 Arrive at Jaisalmer and complete hotel check-in.",
+                    "🌅 Evening free for leisure or explore the nearby local markets famous for mirror work, handicrafts and traditional Rajasthani textiles.",
+                    "🏨 Overnight stay at Jaisalmer."
+                ]
+                },
+
+                {
+                "day": "Day 05 : Jaisalmer Sightseeing",
+
+                "images": [
+                    "/holiday-images/rajasthan/colours of rajasthan/image copy 14.png",
+                    "/holiday-images/rajasthan/colours of rajasthan/image copy 15.png",
+                    "/holiday-images/rajasthan/colours of rajasthan/image copy 16.png"
+                ],
+
+                "details": [
+                    "🍽️ Breakfast at the hotel.",
+                    "🏰 Visit the majestic Jaisalmer Fort (Sonar Quila), one of the world's few living forts and a UNESCO World Heritage Site.",
+                    "🛕 Explore the beautifully carved Jain Temples located inside the fort complex.",
+                    "🏛️ Visit Patwon Ki Haveli, famous for its intricate sandstone carvings and grand architecture.",
+                    "🏠 Continue to Nathmal Ki Haveli and Salim Singh Ki Haveli, showcasing exquisite Rajasthani craftsmanship.",
+                    "🏜️ In the evening, visit Sam Sand Dunes and enjoy a camel safari across the golden Thar Desert.",
+                    "🎭 Witness the spectacular desert sunset followed by traditional Rajasthani folk dance, music and cultural performances.",
+                    "🍽️ Enjoy dinner at the desert camp (if included).",
+                    "🏨 Overnight stay at Jaisalmer."
+                ]
+                }
+
+                ,
+                {
+                "day": "Day 06 : Jaisalmer → Jodhpur",
+
+                "images": [
+                    "/holiday-images/rajasthan/colours of rajasthan/image copy 17.png",
+                    "/holiday-images/rajasthan/colours of rajasthan/image copy 18.png"
+                ],
+
+                "details": [
+                    "🍽️ Enjoy breakfast at the hotel and check out.",
+                    "🚗 Drive towards Jodhpur, popularly known as the Blue City of Rajasthan.",
+                    "🏨 Arrive at Jodhpur and complete hotel check-in.",
+                    "🏰 Visit the magnificent Mehrangarh Fort, one of India's largest and best-preserved forts offering spectacular views of the blue houses below.",
+                    "🏛️ Explore the fort museum displaying royal palanquins, weapons, paintings, costumes and historical artifacts.",
+                    "🕰️ Visit the famous Clock Tower and Sardar Market, well known for handicrafts, spices, textiles and traditional souvenirs.",
+                    "🌆 Enjoy the evening exploring the vibrant streets of Jodhpur.",
+                    "🏨 Overnight stay at Jodhpur."
+                ]
+                },
+
+                {
+                "day": "Day 07 : Jodhpur → Udaipur",
+
+                "images": [
+                    "/holiday-images/rajasthan/colours of rajasthan/image copy 19.png"
+                ],
+
+                "details": [
+                    "🍽️ Breakfast at the hotel followed by check-out.",
+                    "🚗 Proceed towards Udaipur, famously known as the City of Lakes.",
+                    "🏞️ En route enjoy the scenic Aravalli mountain ranges and rural landscapes of Rajasthan.",
+                    "🏨 Arrive at Udaipur and check in to the hotel.",
+                    "🌅 Evening free to relax or enjoy a walk around Fateh Sagar Lake.",
+                    "🛍️ Explore the nearby local markets famous for miniature paintings, handicrafts and traditional Rajasthani artwork.",
+                    "🏨 Overnight stay at Udaipur."
+                ]
+                }
+
+                ,
+                {
+                "day": "Day 08 : Udaipur Local Sightseeing",
+
+                "details": [
+                    "🍽️ Enjoy breakfast at the hotel.",
+                    "🏰 Visit the magnificent City Palace, the largest palace complex in Rajasthan overlooking the beautiful Lake Pichola.",
+                    "🛕 Visit the famous Jagdish Temple dedicated to Lord Vishnu.",
+                    "🌸 Explore Saheliyon Ki Bari, known for its marble fountains, lotus pools and lush gardens.",
+                    "🚤 Enjoy an optional boat ride on Lake Pichola while admiring Jag Mandir and the iconic Lake Palace.",
+                    "📸 Capture beautiful views of Udaipur's lakes and Aravalli Hills.",
+                    "🛍️ Spend the evening shopping for miniature paintings, handicrafts and traditional Rajasthani souvenirs.",
+                    "🏨 Overnight stay at Udaipur."
+                ]
+                },
+
+                {
+                "day": "Day 09 : Udaipur → Departure",
+
+                "details": [
+                    "🍽️ Breakfast at the hotel and check-out.",
+                    "⏳ Free time for local shopping or relaxation depending on your departure schedule.",
+                    "🚖 Transfer to Udaipur Airport / Railway Station.",
+                    "❤️ Tour ends with unforgettable memories of Rajasthan's royal heritage, colourful culture and warm hospitality."
+                ]
+                }
+            ]
+        },
+        {
+            "name": "Rajasthan Glory",
+            "duration": "8 Days / 7 Nights",
+            "kmLimit": "1800 Km Limit",
+            "kiloLimits": [450, 450, 180],
+
+            "rates": [
+                { "vehicle": "A/C Swift Dzire / Etios", "price": 31800 },
+                { "vehicle": "Innova Crysta", "price": 40200 },
+                { "vehicle": "SUV(ertiga)", "price": 36500 },
+                { "vehicle": "A/C 12-Seater Tempo Traveler", "price": 52000 },
+                { "vehicle": "Force Urbania 13 seater van", "price": 56000 },
+                { "vehicle": "A/C 17-Seater Tempo Traveler", "price": 66000 },
+                { "vehicle": "A/C 25-Seater Tempo Traveler", "price": 86000 },
+                { "vehicle": "A/C 45-Seater Tempo Traveler", "price": 132000 }
+            ],
+
+            "itinerary": [
+
+                {
+                "day": "Day 01 : Jaipur Arrival – Amber Fort – Birla Mandir – Chokhi Dhani",
+
+                "images": [
+                    "/holiday-images/rajasthan/rajasthan-glory/image.png",
+                    "/holiday-images/rajasthan/rajasthan-glory/image copy.png",
+                    "/holiday-images/rajasthan/rajasthan-glory/image copy 2.png",
+                    "/holiday-images/rajasthan/rajasthan-glory/image copy 3.png"
+                ],
+
+                "details": [
+                    "✈️ Meet & greet on arrival at Jaipur Airport or Railway Station followed by transfer to the hotel for check-in.",
+                    "🏨 After a short refreshment break, begin exploring the Pink City of Rajasthan.",
+                    "🏰 Visit the magnificent Amber Fort (Amer Fort), a UNESCO World Heritage Site renowned for its Rajput-Mughal architecture, mirror-work halls, royal courtyards and panoramic views of Maota Lake.",
+                    "🛕 Visit the beautiful Laxminarayan Temple (Birla Mandir), one of Jaipur's most peaceful white-marble temples.",
+                    "🎭 In the evening experience Rajasthan's vibrant culture at Chokhi Dhani, a traditional ethnic village resort famous for folk dances, puppet shows, camel rides, village activities and unlimited authentic Rajasthani dinner.",
+                    "🏨 Overnight stay at Jaipur."
+                ]
+                },
+
+                {
+                "day": "Day 02 : Jaipur Local Sightseeing",
+
+                "images": [
+                    "/holiday-images/rajasthan/rajasthan-glory/image copy 4.png",
+                    "/holiday-images/rajasthan/rajasthan-glory/image copy 5.png",
+                    "/holiday-images/rajasthan/rajasthan-glory/image copy 6.png",
+                    "/holiday-images/rajasthan/rajasthan-glory/image copy 7.png"
+                ],
+
+                "details": [
+                    "🍽️ After breakfast, proceed for a full-day sightseeing tour of Jaipur.",
+                    "🌬️ Visit the iconic Hawa Mahal (Palace of Winds), built in 1799 by Maharaja Sawai Pratap Singh and designed by Lal Chand Ustad.",
+                    "🏛️ Explore the magnificent City Palace, the royal residence showcasing museums, courtyards and royal collections.",
+                    "🔭 Visit Jantar Mantar, a UNESCO World Heritage astronomical observatory featuring 19 giant scientific instruments used to observe celestial movements.",
+                    "🌊 Stop at the picturesque Jal Mahal situated in the middle of Man Sagar Lake.",
+                    "🏯 Visit Nahargarh Fort and Jaigarh Fort, both offering breathtaking panoramic views of Jaipur city and the Aravalli Hills.",
+                    "📸 Visit the colourful Patrika Gate, one of Jaipur's most photographed landmarks showcasing traditional Rajasthani artwork.",
+                    "🏨 Overnight stay at Jaipur."
+                ]
+                }
+                ,
+                {
+                "day": "Day 03 : Jaipur → Jodhpur",
+
+                "images": [
+                    "/holiday-images/rajasthan/rajasthan-glory/image copy 8.png",
+                    "/holiday-images/rajasthan/rajasthan-glory/image copy 9.png",
+                    "/holiday-images/rajasthan/rajasthan-glory/image copy 10.png",
+                    "/holiday-images/rajasthan/rajasthan-glory/image copy 11.png"
+                ],
+
+                "details": [
+                    "🍽️ After breakfast, check out from the hotel and begin your journey towards Jodhpur, popularly known as the Blue City of Rajasthan.",
+                    "🚗 Enjoy the scenic drive through rural Rajasthan while witnessing its colourful villages and landscapes.",
+                    "🏨 Upon arrival, check in to the hotel and relax.",
+                    "🏰 Visit the magnificent Mehrangarh Fort, one of India's largest and best-preserved forts offering spectacular views of the Blue City.",
+                    "🏛️ Explore the fort museum displaying royal palanquins, weapons, paintings, costumes and historical artefacts of the Rathore dynasty.",
+                    "🕰️ Visit Jaswant Thada, the beautiful white marble cenotaph built in memory of Maharaja Jaswant Singh II.",
+                    "🛍️ Spend the evening exploring the vibrant Clock Tower and Sardar Market, famous for handicrafts, spices, textiles and souvenirs.",
+                    "🏨 Overnight stay at Jodhpur."
+                ]
+                },
+
+                {
+                "day": "Day 04 : Jodhpur → Ranakpur → Udaipur",
+
+                "images": [
+                    "/holiday-images/rajasthan/rajasthan-glory/image copy 12.png",
+                    "/holiday-images/rajasthan/rajasthan-glory/image copy 13.png",
+                    "/holiday-images/rajasthan/rajasthan-glory/image copy 14.png",
+                    "/holiday-images/rajasthan/rajasthan-glory/image copy 15.png"
+                ],
+
+                "details": [
+                    "🍽️ Breakfast at the hotel followed by check-out.",
+                    "🚗 Drive towards Udaipur via Ranakpur, nestled amidst the scenic Aravalli Hills.",
+                    "🛕 Visit the world-famous Ranakpur Jain Temple, renowned for its stunning marble architecture and 1,444 intricately carved pillars, each with a unique design.",
+                    "🌿 Enjoy the peaceful surroundings of the temple complex before continuing your journey.",
+                    "🏨 Arrive at Udaipur, popularly known as the City of Lakes, and check in to the hotel.",
+                    "🌅 Evening free for leisure or enjoy a relaxing walk near Fateh Sagar Lake.",
+                    "🏨 Overnight stay at Udaipur."
+                ]
+                }
+                ,
+                {
+                "day": "Day 05 : Udaipur Local Sightseeing",
+
+                "images": [
+                    "/holiday-images/rajasthan/rajasthan-glory/image copy 16.png",
+                    "/holiday-images/rajasthan/rajasthan-glory/image copy 17.png",
+                    "/holiday-images/rajasthan/rajasthan-glory/image copy 18.png"
+                ],
+
+                "details": [
+                    "🍽️ After breakfast, begin a full-day sightseeing tour of Udaipur, famously known as the 'City of Lakes'.",
+                    "🏰 Visit the magnificent City Palace overlooking Lake Pichola, the largest palace complex in Rajasthan showcasing royal courtyards, museums and priceless collections.",
+                    "🛕 Visit the historic Jagdish Temple, dedicated to Lord Vishnu and admired for its intricate Indo-Aryan architecture.",
+                    "🌸 Explore Saheliyon Ki Bari (Garden of Maidens), famous for its marble fountains, lotus pools and beautifully landscaped gardens.",
+                    "🚤 Enjoy an optional boat ride on the serene Lake Pichola while admiring Jag Mandir and the world-famous Lake Palace.",
+                    "🛍️ Spend the evening exploring local markets known for miniature paintings, marble handicrafts and traditional Rajasthani souvenirs.",
+                    "🏨 Overnight stay at Udaipur."
+                ]
+                },
+
+                {
+                "day": "Day 06 : Udaipur → Chittorgarh → Udaipur",
+
+                "images": [
+                    "/holiday-images/rajasthan/rajasthan-glory/image copy 19.png",
+                    "/holiday-images/rajasthan/rajasthan-glory/image copy 20.png",
+                    "/holiday-images/rajasthan/rajasthan-glory/image copy 21.png"
+                ],
+
+                "details": [
+                    "🍽️ Enjoy breakfast at the hotel before leaving for an excursion to Chittorgarh.",
+                    "🏰 Visit the majestic Chittorgarh Fort, India's largest fort and a UNESCO World Heritage Site symbolizing Rajput bravery and sacrifice.",
+                    "🗼 Explore the iconic Vijay Stambh (Victory Tower), built by Maharana Kumbha to commemorate his victory over the Sultan of Malwa.",
+                    "🏛️ Visit Kirti Stambh, Rana Kumbha Palace, Padmini Palace and Gaumukh Reservoir inside the massive fort complex.",
+                    "📖 Learn about the inspiring history of Rani Padmini and the legendary tales associated with Chittorgarh.",
+                    "🚗 Return to Udaipur in the evening.",
+                    "🏨 Overnight stay at Udaipur."
+                ]
+                }
+
+                ,
+                {
+                "day": "Day 07 : Udaipur Local Sightseeing",
+
+                "images": [
+                    "/holiday-images/rajasthan/rajasthan-glory/image copy 22.png",
+                    "/holiday-images/rajasthan/rajasthan-glory/image copy 23.png",
+                    "/holiday-images/rajasthan/rajasthan-glory/image copy 24.png"
+                ],
+
+                "details": [
+                    "🍽️ Enjoy breakfast at the hotel before continuing the sightseeing tour of Udaipur.",
+                    "🌊 Visit the beautiful Fateh Sagar Lake, one of Udaipur's most picturesque attractions.",
+                    "🗿 Visit Maharana Pratap Memorial (Moti Magri), dedicated to the legendary Rajput warrior Maharana Pratap and his loyal horse Chetak.",
+                    "🌳 Stop for photographs at Nehru Garden situated amidst the lake.",
+                    "🌸 Explore Saheliyon Ki Bari, the historic Garden of Maidens known for its marble fountains, lotus pools and lush greenery.",
+                    "🎭 Visit Bharatiya Lok Kala Museum showcasing Rajasthan's rich collection of folk costumes, puppets, masks, paintings and traditional art.",
+                    "🛍️ Spend the evening shopping for handicrafts, miniature paintings and marble souvenirs.",
+                    "🏨 Overnight stay at Udaipur."
+                ]
+                },
+
+                {
+                "day": "Day 08 : Udaipur Departure",
+
+                "images": [
+                    "/holiday-images/rajasthan/rajasthan-glory/image copy 25.png"
+                ],
+
+                "details": [
+                    "🍽️ Enjoy breakfast at the hotel and complete the check-out formalities.",
+                    "⏳ Depending on your departure schedule, enjoy some free time for shopping or leisure.",
+                    "📸 Capture your final memories of the beautiful City of Lakes.",
+                    "🚖 Transfer to Udaipur Airport / Railway Station for your onward journey.",
+                    "❤️ Tour concludes with unforgettable memories of Rajasthan's magnificent forts, royal palaces, colourful culture, historic temples and warm hospitality."
+                ]
+                }
+
+            ]
+
+        }
+        ,
+        {
+            "name": "Rajasthan Highlights",
+            "duration": "6 Days / 5 Nights",
+            "kmLimit": "1400 Km Limit",
+            "kiloLimits": [350, 350, 140],
+
+            "rates": [
+                { "vehicle": "A/C Swift Dzire / Etios", "price": 24800 },
+                { "vehicle": "Innova Crysta", "price": 31800 },
+                { "vehicle": "SUV(ertiga)", "price": 28500 },
+                { "vehicle": "A/C 12-Seater Tempo Traveler", "price": 42000 },
+                { "vehicle": "Force Urbania 13 seater van", "price": 46000 },
+                { "vehicle": "A/C 17-Seater Tempo Traveler", "price": 54000 },
+                { "vehicle": "A/C 25-Seater Tempo Traveler", "price": 72000 },
+                { "vehicle": "A/C 45-Seater Tempo Traveler", "price": 112000 }
+            ],
+
+            "itinerary": [
+
+                {
+                "day": "Day 01 : Arrival at Jodhpur – Mehrangarh Fort – Jaswant Thada – Umaid Bhawan Palace",
+
+                "images": [
+                    "/holiday-images/rajasthan/rajasthan-highlights/image.png",
+                    "/holiday-images/rajasthan/rajasthan-highlights/image copy.png"
+                ],
+
+                "details": [
+                    "✈️ Meet & greet on arrival at Jodhpur Airport / Railway Station followed by transfer to the hotel.",
+                    "🏨 Complete hotel check-in and freshen up before beginning the sightseeing tour.",
+                    "🏰 Visit the majestic Mehrangarh Fort, one of India's largest and best-preserved forts built by Rao Jodha in 1459. Explore its magnificent palaces, museum, courtyards and enjoy breathtaking panoramic views of the Blue City.",
+                    "⚪ Visit Jaswant Thada, the beautiful white marble cenotaph often referred to as the 'Taj Mahal of Marwar', known for its intricate marble carvings and peaceful surroundings.",
+                    "🏛️ Explore the museum section of Umaid Bhawan Palace, one of the world's largest private residences built during the reign of Maharaja Umaid Singh.",
+                    "🛍️ Spend the evening at the famous Clock Tower and Sardar Market, known for handicrafts, spices, textiles and traditional Rajasthani souvenirs.",
+                    "🏨 Overnight stay at Jodhpur."
+                ]
+                },
+
+                {
+                "day": "Day 02 : Jodhpur → Jaisalmer",
+
+                "images": [
+                    "/holiday-images/rajasthan/rajasthan-highlights/image copy 2.png",
+                    "/holiday-images/rajasthan/rajasthan-highlights/image copy 3.png"
+                ],
+
+                "details": [
+                    "🍽️ After breakfast, check out from the hotel and begin the drive towards Jaisalmer, famously known as the Golden City of Rajasthan.",
+                    "🚗 Enjoy a scenic drive across the Thar Desert with optional stop at Osian, famous for its ancient temples and desert landscapes.",
+                    "🌊 On arrival at Jaisalmer, visit the picturesque Gadisar Lake, a historic 14th-century reservoir surrounded by beautifully carved temples, ghats and sandstone architecture.",
+                    "🌅 Spend the evening relaxing beside the lake or exploring the nearby surroundings.",
+                    "🏨 Overnight stay at Jaisalmer."
+                ]
+                },
+                {
+                "day": "Day 03 : Jaisalmer City Sightseeing",
+
+                "images": [
+                   "/holiday-images/rajasthan/rajasthan-highlights/image copy 4.png",
+                    "/holiday-images/rajasthan/rajasthan-highlights/image copy 5.png"
+                ],
+
+                "details": [
+                    "🍽️ After breakfast, begin a full-day sightseeing tour of Jaisalmer, famously known as the Golden City.",
+                    "🏰 Visit the magnificent Jaisalmer Fort (Sonar Quila), one of the world's few living forts and a UNESCO World Heritage Site. Explore its narrow lanes, ancient Jain temples, traditional houses and bustling local markets.",
+                    "🏛️ Visit the beautifully carved Patwon Ki Haveli, the largest and most elaborate haveli in Jaisalmer, renowned for its intricate sandstone architecture.",
+                    "🏠 Continue to Salim Singh Ki Haveli, famous for its unique peacock-shaped roof and remarkable craftsmanship.",
+                    "🏡 Explore Nathmal Ki Haveli, an architectural masterpiece built from yellow sandstone with beautifully carved balconies and walls.",
+                    "🏜️ In the afternoon, proceed towards the famous Sam Sand Dunes or Khuri Desert.",
+                    "🐪 Enjoy an optional Camel Safari or Jeep Safari across the golden sand dunes while witnessing the spectacular desert sunset.",
+                    "🎭 Experience traditional Rajasthani folk music and dance performances in the desert.",
+                    "🏨 Overnight stay at Jaisalmer."
+                ]
+                },
+
+                {
+                "day": "Day 04 : Jaisalmer – Tanot Mata – Longewala – Kuldhara – Bada Bagh",
+
+                "images": [
+                    "/holiday-images/rajasthan/rajasthan-highlights/image copy 6.png",
+                    "/holiday-images/rajasthan/rajasthan-highlights/image copy 7.png"
+                ],
+
+                "details": [
+                    "🍽️ Breakfast at the hotel before leaving for an exciting full-day excursion.",
+                    "🛕 Visit the sacred Tanot Mata Temple, located close to the Indo-Pak border and famous for its miraculous history during the 1965 and 1971 wars.",
+                    "🇮🇳 Continue to Longewala War Memorial and Museum, commemorating the historic Battle of Longewala during the 1971 Indo-Pak War.",
+                    "🏚️ Visit the mysterious Kuldhara Abandoned Village, an ancient deserted settlement surrounded by fascinating legends and history.",
+                    "🏛️ Explore the beautiful cenotaphs of Bada Bagh and Vyas Chhatri, popular for their yellow sandstone architecture and breathtaking sunset views.",
+                    "📸 Capture memorable photographs of the desert landscape before returning to Jaisalmer.",
+                    "🏨 Overnight stay at Jaisalmer."
+                ]
+                }
+                ,
+                {
+                "day": "Day 05 : Jaisalmer → Bikaner",
+
+                "images": [
+                    "/holiday-images/rajasthan/rajasthan-highlights/image copy 8.png",
+                    "/holiday-images/rajasthan/rajasthan-highlights/image copy 9.png"
+                ],
+
+                "details": [
+                    "🍽️ Enjoy breakfast at the hotel and check out from Jaisalmer.",
+                    "🚗 Begin your journey towards Bikaner, popularly known as the Camel City of Rajasthan, passing through the scenic landscapes of the Thar Desert.",
+                    "🏨 Upon arrival, check in to the hotel and relax for a while.",
+                    "🏰 Visit the magnificent Junagarh Fort, one of the very few major forts in Rajasthan built on the plains rather than on a hill. Explore its beautifully decorated palaces, courtyards, museums and royal chambers.",
+                    "🛕 Visit the famous Bhandasar Jain Temple, renowned for its exquisite fresco paintings, intricate carvings and remarkable architecture.",
+                    "🐀 Continue to the world-famous Karni Mata Temple (Deshnok), popularly known as the Rat Temple, one of Rajasthan's most unique religious attractions.",
+                    "🐪 If time permits, visit the National Research Centre on Camel, the only camel research and breeding centre in Asia, where visitors can learn about camel conservation and even taste camel milk products.",
+                    "🏛️ Drive past the magnificent Rampuria Havelis, known for their red sandstone architecture, intricate woodwork and royal heritage.",
+                    "🏨 Overnight stay at Bikaner."
+                ]
+                },
+
+                {
+                "day": "Day 06 : Bikaner → Jodhpur Departure",
+
+                "images": [
+                    "/holiday-images/rajasthan/rajasthan-highlights/image copy 10.png",
+                    "/holiday-images/rajasthan/rajasthan-highlights/image copy 11.png"
+                ],
+
+                "details": [
+                    "🍽️ Enjoy breakfast at the hotel and complete the check-out formalities.",
+                    "🚗 Drive back to Jodhpur, enjoying the scenic countryside of Rajasthan during the journey.",
+                    "📸 Depending on your departure schedule, enjoy a short stop for refreshments or shopping.",
+                    "✈️ Arrive at Jodhpur Airport / Railway Station for your onward journey.",
+                    "❤️ Tour concludes with unforgettable memories of Rajasthan's majestic forts, golden deserts, vibrant culture, historic temples and warm hospitality."
+                ]
+                }
+            
+            ]
+        }
+  ]
+
+}
