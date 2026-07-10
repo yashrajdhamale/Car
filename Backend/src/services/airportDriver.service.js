@@ -52,8 +52,9 @@ export const findAndAssignAirportDriver = async ({ bookingId }) => {
     const status = String(driver.status || "unknown").toLowerCase();
     if (!["available", "online", "active"].includes(status)) continue;
 
-    const routesSnapshot = await firestore.collection("drivers").doc(driverDoc.id).collection("assignedRoutes").get();
-    const matched = routesSnapshot.docs.some((routeDoc) => {
+    // Query routes from top-level /routes collection for this driver
+    const driverRoutesSnapshot = await firestore.collection("routes").where("driverId", "==", driverDoc.id).get();
+    const matched = driverRoutesSnapshot.docs.some((routeDoc) => {
       const route = routeDoc.data();
       const routeFrom = normalizeLocation(route.from);
       const routeTo = normalizeLocation(route.to);

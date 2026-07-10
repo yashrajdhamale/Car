@@ -745,6 +745,15 @@ export default function OutstationPage() {
         };
 
         try {
+            console.log("[OutstationPage] Creating outstation booking", {
+                pickupCity: bookingData.pickupCity,
+                pickupCityForDriver: bookingData.pickupCityForDriver,
+                destinationCity: bookingData.destinationCity,
+                destinationCityForDriver: bookingData.destinationCityForDriver,
+                rideType: bookingData.rideType,
+                status: bookingData.status,
+            });
+
             const response = await fetch(`${API_BASE}/api/outstation-bookings`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -756,6 +765,7 @@ export default function OutstationPage() {
             }
 
             const result = await response.json();
+            console.log("[OutstationPage] Create outstation response", result);
             const bookingId = result.bookingId;
 
             if (bookingId) {

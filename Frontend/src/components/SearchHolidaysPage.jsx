@@ -42,6 +42,7 @@ export default function SearchHolidaysPage() {
     { label: "Sikkim", value: "sikkim", packages: 4 },
     { label: "Assam", value: "assam", packages: 3 },
     { label: "West Bengal", value: "west bengal", packages: 4 },
+    { label: "Maharashtra", value: "maharashtra", packages: 4 }
   ];
 
   return (

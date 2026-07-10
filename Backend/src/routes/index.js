@@ -16,6 +16,7 @@ import driverLocationRoutes from "./driverLocation.routes.js";
 import outstationInvoiceRoutes from "./outstationInvoice.routes.js";
 import adminRoutes from "./admin.routes.js";
 import adminStorageRoutes from "./adminStorage.routes.js";
+import debugRoutes from "./debug.routes.js";
 
 const router = Router();
 
@@ -36,6 +37,7 @@ router.use("/driver-location", driverLocationRoutes);
 router.use("/outstation-invoice", outstationInvoiceRoutes);
 router.use("/admin", adminRoutes);
 router.use("/admin-storage", adminStorageRoutes);
+router.use("/debug", debugRoutes);
 
 router.get("/", (_req, res) => {
   res.json({

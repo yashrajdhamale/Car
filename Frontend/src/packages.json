@@ -1655,5 +1655,304 @@
         ]
       }
     ]
-  }
+  },
+
+"Maharashtra": {
+  "keywords": [
+    "maharashtra",
+    "pune",
+    "shirdi",
+    "nashik",
+    "ajanta",
+    "ellora",
+    "daulatabad",
+    "aurangabad",
+    "chhatrapati sambhaji nagar",
+    "trimbakeshwar",
+    "bhimashankar",
+    "ashtavinayak"
+  ],
+
+  "bgImage": "https://images.unsplash.com/photo-1605640840605-14ac1855827b",
+
+  "packages": [
+
+    {
+      "name": "Shirdi - Ajanta - Ellora Trip With Daulatabad Fort",
+      "duration": "4 Days / 3 Nights",
+
+      "itinerary": [
+          {
+            "day": "Day 01 : Pune → Shirdi",
+            "image": "/holiday-images/shirdi/sai-baba-temple.png",
+            "details": "🚗 Journey\n\n• Start early morning from Pune and drive to Shirdi.\n\n• Shirdi is one of Maharashtra's most famous pilgrimage destinations and the home of Shri Sai Baba.\n\n🛕 Shri Sai Baba Temple\n\n• Visit the sacred Shri Sai Baba Temple.\n• Take Darshan and seek blessings.\n• Thousands of devotees from across the world visit this holy shrine every day.\n\n🏡 Sai Heritage Village\n\n• Explore Sai Heritage Village.\n• Experience beautifully recreated scenes from Sai Baba's life.\n• Enjoy the peaceful surroundings.\n\n🎡 Sai Teerth Devotional Theme Park\n\n• Visit India's first devotional theme park.\n• Enjoy interactive shows based on Sai Baba's life.\n\n🏨 Overnight Stay\n\n• Overnight stay at Shirdi."
+        },
+          
+          {
+            "day": "Day 02 : Shirdi → Ajanta Caves → Chhatrapati Sambhaji Nagar (195 km | 4–5 hrs)",
+             "image": "/holiday-images/shirdi/ajanta-caves.png",
+            "details": "🍽️ Morning\n\n• After breakfast, drive to Chhatrapati Sambhaji Nagar.\n\n🏙️ About the City\n\n• Formerly known as Aurangabad.\n• Famous for UNESCO World Heritage Sites.\n• Known for Bibi Ka Maqbara, Himroo fabrics, 52 historic gates and rich Mughal history.\n\n🪨 Ajanta Caves\n\n• Visit the UNESCO World Heritage Site.\n• Explore ancient Buddhist caves dating back to the 2nd century BC.\n• Admire beautiful murals, sculptures and monasteries.\n• Walk through the caves overlooking the Waghora River.\n\n✨ Highlights\n\n• Chaityagrihas (Prayer Halls).\n• Viharas (Monasteries).\n• Ancient Buddhist paintings.\n\n🏨 Overnight Stay\n\n• Check-in to hotel.\n• Overnight stay at Chhatrapati Sambhaji Nagar."
+          },
+          {
+            "day": "Day 03 : Ellora Caves & Shri Grishneshwar Jyotirlinga",
+            "image": "/holiday-images/shirdi/ellora-caves.png",
+            "details": "🍽️ Morning\n\n• Breakfast at the hotel.\n• Proceed for local sightseeing.\n\n🪨 Ellora Caves\n\n• Visit the UNESCO World Heritage Site.\n• Explore 34 magnificent rock-cut caves.\n• Discover Buddhist, Hindu and Jain monuments.\n• Witness one of India's finest examples of ancient rock-cut architecture.\n\n🛕 Shri Grishneshwar Jyotirlinga\n\n• Visit one of the twelve sacred Jyotirlingas.\n• Dedicated to Lord Shiva.\n• Admire the beautifully carved temple architecture.\n• Seek blessings at this revered shrine.\n\n✨ Highlights\n\n• Intricate stone carvings.\n• Ancient temple pillars.\n• Historic sculptures.\n\n🏨 Overnight Stay\n\n• Return to hotel.\n• Overnight stay."
+          },
+          {
+            "day": "Day 04 : Daulatabad Fort → Pune",
+            "image": "/holiday-images/shirdi/daulatabad-fort.png",
+            "details": "🍽️ Morning\n\n• Breakfast and hotel check-out.\n\n🏰 Daulatabad Fort\n\n• Visit the historic Daulatabad Fort.\n• Explore one of India's strongest hill forts.\n• Walk through secret passages and massive fortification walls.\n• Experience the famous 'Black Hole' labyrinth.\n• Enjoy breathtaking panoramic views from the fort.\n\n📸 Highlights\n\n• Ancient military architecture.\n• Scenic viewpoints.\n• Historic defence system.\n\n🚗 Return Journey\n\n• Drive back to Pune.\n\n🎉 Tour Ends\n\n• Return with unforgettable memories."
+          }
+        ],
+
+      "kiloLimits": [
+        190,
+        195,
+        90,
+        350
+      ],
+
+      "kmLimit": "300 km per day",
+
+      "rates": [
+        {
+          "vehicle": "A/C Swift Dzire / Etios",
+          "price": 14500
+        },
+        {
+          "vehicle": "Innova Crysta",
+          "price": 18500
+        },
+        {
+          "vehicle": "SUV(ertiga)",
+          "price": 16500
+        },
+        {
+          "vehicle": "A/C 12-Seater Tempo Traveler",
+          "price": 26000
+        },
+        {
+          "vehicle": "Force Urbania 13 seater van",
+          "price": 28000
+        },
+        {
+          "vehicle": "A/C 17-Seater Tempo Traveler",
+          "price": 32000
+        },
+        {
+          "vehicle": "A/C 25-Seater Tempo Traveler",
+          "price": 42000
+        },
+        {
+          "vehicle": "A/C 45-Seater Tempo Traveler",
+          "price": 66000
+        }
+      ]
+    },
+
+
+
+    {
+      "name": "Ajanta - Ellora Trip With Daulatabad Fort",
+
+      "duration": "3 Days / 2 Nights",
+
+      "itinerary": [
+          {
+            "day": "Day 01 : Pune → Ajanta Caves → Chhatrapati Sambhaji Nagar (Approx. 350 km | 5–6 hrs)",
+            "image": "/holiday-images/ajanta-ellora/ajanta-caves.png",
+            "details": "🚗 Journey\n\n• Start early morning from Pune.\n• Drive to Chhatrapati Sambhaji Nagar (formerly Aurangabad).\n\n🏙️ About Chhatrapati Sambhaji Nagar\n\n• Known as the City of Gates.\n• Famous for Ajanta & Ellora Caves (UNESCO World Heritage Sites).\n• Visit the historic city known for Himroo fabrics, Bibi Ka Maqbara and rich Mughal heritage.\n\n🪨 Ajanta Caves\n\n• Explore the world-famous Ajanta Caves.\n• Buddhist caves dating back to the 2nd & 1st century BC.\n• Admire ancient paintings, sculptures and beautifully carved monasteries.\n• Walk through the caves overlooking the scenic Waghora River.\n\n✨ Highlights\n\n• UNESCO World Heritage Site.\n• Ancient Buddhist Art.\n• Rock-cut Chaityas & Viharas.\n\n🏨 Overnight Stay\n\n• Check-in at the hotel.\n• Overnight stay at Chhatrapati Sambhaji Nagar."
+          },
+
+          {
+            "day": "Day 02 : Ellora Caves & Shri Grishneshwar Jyotirlinga",
+            "image": "/holiday-images/ajanta-ellora/ellora-caves.png",
+            "details": "🍽️ Morning\n\n• Breakfast at the hotel.\n• Proceed for full-day sightseeing.\n\n🪨 Ellora Caves\n\n• Visit the UNESCO World Heritage Site.\n• Explore 34 magnificent rock-cut caves.\n• Discover Buddhist, Hindu and Jain monuments built into basalt cliffs.\n• Witness one of India's finest examples of ancient rock-cut architecture.\n\n🛕 Shri Grishneshwar Jyotirlinga\n\n• Visit one of the twelve sacred Jyotirlingas dedicated to Lord Shiva.\n• Admire the beautiful stone carvings and temple architecture.\n• Seek blessings at this revered pilgrimage site.\n\n✨ Highlights\n\n• UNESCO World Heritage Site.\n• Kailasa Temple.\n• Ancient sculptures and carvings.\n• Sacred Jyotirlinga Darshan.\n\n🏨 Overnight Stay\n\n• Return to the hotel.\n• Overnight stay at Chhatrapati Sambhaji Nagar."
+          },
+
+          {
+            "day": "Day 03 : Chhatrapati Sambhaji Nagar → Daulatabad Fort → Pune",
+            "image": "/holiday-images/ajanta-ellora/daulatabad.png",
+            "details": "🍽️ Morning\n\n• Breakfast at the hotel.\n• Check-out and begin sightseeing.\n\n🏰 Daulatabad Fort\n\n• Visit the magnificent Daulatabad Fort.\n• Explore one of India's strongest hill forts.\n• Walk through massive fortification walls, secret passages and the famous 'Black Hole' labyrinth.\n• Enjoy breathtaking panoramic views from the fort.\n\n📸 Highlights\n\n• Ancient military architecture.\n• Historic defence system.\n• Scenic viewpoints.\n\n🚗 Return Journey\n\n• Begin the drive back to Pune.\n\n🎉 Tour Ends\n\n• Return with wonderful memories of Maharashtra's rich heritage."
+          }
+        ],
+
+      "kiloLimits": [
+        350,
+        90,
+        350
+      ],
+
+      "kmLimit": "300 km per day",
+
+      "rates": [
+        {
+          "vehicle": "A/C Swift Dzire / Etios",
+          "price": 12600
+        },
+        {
+          "vehicle": "Innova Crysta",
+          "price": 16200
+        },
+        {
+          "vehicle": "SUV(ertiga)",
+          "price": 14500
+        },
+        {
+          "vehicle": "A/C 12-Seater Tempo Traveler",
+          "price": 22000
+        },
+        {
+          "vehicle": "Force Urbania 13 seater van",
+          "price": 24000
+        },
+        {
+          "vehicle": "A/C 17-Seater Tempo Traveler",
+          "price": 28000
+        },
+        {
+          "vehicle": "A/C 25-Seater Tempo Traveler",
+          "price": 36000
+        },
+        {
+          "vehicle": "A/C 45-Seater Tempo Traveler",
+          "price": 58000
+        }
+      ]
+    }
+
+    ,
+    {
+      "name": "Nashik Pilgrimage Visit Tour",
+
+      "duration": "3 Days / 2 Nights",
+
+      "itinerary": [
+          {
+            "day": "Day 01 : Pune → Nashik",
+            "image": "/holiday-images/nashik/panchavati.png",
+            "details": "🚗 Journey\n\n• Early morning departure from Pune to Nashik.\n• Arrive and begin the spiritual tour of Nashik.\n\n📍 Panchavati\n\n• Visit one of the holiest places associated with Lord Rama.\n• Explore the sacred ghats and temples.\n\n📍 Ramkund\n\n• Holy bathing tank where Lord Rama is believed to have performed rituals for his father.\n\n📍 Kalaram Temple\n\n• Visit the famous temple dedicated to Lord Rama.\n• Admire the magnificent black stone idol.\n\n📍 Sita Gufa & Kapileshwar Temple\n\n• Explore the sacred cave associated with Goddess Sita.\n• Visit the nearby Kapileshwar Temple.\n\n📍 Muktidham Temple\n\n• Built entirely with white marble.\n• Houses replicas of all 12 Jyotirlingas.\n\n🏨 Overnight Stay\n\n• Check-in to hotel.\n• Overnight stay at Nashik."
+          },
+
+          {
+            "day": "Day 02 : Trimbakeshwar & Local Sightseeing",
+             "image": "/holiday-images/nashik/trimbakeshwar.png",
+            "details": "🍽️ Morning\n\n• Breakfast at the hotel.\n• Drive towards Trimbakeshwar.\n\n🛕 Trimbakeshwar Jyotirlinga\n\n• Visit one of the twelve sacred Jyotirlingas.\n• Located at the foothills of Brahmagiri Mountain.\n• Seek blessings at this revered Shiva temple.\n\n🌊 Kushavarta Kund\n\n• Visit the sacred pond believed to be the origin of River Godavari.\n• A holy place where pilgrims take a ritual bath.\n\n🪨 Pandavleni (Trirashmi) Caves\n\n• Explore the ancient Buddhist rock-cut caves.\n• Admire sculptures and carvings dating back to the 1st Century BCE.\n\n🏨 Overnight Stay\n\n• Return to Nashik.\n• Overnight stay at the hotel."
+          },
+
+          {
+            "day": "Day 03 : Bhimashankar → Pune",
+            "image": "/holiday-images/nashik/muktidham.png",
+            "details": "🍽️ Morning\n\n• Breakfast and hotel check-out.\n\n🛕 Bhimashankar Jyotirlinga\n\n• Drive through the scenic Sahyadri Hills.\n• Visit one of the twelve sacred Jyotirlingas dedicated to Lord Shiva.\n• Enjoy the peaceful surroundings and seek blessings.\n\n✨ Highlights\n\n• Scenic mountain drive.\n• Spiritual Darshan.\n• Beautiful forest landscape.\n\n🚗 Return Journey\n\n• Drive back to Pune.\n\n🎉 Tour Ends\n\n• Return with wonderful spiritual memories."
+          }
+      ],
+      
+      "kiloLimits": [
+        230,
+        100,
+        220
+      ],
+
+      "kmLimit": "300 km per day",
+
+      "rates": [
+        {
+          "vehicle": "A/C Swift Dzire / Etios",
+          "price": 12600
+        },
+        {
+          "vehicle": "Innova Crysta",
+          "price": 16200
+        },
+        {
+          "vehicle": "SUV(ertiga)",
+          "price": 14500
+        },
+        {
+          "vehicle": "A/C 12-Seater Tempo Traveler",
+          "price": 22000
+        },
+        {
+          "vehicle": "Force Urbania 13 seater van",
+          "price": 24000
+        },
+        {
+          "vehicle": "A/C 17-Seater Tempo Traveler",
+          "price": 28000
+        },
+        {
+          "vehicle": "A/C 25-Seater Tempo Traveler",
+          "price": 36000
+        },
+        {
+          "vehicle": "A/C 45-Seater Tempo Traveler",
+          "price": 58000
+        }
+      ]
+    },
+    {
+      "name": "Ashtavinayak Yatra Package",
+      "duration": "3 Days / 2 Nights",
+      "itinerary": [
+        {
+          "day": "Day 01 : Pune → Morgaon → Siddhatek → Theur",
+          "image": "/holiday-images/ashtavinayak/mayureshwar.png",
+        "details": "🚗 Journey Begins\n\n• Start early morning from Pune.\n• Begin the sacred Ashtavinayak Yatra.\n\n🛕 Morgaon – Mayureshwar Ganpati\n\n• Visit the first and most important temple of the Ashtavinayak circuit.\n• Learn about Lord Ganesha defeating the demon Sindurasura.\n• Take Darshan and seek blessings.\n\n🛕 Siddhatek – Siddhivinayak Temple\n\n• Visit the temple where Lord Vishnu attained Siddhi through penance.\n• One of the most sacred Ganesh temples in Maharashtra.\n\n🛕 Theur – Chintamani Ganpati\n\n• Visit the famous Chintamani Temple.\n• Explore its rich history connected with the Maratha Empire.\n\n🏨 Overnight Stay\n\n• Overnight stay at Pune or nearby area."
+      },
+
+      {
+        "day": "Day 02 : Pune → Ranjangaon → Ozar → Lenyadri",
+        "image": "/holiday-images/ashtavinayak/ranjangaon.png",
+        "details": "🍽️ Morning\n\n• Breakfast and continue the pilgrimage.\n\n🛕 Ranjangaon – Mahaganapati\n\n• Visit the temple where Lord Shiva worshipped Lord Ganesha before defeating Tripurasura.\n\n🛕 Ozar – Vighneshwar Ganapati\n\n• Famous for its golden dome and beautiful Peshwa-style architecture.\n• Associated with the legend of Ganesha defeating Vighnasura.\n\n🛕 Lenyadri – Girijatmaj Ganpati\n\n• Visit the only Ashtavinayak temple located inside a Buddhist cave.\n• Lord Ganesha is worshipped here in his child form.\n\n✨ Highlights\n\n• Ancient cave temple.\n• Scenic hill views.\n• Spiritual experience.\n\n🏨 Overnight Stay\n\n• Overnight stay near Junnar/Pune."
+      },
+
+      {
+        "day": "Day 03 : Mahad → Pali → Pune",
+         "image": "/holiday-images/ashtavinayak/mahad.png",
+        "details": "🍽️ Morning\n\n• Breakfast and check-out.\n\n🛕 Mahad – Varadvinayak Temple\n\n• Visit the temple believed to fulfill devotees' wishes.\n• Seek blessings of Lord Ganesha.\n\n🛕 Pali – Ballaleshwar Temple\n\n• Visit the only Ashtavinayak temple named after a devotee.\n• Learn about the inspiring story of devotee Ballal.\n\n✨ Completion of Yatra\n\n• Complete the sacred Ashtavinayak pilgrimage.\n• Offer final prayers before departure.\n\n🚗 Return Journey\n\n• Drive back to Pune.\n\n🎉 Tour Ends\n\n• Return with divine blessings and unforgettable memories."
+      }
+      ],
+      "kiloLimits": [
+        170,
+        180,
+        190
+      ],
+      "kmLimit": "300 km per day",
+      "rates": [
+        {
+          "vehicle": "A/C Swift Dzire / Etios",
+          "price": 12600
+        },
+        {
+          "vehicle": "Innova Crysta",
+          "price": 16200
+        },
+        {
+          "vehicle": "SUV(ertiga)",
+          "price": 14500
+        },
+        {
+          "vehicle": "A/C 12-Seater Tempo Traveler",
+          "price": 22000
+        },
+        {
+          "vehicle": "Force Urbania 13 seater van",
+          "price": 24000
+        },
+        {
+          "vehicle": "A/C 17-Seater Tempo Traveler",
+          "price": 28000
+        },
+        {
+          "vehicle": "A/C 25-Seater Tempo Traveler",
+          "price": 36000
+        },
+        {
+          "vehicle": "A/C 45-Seater Tempo Traveler",
+          "price": 58000
+        }
+      ]
+    }
+  ]
+}
 }

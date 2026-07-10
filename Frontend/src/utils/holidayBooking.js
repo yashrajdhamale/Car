@@ -117,7 +117,7 @@ const routeMatchesState = (route, stateVariants) => {
 
 /**
  * Find drivers who have active routes matching the package state.
- * Searches the top-level 'routes' collection (written by InterestedRoutes.jsx).
+ * Searches holidayRoutes first (written by HolidayRoutesSection), then falls back to routes.
  */
 export const findDriversForHoliday = async (pkgState, pkgName = "") => {
   console.log(`\n[findDriversForHoliday] pkgState="${pkgState}" pkgName="${pkgName}"`);
@@ -126,6 +126,34 @@ export const findDriversForHoliday = async (pkgState, pkgName = "") => {
   const driverMap = new Map();
 
   try {
+    const holidayRoutesSnap = await getDocs(
+      query(collection(db, "holidayRoutes"), where("isActive", "==", true))
+    );
+
+    console.log(`[findDriversForHoliday] Active holidayRoutes in DB: ${holidayRoutesSnap.size}`);
+
+    holidayRoutesSnap.forEach((docSnap) => {
+      const route = { id: docSnap.id, ...docSnap.data() };
+      console.log(`  HolidayRoute: ${route.state} | ${route.packageName} | driverId: ${route.driverId}`);
+
+      if (!route.driverId) return;
+
+      if (routeMatchesState(route, stateVariants) || (
+        route.packageName &&
+        pkgName &&
+        route.packageName.toLowerCase().includes(pkgName.toLowerCase())
+      )) {
+        console.log(`  ✅ MATCHED holidayRoute — driver: ${route.driverId}`);
+        if (!driverMap.has(route.driverId)) {
+          driverMap.set(route.driverId, {
+            driverId: route.driverId,
+            driverName: route.driverName || "Driver",
+            matchedRoute: `${route.state || ""}:${route.packageName || ""}`,
+          });
+        }
+      }
+    });
+
     const routesSnap = await getDocs(
       query(collection(db, "routes"), where("isActive", "==", true))
     );
@@ -155,12 +183,12 @@ export const findDriversForHoliday = async (pkgState, pkgName = "") => {
     console.error("[findDriversForHoliday] Error:", e.message);
   }
 
-  // Fallback: if 0 matched, send to ALL drivers with any active route
+  // Fallback: if 0 matched, send to ALL drivers with any active holiday route
   if (driverMap.size === 0) {
     console.warn("[findDriversForHoliday] No state match — falling back to ALL active drivers");
     try {
       const snap = await getDocs(
-        query(collection(db, "routes"), where("isActive", "==", true), limit(20))
+        query(collection(db, "holidayRoutes"), where("isActive", "==", true), limit(20))
       );
       snap.forEach((d) => {
         const route = { id: d.id, ...d.data() };

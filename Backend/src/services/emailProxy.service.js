@@ -3,13 +3,27 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
+console.log("EMAIL_USER =", process.env.EMAIL_USER);
+console.log("EMAIL_PASSWORD exists =", !!process.env.EMAIL_PASSWORD);
+console.log("EMAIL_FROM =", process.env.EMAIL_FROM);
 // Create transporter using configured credentials
 const transporter = nodemailer.createTransport({
-  service: "gmail",
+  host: "smtp.gmail.com",
+  port: 465,
+  secure: true,
   auth: {
-    user: process.env.EMAIL_USER || process.env.GMAIL_USER || "carworkpune@gmail.com",
-    pass: process.env.EMAIL_PASSWORD || process.env.GMAIL_PASS || "jprbiffnzihctmbw",
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASSWORD,
   },
+});
+
+transporter.verify((err, success) => {
+  if (err) {
+    console.error("❌ SMTP VERIFY FAILED");
+    console.error(err);
+  } else {
+    console.log("✅ SMTP VERIFIED");
+  }
 });
 
 /**
@@ -120,7 +134,188 @@ export const sendEmailThroughBackend = async (payload) => {
         <p>Our driver will contact you shortly before the ride.</p>
         <p>Have a safe journey!</p>
       </div>`;
-  }
+  }else if (template === "airportInvoice") {
+
+    const total = Number(payload.price || 0).toFixed(2);
+    const invoiceNum = `AIR-${payload.bookingId}`;
+    const genDate = new Date().toLocaleDateString();
+
+    emailSubject = `Airport Booking Invoice - ${payload.bookingId}`;
+
+    emailHtml = `
+    <div style="font-family:Arial,sans-serif;
+                max-width:700px;
+                margin:auto;
+                background:#ffffff;
+                border-radius:10px;
+                padding:30px;
+                border:1px solid #ddd;">
+
+        <h2 style="text-align:center;color:#1565C0;">
+            Cabroute Airport Transfer Invoice
+        </h2>
+
+        <hr/>
+
+        <p><strong>Invoice No:</strong> ${invoiceNum}</p>
+        <p><strong>Booking ID:</strong> ${payload.bookingId}</p>
+        <p><strong>Date:</strong> ${genDate}</p>
+
+        <br/>
+
+        <h3>Customer Details</h3>
+
+        <p><strong>Name:</strong> ${payload.customerName}</p>
+        <p><strong>Email:</strong> ${payload.customerEmail || to}</p>
+
+        <br/>
+
+        <h3>Trip Details</h3>
+
+        <table style="width:100%;border-collapse:collapse;">
+
+            <tr>
+                <td style="padding:8px;"><strong>Vehicle</strong></td>
+                <td>${payload.vehicleType}</td>
+            </tr>
+
+            <tr>
+                <td style="padding:8px;"><strong>Pickup</strong></td>
+                <td>${payload.pickup}</td>
+            </tr>
+
+            <tr>
+                <td style="padding:8px;"><strong>Drop</strong></td>
+                <td>${payload.drop}</td>
+            </tr>
+
+            <tr>
+                <td style="padding:8px;"><strong>Travel Date</strong></td>
+                <td>${payload.travelDate}</td>
+            </tr>
+
+            <tr>
+                <td style="padding:8px;"><strong>Time</strong></td>
+                <td>${payload.time}</td>
+            </tr>
+
+            <tr>
+                <td style="padding:8px;"><strong>Adults</strong></td>
+                <td>${payload.adults}</td>
+            </tr>
+
+            <tr>
+                <td style="padding:8px;"><strong>Children</strong></td>
+                <td>${payload.children}</td>
+            </tr>
+
+        </table>
+
+        <br/>
+
+        <h2 style="text-align:right;color:#2E7D32;">
+            Total : ₹${total}
+        </h2>
+
+        <hr/>
+
+        <p style="text-align:center;color:#666;">
+            Thank you for choosing Cabroute.
+            Have a safe journey.
+        </p>
+
+    </div>`;
+} else if (template === "holidayInvoice") {
+    const total = Number(payload.price || 0).toFixed(2);
+    const invoiceNum = `HOL-${payload.bookingId}`;
+    const genDate = new Date().toLocaleDateString();
+    const itinerary = Array.isArray(payload.itinerary) ? payload.itinerary : [];
+
+    emailSubject = `Holiday Booking Invoice - ${payload.bookingId}`;
+
+    emailHtml = `
+    <div style="font-family:Arial,sans-serif;
+                max-width:700px;
+                margin:auto;
+                background:#ffffff;
+                border-radius:10px;
+                padding:30px;
+                border:1px solid #ddd;">
+
+        <h2 style="text-align:center;color:#2E7D32;">
+            Cabroute Holiday Booking Invoice
+        </h2>
+
+        <hr/>
+
+        <p><strong>Invoice No:</strong> ${invoiceNum}</p>
+        <p><strong>Booking ID:</strong> ${payload.bookingId}</p>
+        <p><strong>Date:</strong> ${genDate}</p>
+
+        <br/>
+
+        <h3>Customer Details</h3>
+        <p><strong>Name:</strong> ${payload.customerName || "-"}</p>
+        <p><strong>Email:</strong> ${payload.customerEmail || to}</p>
+        <p><strong>Phone:</strong> ${payload.customerPhone || "-"}</p>
+
+        <br/>
+
+        <h3>Holiday Details</h3>
+        <table style="width:100%;border-collapse:collapse;">
+            <tr>
+                <td style="padding:8px;"><strong>Package</strong></td>
+                <td>${payload.packageName || "-"}</td>
+            </tr>
+            <tr>
+                <td style="padding:8px;"><strong>State</strong></td>
+                <td>${payload.state || "-"}</td>
+            </tr>
+            <tr>
+                <td style="padding:8px;"><strong>Duration</strong></td>
+                <td>${payload.duration || "-"}</td>
+            </tr>
+            <tr>
+                <td style="padding:8px;"><strong>Vehicle</strong></td>
+                <td>${payload.vehicle || "-"}</td>
+            </tr>
+            <tr>
+                <td style="padding:8px;"><strong>Travel Date</strong></td>
+                <td>${payload.travelDate || "-"}</td>
+            </tr>
+            <tr>
+                <td style="padding:8px;"><strong>Guests</strong></td>
+                <td>${payload.guests || 1}</td>
+            </tr>
+            <tr>
+                <td style="padding:8px;"><strong>Driver</strong></td>
+                <td>${payload.driverName || "-"} ${payload.driverPhone ? `(${payload.driverPhone})` : ""}</td>
+            </tr>
+        </table>
+
+        ${itinerary.length ? `
+          <br/>
+          <h3>Itinerary</h3>
+          <ul>
+            ${itinerary.map((item) => `<li>${typeof item === "string" ? item : item?.title || item?.name || JSON.stringify(item)}</li>`).join("")}
+          </ul>
+        ` : ""}
+
+        <br/>
+
+        <h2 style="text-align:right;color:#2E7D32;">
+            Total : â‚¹${total}
+        </h2>
+
+        <hr/>
+
+        <p style="text-align:center;color:#666;">
+            Thank you for choosing Cabroute.
+            Have a wonderful holiday.
+        </p>
+
+    </div>`;
+}
 
   const mailOptions = {
     from: process.env.EMAIL_FROM || "carworkpune@gmail.com",

@@ -66,9 +66,22 @@ export const proxyResolveELoc = async (req, res, next) => {
 
 export const proxyCalculateDistance = async (req, res, next) => {
   try {
-    const result = await calculateDistance(req.body || {});
+    console.log(
+      "📥 DISTANCE REQUEST BODY:",
+      req.body
+    );
+
+    const result = await calculateDistance(
+      req.body || {}
+    );
+
     return res.status(200).json(result);
   } catch (error) {
+    console.error(
+      "❌ DISTANCE CONTROLLER ERROR:",
+      error
+    );
+
     next(error);
   }
 };
@@ -76,7 +89,17 @@ export const proxyCalculateDistance = async (req, res, next) => {
 export const submitLocalPickupRide = async (req, res, next) => {
   try {
     const user = await getAuthenticatedUser(req);
+    console.log("[LocalPickupController] POST /rides received", {
+      authenticatedUserId: user?.uid || null,
+      bodyUserId: req.body?.userId || null,
+      hasPickupLocation: Boolean(req.body?.pickupLocation),
+      hasDropoffLocation: Boolean(req.body?.dropoffLocation),
+      distance: req.body?.distance,
+      totalFare: req.body?.totalFare,
+    });
+
     const result = await createLocalPickupRide({ user, body: req.body || {} });
+    console.log("[LocalPickupController] POST /rides completed", result);
 
     return res.status(201).json({
       success: true,

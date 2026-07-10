@@ -7,10 +7,117 @@ import {
 } from "./mapmyindia.service.js";
 import { sendEmailThroughBackend } from "./emailProxy.service.js";
 
+const logLocalPickup = (message, meta = {}) => {
+  console.log(`[LocalPickup] ${message}`, meta);
+};
+
 const getRideDoc = async (rideId) => {
   const snapshot = await firestore.collection("localRides").doc(rideId).get();
   if (!snapshot.exists) return null;
   return { id: snapshot.id, ...snapshot.data() };
+};
+
+const getOnlineDrivers = async () => {
+  const snapshot = await firestore.collection("drivers").get();
+  const drivers = snapshot.docs.map((docSnap) => ({ id: docSnap.id, ...docSnap.data() }));
+  const eligibleDrivers = drivers.filter((driver) => {
+    const status = String(driver.status || "").toLowerCase();
+    return driver.isOnline || ["available", "online", "active"].includes(status);
+  });
+
+  logLocalPickup("Driver eligibility scan complete", {
+    totalDrivers: drivers.length,
+    eligibleDrivers: eligibleDrivers.length,
+    ineligibleDrivers: drivers.length - eligibleDrivers.length,
+    eligibleWithLastLocation: eligibleDrivers.filter((driver) => driver.lastLocation).length,
+    eligibleWithoutLastLocation: eligibleDrivers.filter((driver) => !driver.lastLocation).length,
+    eligibleDriverIds: eligibleDrivers.map((driver) => driver.id),
+    rejectedSamples: drivers
+      .filter((driver) => {
+        const status = String(driver.status || "").toLowerCase();
+        return !(driver.isOnline || ["available", "online", "active"].includes(status));
+      })
+      .slice(0, 5)
+      .map((driver) => ({
+        id: driver.id,
+        isOnline: Boolean(driver.isOnline),
+        locationEnabled: Boolean(driver.locationEnabled),
+        hasLastLocation: Boolean(driver.lastLocation),
+        status: driver.status || null,
+      })),
+  });
+
+  return eligibleDrivers;
+};
+
+const buildLocalPickupRequest = ({ rideId, rideData }) => {
+  const expiresAtTime = Date.now() + 3 * 60 * 1000;
+
+  return {
+    ...rideData,
+    id: rideId,
+    rideId,
+    bookingId: rideId,
+    type: "localPickup",
+    tripType: "localPickup",
+    status: "searching_driver",
+    pickupCoordinates: rideData.pickupLocation
+      ? {
+          lat: rideData.pickupLocation.lat ?? rideData.pickupLocation.latitude ?? null,
+          lng: rideData.pickupLocation.lng ?? rideData.pickupLocation.longitude ?? null,
+        }
+      : null,
+    requestedAt: FieldValue.serverTimestamp(),
+    createdAt: FieldValue.serverTimestamp(),
+    updatedAt: FieldValue.serverTimestamp(),
+    expiresAt: new Date(expiresAtTime), // Store as Date for consistency with frontend filtering
+  };
+};
+
+const sendLocalPickupRequestsToDrivers = async ({ rideId, rideData }) => {
+  const drivers = await getOnlineDrivers();
+  if (!drivers.length) {
+    logLocalPickup("No eligible drivers found for local pickup fan-out", {
+      rideId,
+      pickupLocation: rideData.pickupLocation || null,
+      dropoffLocation: rideData.dropoffLocation || null,
+    });
+    return [];
+  }
+
+  const requestData = buildLocalPickupRequest({ rideId, rideData });
+  const batchSize = 450;
+
+  logLocalPickup("Writing local pickup incoming requests", {
+    rideId,
+    driverCount: drivers.length,
+    targetPath: "users/{driverId}/incomingRequests/{rideId}",
+    driverIds: drivers.map((driver) => driver.id),
+    pickupCoordinates: requestData.pickupCoordinates,
+  });
+
+  for (let index = 0; index < drivers.length; index += batchSize) {
+    const batch = firestore.batch();
+    const chunk = drivers.slice(index, index + batchSize);
+
+    chunk.forEach((driver) => {
+      const requestRef = firestore.collection("users").doc(driver.id).collection("incomingRequests").doc(rideId);
+      batch.set(requestRef, {
+        ...requestData,
+        driverId: driver.id,
+      });
+    });
+
+    await batch.commit();
+    logLocalPickup("Committed incoming request batch", {
+      rideId,
+      batchStart: index,
+      batchSize: chunk.length,
+      driverIds: chunk.map((driver) => driver.id),
+    });
+  }
+
+  return drivers.map((driver) => driver.id);
 };
 
 const requireOwnerOrGuest = async (rideId, user) => {
@@ -54,6 +161,17 @@ export const calculateDistance = async ({ originLat, originLng, destinationLat, 
 
 
 export const createLocalPickupRide = async ({ user, body }) => {
+  logLocalPickup("Create ride requested", {
+    authenticatedUserId: user?.uid || null,
+    bodyUserId: body?.userId || null,
+    hasPickupLocation: Boolean(body?.pickupLocation),
+    hasDropoffLocation: Boolean(body?.dropoffLocation),
+    pickupLocation: body?.pickupLocation || null,
+    dropoffLocation: body?.dropoffLocation || null,
+    distance: body?.distance,
+    totalFare: body?.totalFare,
+  });
+
   const payload = {
     userId: user?.uid || body?.userId || "guest",
     userName: body?.userName || body?.customerName || user?.displayName || user?.email || "Guest",
@@ -74,11 +192,34 @@ export const createLocalPickupRide = async ({ user, body }) => {
   };
 
   const rideRef = await firestore.collection("localRides").add(payload);
+  logLocalPickup("Created localRides document", {
+    rideId: rideRef.id,
+    status: payload.status,
+    userId: payload.userId,
+  });
+
+  const assignedDrivers = await sendLocalPickupRequestsToDrivers({ rideId: rideRef.id, rideData: payload });
+
+  await firestore.collection("localRides").doc(rideRef.id).set(
+    {
+      rideId: rideRef.id,
+      assignedDrivers,
+      updatedAt: FieldValue.serverTimestamp(),
+    },
+    { merge: true }
+  );
+
+  logLocalPickup("Local pickup create flow complete", {
+    rideId: rideRef.id,
+    notifiedDrivers: assignedDrivers.length,
+    assignedDrivers,
+  });
 
   return {
     success: true,
     rideId: rideRef.id,
     status: payload.status,
+    notifiedDrivers: assignedDrivers.length,
   };
 };
 

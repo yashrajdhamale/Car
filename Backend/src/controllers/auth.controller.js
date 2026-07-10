@@ -231,6 +231,27 @@ export const registerDriver = async (req, res, next) => {
 
     const fullName = [firstName, middleName, lastName].filter(Boolean).join(" ").trim();
     let authUser;
+    // normalize phone like createAuthUser does and pre-check for existing phone
+    const normalizedPhoneNumber = primaryContact
+      ? String(primaryContact).startsWith("+")
+        ? String(primaryContact)
+        : `+91${primaryContact}`
+      : undefined;
+    if (normalizedPhoneNumber) {
+      try {
+        const existingUser = await firebaseAdmin.auth().getUserByPhoneNumber(normalizedPhoneNumber);
+        if (existingUser) {
+          return res.status(409).json({
+            success: false,
+            message: "This phone number is already registered. Please sign in instead.",
+          });
+        }
+      } catch (err) {
+        // getUserByPhoneNumber throws when user not found; ignore that case
+        if (err && err.code !== "auth/user-not-found") throw err;
+      }
+    }
+
     try {
       authUser = await createAuthUser({
         email,
@@ -249,6 +270,12 @@ export const registerDriver = async (req, res, next) => {
         return res.status(400).json({
           success: false,
           message: "Please enter a valid phone number.",
+        });
+      }
+      if (error?.code === "auth/phone-number-already-exists") {
+        return res.status(409).json({
+          success: false,
+          message: "This phone number is already registered. Please sign in instead.",
         });
       }
       throw error;
@@ -321,7 +348,7 @@ export const registerDriver = async (req, res, next) => {
         officeAddress,
         role: "driver",
         type: "driver",
-        status: "pending",
+        status: "active",
         emailVerified: false,
         isDriver: true,
         agreementAccepted: true,
@@ -357,8 +384,8 @@ export const registerDriver = async (req, res, next) => {
         officeAddress,
         role: "driver",
         type: "driver",
-        status: "pending",
-        isActive: false,
+        status: "active",
+        isActive: true,
         isVerified: false,
         agreementAccepted: true,
         agreementVersion,

@@ -408,7 +408,7 @@ const DriverSignup = () => {
       localStorage.removeItem(STEP_KEY);
 
       addNotification(
-        'Registration submitted successfully. Your driver account will be activated after review.',
+        'Registration successful. You can now log in to your driver account.',
         'success'
       );
 
@@ -918,8 +918,9 @@ const DriverSignup = () => {
               <p className="text-gray-600 mb-4">
                 Your driver registration and agreement have been submitted successfully.
               </p>
+
               <p className="text-sm text-gray-500 mb-6">
-                Please verify your email first. Your account will remain pending until reviewed by admin.
+                Your driver account has been created successfully. You can now log in using your registered email and password.
               </p>
               <div className="flex flex-col gap-3">
                 <button

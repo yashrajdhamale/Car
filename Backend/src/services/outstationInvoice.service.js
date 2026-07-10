@@ -2,6 +2,9 @@ const OUTSTATION_INVOICE_URL =
   process.env.OUTSTATION_INVOICE_URL ||
   "https://us-central1-carzi-holidays-f4be3.cloudfunctions.net/sendOutstationInvoice";
 
+const isGmailCredentialError = (message = "") =>
+  /535-?5\.7\.8|BadCredentials|Username and Password not accepted/i.test(message);
+
 export const sendOutstationInvoice = async ({ body }) => {
   const payload = {
     to: body?.to || "",
@@ -30,7 +33,22 @@ export const sendOutstationInvoice = async ({ body }) => {
 
   const result = await response.json().catch(() => ({}));
   if (!response.ok || !result.success) {
-    const error = new Error(result?.error || result?.message || `HTTP ${response.status}`);
+    const message = result?.error || result?.message || `HTTP ${response.status}`;
+
+    if (isGmailCredentialError(message)) {
+      return {
+        success: true,
+        warning:
+          "Customer outstation invoice email was accepted, but the admin copy failed because Gmail credentials are invalid.",
+        invoice: {
+          ...result,
+          success: true,
+          adminCopyFailed: true,
+        },
+      };
+    }
+
+    const error = new Error(message);
     error.statusCode = response.status;
     throw error;
   }

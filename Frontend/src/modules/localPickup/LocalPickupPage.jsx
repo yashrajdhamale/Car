@@ -765,10 +765,22 @@ speak(message, { rate: 0.95 });
         totalFare:  priceDetails.totalFare,
         isScheduled: false
       };
+
+      console.log("[LocalPickupPage] Creating local pickup ride", {
+        userId: payload.userId,
+        pickupLocation: payload.pickupLocation,
+        dropoffLocation: payload.dropoffLocation,
+        distance: payload.distance,
+        totalFare: payload.totalFare,
+      });
+
       const data = await apiRequest('/local-pickups/rides', {
         method: 'POST',
         body: payload,
       });
+
+      console.log("[LocalPickupPage] Create local pickup response", data);
+
       if (!data.success) throw new Error(data.error || "Failed to create ride");
       setRideId(data.rideId);
       setFlowStep("SEARCHING");

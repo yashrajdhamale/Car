@@ -20,7 +20,20 @@ const getAuthenticatedUser = async (req) => {
 export const submitOutstationBooking = async (req, res, next) => {
   try {
     const user = await getAuthenticatedUser(req);
+    console.log("[OutstationController] POST /outstation-bookings received", {
+      authenticatedUserId: user?.uid || null,
+      bodyUserId: req.body?.userId || null,
+      pickupCity: req.body?.pickupCity,
+      pickupCityForDriver: req.body?.pickupCityForDriver,
+      destinationCity: req.body?.destinationCity,
+      destinationCityForDriver: req.body?.destinationCityForDriver,
+      rideType: req.body?.rideType,
+      status: req.body?.status,
+    });
+
     const result = await createOutstationBooking({ user, body: req.body || {} });
+    console.log("[OutstationController] POST /outstation-bookings completed", result);
+
     return res.status(201).json({ success: true, message: "Outstation booking created successfully", ...result });
   } catch (error) {
     next(error);

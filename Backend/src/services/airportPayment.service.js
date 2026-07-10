@@ -1,10 +1,11 @@
 import { FieldValue, firestore } from "./firebase.js";
+import { sendEmailThroughBackend } from "./emailProxy.service.js";
 
-const AIRPORT_INVOICE_URL =
-  process.env.AIRPORT_INVOICE_URL ||
-  "https://sendairportinvoice-fhq2rwxr2a-uc.a.run.app";
-
-export const confirmAirportPaymentAndSendInvoice = async ({ user, bookingId, body }) => {
+export const confirmAirportPaymentAndSendInvoice = async ({
+  user,
+  bookingId,
+  body,
+}) => {
   if (!user?.uid) {
     const error = new Error("Authentication required");
     error.statusCode = 401;
@@ -27,30 +28,66 @@ export const confirmAirportPaymentAndSendInvoice = async ({ user, bookingId, bod
   }
 
   const booking = bookingSnap.data() || {};
-  const customerName = body?.customerName || user.displayName || booking.customerName || booking.userName || "Customer";
-  const customerEmail = body?.customerEmail || user.email || booking.customerEmail || booking.userEmail || "";
+
+  const customerName =
+    body?.customerName ||
+    user.displayName ||
+    booking.customerName ||
+    booking.userName ||
+    "Customer";
+
+  const customerEmail =
+    body?.customerEmail ||
+    user.email ||
+    booking.customerEmail ||
+    booking.userEmail ||
+    "";
 
   const updateData = {
     paymentStatus: "paid",
     paidAt: FieldValue.serverTimestamp(),
     updatedAt: FieldValue.serverTimestamp(),
+
     customerName,
     userName: customerName,
+
     customerEmail,
     userEmail: customerEmail,
-    customerPhone: body?.customerPhone || booking.customerPhone || booking.userPhone || "",
-    userPhone: body?.customerPhone || booking.userPhone || "",
-    phoneNumber: body?.customerPhone || booking.phoneNumber || booking.userPhone || "",
+
+    customerPhone:
+      body?.customerPhone ||
+      booking.customerPhone ||
+      booking.userPhone ||
+      "",
+
+    userPhone:
+      body?.customerPhone ||
+      booking.userPhone ||
+      "",
+
+    phoneNumber:
+      body?.customerPhone ||
+      booking.phoneNumber ||
+      booking.userPhone ||
+      "",
+
     waitingForLocation: true,
     locationShared: false,
     locationSkipped: false,
+
     customerInfoAvailable: true,
     customerInfoSavedAt: FieldValue.serverTimestamp(),
+
     termsAccepted: true,
     termsAcceptedAt: FieldValue.serverTimestamp(),
+
     cancellationPolicyAccepted: true,
     cancellationPolicyAcceptedAt: FieldValue.serverTimestamp(),
-    status: booking.driverId && booking.status === "accepted" ? "accepted" : "searching_driver",
+
+    status:
+      booking.driverId && booking.status === "accepted"
+        ? "accepted"
+        : "searching_driver",
   };
 
   await bookingRef.update(updateData);
@@ -59,50 +96,97 @@ export const confirmAirportPaymentAndSendInvoice = async ({ user, bookingId, bod
     return {
       success: true,
       bookingId,
-      message: "Payment recorded but no customer email was available for invoice.",
-      booking: { id: bookingId, ...booking, ...updateData },
+      message:
+        "Payment recorded but customer email was not found.",
     };
   }
 
-  const invoicePayload = {
-    to: customerEmail.trim(),
-    customerName,
-    bookingId,
-    vehicleType: body?.vehicleType || booking.vehicleDetails?.name || booking.vehicleType || "Vehicle",
-    pickup: body?.pickup || booking.pickupLocation?.name || booking.pickupLocation?.address || "",
-    dropoff: body?.dropoff || booking.dropoffLocation?.name || booking.dropoffLocation?.address || "",
-    travelDate: body?.travelDate || booking.travelDate || "",
-    time: body?.time || "",
-    adults: body?.adults || booking.adults || 1,
-    children: body?.children || booking.children || 0,
-    price: Number(body?.price ?? booking.price ?? 0),
-  };
+  try {
+    await sendEmailThroughBackend({
+      to: customerEmail.trim(),
 
-  const response = await fetch(AIRPORT_INVOICE_URL, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Accept: "application/json",
-    },
-    body: JSON.stringify(invoicePayload),
-  });
+      subject: `Airport Booking Invoice - ${bookingId}`,
 
-  const result = await response.json().catch(() => ({}));
-  if (!response.ok) {
-    const error = new Error(result?.error || result?.message || `HTTP ${response.status}`);
-    error.statusCode = response.status;
-    error.payload = result;
-    throw error;
+      template: "airportInvoice",
+
+      customerName,
+
+      customerEmail,
+
+      bookingId,
+
+      vehicleType:
+        body?.vehicleType ||
+        booking.vehicleDetails?.name ||
+        booking.vehicleType ||
+        "Vehicle",
+
+      pickup:
+        body?.pickup ||
+        booking.pickupLocation?.name ||
+        booking.pickupLocation?.address ||
+        "",
+
+      drop:
+        body?.dropoff ||
+        booking.dropoffLocation?.name ||
+        booking.dropoffLocation?.address ||
+        "",
+
+      travelDate:
+        body?.travelDate ||
+        booking.travelDate ||
+        "",
+
+      time:
+        body?.time ||
+        `${booking.hour || ""}:${booking.minute || ""}`,
+
+      adults:
+        body?.adults ??
+        booking.adults ??
+        1,
+
+      children:
+        body?.children ??
+        booking.children ??
+        0,
+
+      price:
+        Number(
+          body?.price ??
+          booking.price ??
+          booking.vehicleDetails?.price ??
+          0
+        ),
+    });
+
+    console.log("✅ Airport invoice email sent.");
+
+    return {
+      success: true,
+      bookingId,
+      message: "Payment confirmed and invoice sent.",
+    };
+  } catch (err) {
+    console.error("Airport invoice email failed:");
+    console.error(err);
+
+    return {
+      success: true,
+      bookingId,
+      message:
+        "Payment recorded successfully but invoice email failed.",
+      invoiceError: err.message,
+    };
   }
-
-  return {
-    success: true,
-    bookingId,
-    invoice: result,
-  };
 };
 
-export const updateAirportBookingLocation = async ({ user, bookingId, body }) => {
+export const updateAirportBookingLocation = async ({
+  user,
+  bookingId,
+  body,
+}) => {
   if (!user?.uid) {
     const error = new Error("Authentication required");
     error.statusCode = 401;
@@ -125,15 +209,32 @@ export const updateAirportBookingLocation = async ({ user, bookingId, body }) =>
   }
 
   const updates = {
-    ...(body?.userLocation ? { userLocation: body.userLocation } : {}),
-    ...(body?.locationShared !== undefined ? { locationShared: Boolean(body.locationShared) } : {}),
-    ...(body?.waitingForLocation !== undefined ? { waitingForLocation: Boolean(body.waitingForLocation) } : {}),
-    ...(body?.locationSkipped !== undefined ? { locationSkipped: Boolean(body.locationSkipped) } : {}),
-    ...(body?.status ? { status: body.status } : {}),
+    ...(body?.userLocation && {
+      userLocation: body.userLocation,
+    }),
+
+    ...(body?.locationShared !== undefined && {
+      locationShared: Boolean(body.locationShared),
+    }),
+
+    ...(body?.waitingForLocation !== undefined && {
+      waitingForLocation: Boolean(body.waitingForLocation),
+    }),
+
+    ...(body?.locationSkipped !== undefined && {
+      locationSkipped: Boolean(body.locationSkipped),
+    }),
+
+    ...(body?.status && {
+      status: body.status,
+    }),
+
     updatedAt: FieldValue.serverTimestamp(),
   };
 
-  await bookingRef.set(updates, { merge: true });
+  await bookingRef.set(updates, {
+    merge: true,
+  });
 
   return {
     success: true,

@@ -857,6 +857,29 @@ const isRequestWithinRadius = useCallback((request) => {
     
     console.log('🔍 Fetching interested routes for driver:', user.uid);
     
+    let docArrayRoutes = [];
+    const publishInterestedRoutes = () => {
+      const routes = docArrayRoutes.map((route, index) => ({ id: `doc-${index}`, ...route }));
+
+      console.log('[DriverDashboard][Outstation] Interested routes loaded', {
+        driverId: user.uid,
+        docArrayRoutes: docArrayRoutes.length,
+        routes,
+      });
+
+      setInterestedRoutes(routes);
+    };
+
+    const driverRef = doc(db, 'drivers', user.uid);
+    const unsubscribeDriverDoc = onSnapshot(driverRef, (docSnap) => {
+      docArrayRoutes = docSnap.exists() && Array.isArray(docSnap.data().assignedRoutes)
+        ? docSnap.data().assignedRoutes
+        : [];
+      publishInterestedRoutes();
+    }, (error) => {
+      console.error('[DriverDashboard][Outstation] Error fetching driver route array:', error);
+    });
+
     const routesRef = collection(db, 'drivers', user.uid, 'assignedRoutes');
     const q = query(routesRef);
     
@@ -869,12 +892,18 @@ const isRequestWithinRadius = useCallback((request) => {
         });
       });
       console.log('✅ Fetched interested routes:', routes);
-      setInterestedRoutes(routes);
+      console.log('[DriverDashboard][Outstation] Ignoring legacy assignedRoutes subcollection for filtering', {
+        driverId: user.uid,
+        legacySubcollectionRoutes: routes.length,
+      });
     }, (error) => {
       console.error('❌ Error fetching interested routes:', error);
     });
     
-    return () => unsubscribe();
+    return () => {
+      unsubscribeDriverDoc();
+      unsubscribe();
+    };
   }, [user?.uid]);
 
   // Set up Firestore listeners for ride requests
@@ -886,6 +915,9 @@ const isRequestWithinRadius = useCallback((request) => {
     }
     
     console.log(`[DriverDashboard] Setting up listeners for user: ${user.uid}`);
+    console.log('[DriverDashboard][Debug] Current driver UID must be in backend assignedDrivers to receive outstation requests', {
+      currentDriverUid: user.uid,
+    });
     
     if (unsubscribeRef.current) {
       console.log('[DriverDashboard] Cleaning up previous listeners');
@@ -898,6 +930,7 @@ const isRequestWithinRadius = useCallback((request) => {
     let outstationUnsubscribe = () => {};
     let holidayUnsubscribe = () => {};
     let airportUnsubscribe = () => {};
+    let localUnsubscribe = () => {}; // declared so assignment below doesn't throw
 
     previousRequestCount.current = { outstation: 0, holiday: 0, airport: 0, localPickup: 0 };
     isInitialLoadRef.current = { outstation: true, holiday: true, airport: true, localPickup: true }; // ✅ ADD THIS
@@ -1012,7 +1045,7 @@ const isRequestWithinRadius = useCallback((request) => {
         
         const { processed: allProcessed, newRequests } = processIncomingRequests(
           'airport', 
-          snapshot.docChanges(),
+          snapshot.docs,
           rideRequests.airport
         );
         
@@ -1063,7 +1096,6 @@ const isRequestWithinRadius = useCallback((request) => {
 
       speak();
     };
-    let localUnsubscribe = () => {};
 
     localUnsubscribe = onSnapshot(localQuery, (snapshot) => {
       if (!isMounted) return;
@@ -1073,23 +1105,61 @@ const isRequestWithinRadius = useCallback((request) => {
       const unique = new Map();
 
         snapshot.docs.forEach(doc => {
+          const rawData = doc.data();
           const data = {
             id: doc.id,
-            ...doc.data(),
+            ...rawData,
             type: 'localPickup'
           };
+
+          console.log('[DriverDashboard][LocalPickup] Raw incoming request doc', {
+            id: doc.id,
+            status: rawData.status,
+            type: rawData.type,
+            rideId: rawData.rideId,
+            bookingId: rawData.bookingId,
+            pickupLocation: rawData.pickupLocation,
+            pickupCoordinates: rawData.pickupCoordinates,
+            expiresAt: rawData.expiresAt?.toDate ? rawData.expiresAt.toDate().toISOString() : rawData.expiresAt || null,
+            driverId: rawData.driverId,
+          });
 
           // prevent duplicates
           unique.set(doc.id, data);
         });
 
         const requests = Array.from(unique.values())
-          // 🔥 EXPIRY FILTER (3 minutes)
-          .filter(r => !r.expiresAt || r.expiresAt.toMillis() > now)
+          // 🔥 EXPIRY FILTER (3 minutes) - handle both Timestamp and Date objects
+          .filter(r => {
+            if (!r.expiresAt) return true;
+            const expiryTime = r.expiresAt.toMillis ? r.expiresAt.toMillis() : new Date(r.expiresAt).getTime();
+            return expiryTime > now;
+          })
           // 🔥 3km radius filter
           .filter(r => isRequestWithinRadius(r));
 
       console.log(`🚕 LocalPickup visible: ${requests.length}`);
+
+      const uniqueRequests = Array.from(unique.values());
+      const expiredRequests = uniqueRequests.filter(r => {
+        if (!r.expiresAt) return false;
+        const expiryTime = r.expiresAt.toMillis ? r.expiresAt.toMillis() : new Date(r.expiresAt).getTime();
+        return expiryTime <= now;
+      });
+      const unexpiredRequests = uniqueRequests.filter(r => !r.expiresAt || (r.expiresAt.toMillis ? r.expiresAt.toMillis() : new Date(r.expiresAt).getTime()) > now);
+      const radiusFilteredRequests = unexpiredRequests.filter(r => !requests.some(req => req.id === r.id));
+
+      console.log('[DriverDashboard][LocalPickup] Snapshot filter summary', {
+        userId: user.uid,
+        rawDocs: snapshot.docs.length,
+        uniqueDocs: uniqueRequests.length,
+        expiredDocs: expiredRequests.length,
+        radiusFilteredDocs: radiusFilteredRequests.length,
+        visibleDocs: requests.length,
+        visibleIds: requests.map(r => r.id),
+        expiredIds: expiredRequests.map(r => r.id),
+        radiusFilteredIds: radiusFilteredRequests.map(r => r.id),
+      });
 
       debouncedUpdate('localPickup', requests);
 
@@ -1104,6 +1174,14 @@ const isRequestWithinRadius = useCallback((request) => {
       }
       isInitialLoadRef.current.localPickup = false; // ✅ mark first load done
       previousRequestCount.current.localPickup = requests.length;
+    }, (error) => {
+      console.error('[DriverDashboard][LocalPickup] Snapshot listener error', {
+        code: error.code,
+        message: error.message,
+      });
+      if (isMounted) {
+        toast.error('Failed to load local pickup requests');
+      }
     });
     // Subscribe to outstation requests
     outstationUnsubscribe = onSnapshot(outstationQuery, 
@@ -1117,12 +1195,37 @@ const isRequestWithinRadius = useCallback((request) => {
         );
         
         // ✅ UPDATED: Apply combined filtering
+        snapshot.docChanges().forEach((change) => {
+          const data = change.doc.data();
+          console.log('[DriverDashboard][Outstation] Raw incoming request change', {
+            changeType: change.type,
+            id: change.doc.id,
+            status: data.status,
+            type: data.type,
+            bookingId: data.bookingId,
+            from: data.from,
+            to: data.to,
+            pickupLocation: data.pickupLocation,
+            pickupCoordinates: data.pickupCoordinates,
+          });
+        });
+
         const filteredByRadius = processed.filter(request => {
           return shouldShowRequest(request);
         });
         
         console.log(`📊 Outstation: ${processed.length} total → ${filteredByRadius.length} after filtering`);
         
+        console.log('[DriverDashboard][Outstation] Snapshot filter summary', {
+          userId: user.uid,
+          rawChanges: snapshot.docChanges().length,
+          processedDocs: processed.length,
+          visibleDocs: filteredByRadius.length,
+          visibleIds: filteredByRadius.map(r => r.id),
+          hiddenIds: processed.filter(r => !filteredByRadius.some(req => req.id === r.id)).map(r => r.id),
+          interestedRoutes,
+        });
+
         previousRequestCount.current.outstation = filteredByRadius.length;
         debouncedUpdate('outstation', filteredByRadius);
         
@@ -1159,7 +1262,19 @@ const isRequestWithinRadius = useCallback((request) => {
       snapshot.forEach((docSnap) => {
         const data = docSnap.data();
         const assignedDrivers = data.assignedDrivers || [];
-        if (assignedDrivers.includes(user.uid)) return;
+
+        console.log('[DriverDashboard][Holiday] Raw holiday request doc', {
+          id: docSnap.id,
+          status: data.status,
+          type: data.type,
+          bookingId: data.bookingId,
+          holidayBookingId: data.holidayBookingId,
+          parentBookingId: data.parentBookingId,
+          assignedDrivers,
+          userId: data.userId,
+          packageName: data.packageName || data.package?.name,
+          state: data.state,
+        });
 
         const request = {
           id: docSnap.id,
@@ -1187,6 +1302,16 @@ const isRequestWithinRadius = useCallback((request) => {
       // Sort in JS instead of Firestore orderBy
       const sorted = processed.sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
       const filtered = sorted.filter(r => isRequestWithinRadius(r));
+
+      console.log('[DriverDashboard][Holiday] Snapshot filter summary', {
+        userId: user.uid,
+        rawDocs: snapshot.docs.length,
+        processedDocs: processed.length,
+        radiusFilteredDocs: sorted.length - filtered.length,
+        visibleDocs: filtered.length,
+        visibleIds: filtered.map(r => r.id),
+        hiddenIds: sorted.filter(r => !filtered.some(req => req.id === r.id)).map(r => r.id),
+      });
 
       previousRequestCount.current.holiday = filtered.length;
       debouncedUpdate('holiday', filtered);

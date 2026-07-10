@@ -44,6 +44,8 @@ export class DriverLocationService {
             isOnline: Boolean(payload.isOnline),
             accuracy: payload.location.accuracy || 100,
           });
+        } else {
+          callback(null);
         }
       } catch (error) {
         if (active) callback({ error: "Failed to fetch driver location" });
@@ -91,10 +93,18 @@ export class CustomerLocationService {
         driverUnsubscribe = () => {};
 
         if (driverId) {
+          callback({
+            bookingData: data,
+            driverLocation: data.driverLocation || null,
+            customerLocation: data.userLocation,
+            status: data.status,
+            updatedAt: data.lastUpdated || data.updatedAt,
+          });
+
           driverUnsubscribe = DriverLocationService.subscribeToDriverLocation(driverId, (driverLocation) => {
             callback({
               bookingData: data,
-              driverLocation,
+              driverLocation: driverLocation || data.driverLocation || null,
               customerLocation: data.userLocation,
               status: data.status,
               updatedAt: data.lastUpdated || data.updatedAt,

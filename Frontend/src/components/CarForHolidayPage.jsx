@@ -29,14 +29,30 @@ function ItineraryModal({ open, onClose, pkg, showAll, setShowAll }) {
         <h2 className="text-sm font-semibold text-gray-800 mb-1">{pkg.name}</h2>
         <p className="text-xs text-gray-400 mb-4 pb-3 border-b border-gray-100">Itinerary</p>
         <div className="max-h-[55vh] overflow-y-auto space-y-3 pr-1">
-          {visibleItems.map(({ day, details }, idx) => (
+          {visibleItems.map((item, idx) => (
             <div key={idx} className="flex gap-3">
               <span className="flex-shrink-0 w-5 h-5 rounded-full bg-orange-500 text-white font-semibold text-[10px] flex items-center justify-center mt-0.5">
                 {idx + 1}
               </span>
-              <div>
-                <p className="font-medium text-gray-700 text-sm">{day}</p>
-                {details && <p className="text-gray-500 text-xs mt-0.5 leading-relaxed">{details}</p>}
+
+              <div className="flex-1">
+                <p className="font-medium text-gray-700 text-sm">
+                  {item.day}
+                </p>
+
+                {item.image && (
+                  <img
+                    src={item.image}
+                    alt={item.day}
+                    className="w-full h-52 object-cover rounded-lg mt-3 mb-3 border"
+                  />
+                )}
+
+                {item.details && (
+                  <p className="text-gray-500 text-xs mt-1 leading-6 whitespace-pre-line">
+                    {item.details}
+                  </p>
+                )}
               </div>
             </div>
           ))}

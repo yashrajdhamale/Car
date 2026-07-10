@@ -4,7 +4,6 @@ import { getAuth } from 'firebase/auth';
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL || "";
 const MAX_RETRY_ATTEMPTS = 2;
-const RETRY_DELAY_MS = 30000;
 const ASSIGNMENT_CHECK_INTERVAL = 20000;
 
 const FindDriverPage = () => {
@@ -13,7 +12,7 @@ const FindDriverPage = () => {
   const [driverFound, setDriverFound] = useState(false);
   const [bookingStatus, setBookingStatus] = useState('searching');
   const [driverInfo, setDriverInfo] = useState(null);
-  const [retryCount, setRetryCount] = useState(0);
+  const [retryCount] = useState(0);
   const [bookingId, setBookingId] = useState(null);
   const [timeRemaining, setTimeRemaining] = useState(120);
   const speechSynthesis = window.speechSynthesis;
@@ -26,6 +25,7 @@ const FindDriverPage = () => {
   const searchTimer = useRef(null);
   const unsubscribeRef = useRef(null);
   const timeRemainingTimer = useRef(null);
+  const searchStartedRef = useRef(false);
 
   useEffect(() => () => {
     [retryTimeout, assignmentTimer, progressTimer, periodicCheckTimer, searchTimer, timeRemainingTimer].forEach((ref) => {
@@ -122,22 +122,60 @@ const FindDriverPage = () => {
     speechSynthesis.speak(utterance);
   }, [speechSynthesis]);
 
+  const startSearchProgress = useCallback(() => {
+    if (progressTimer.current) clearInterval(progressTimer.current);
+
+    progressTimer.current = setInterval(() => {
+      setTimeRemaining((prev) => {
+        if (prev <= 1) {
+          clearInterval(progressTimer.current);
+          return 0;
+        }
+        return prev - 1;
+      });
+      setProgress((prev) => Math.min(100, prev + (100 / 120)));
+    }, 1000);
+  }, []);
+
   useEffect(() => {
-    let unsubscribe = null;
     let isMounted = true;
-    let announcementInterval;
 
     speak('We are searching for a driver for you. Please wait while we find the best match.');
 
-    announcementInterval = setInterval(() => {
+    const announcementInterval = setInterval(() => {
       if (isMounted && bookingStatus === 'searching') {
         speak('We are still searching for a driver. Thank you for your patience.');
       }
     }, 30000);
 
+    return () => {
+      isMounted = false;
+      clearInterval(announcementInterval);
+    };
+  }, [bookingStatus, speak]);
+
+  useEffect(() => {
+    if (searchStartedRef.current) return undefined;
+    searchStartedRef.current = true;
+
+    let unsubscribe = null;
+
+    const startBookingSearch = (currentBookingId) => {
+      setBookingId(currentBookingId);
+      unsubscribe = setupBookingListener(currentBookingId);
+      startSearchProgress();
+    };
+
     const createBookingAndStartSearch = async () => {
       try {
         const bookingDetails = state?.bookingDetails || {};
+        const existingBookingId = state?.bookingId || bookingDetails.id || bookingDetails.bookingId;
+
+        if (existingBookingId) {
+          startBookingSearch(existingBookingId);
+          return;
+        }
+
         if (!bookingDetails.pickup || !bookingDetails.dropoff) {
           navigate('/');
           return;
@@ -146,7 +184,10 @@ const FindDriverPage = () => {
         const auth = getAuth();
         const currentUser = auth.currentUser;
         const expiresAt = new Date(Date.now() + 120000).toISOString();
-        const bookingData = {
+        const transferDetails = {
+          ...bookingDetails,
+          pickup: bookingDetails.pickup,
+          dropoff: bookingDetails.dropoff,
           pickupLocation: bookingDetails.pickup,
           dropoffLocation: bookingDetails.dropoff,
           travelDate: bookingDetails.travelDate,
@@ -154,42 +195,36 @@ const FindDriverPage = () => {
           minute: bookingDetails.minute || '00',
           adults: bookingDetails.adults || 1,
           children: bookingDetails.children || 0,
-          vehicleType: bookingDetails.vehicleDetails?.type || 'Standard',
-          vehicleModel: bookingDetails.vehicleDetails?.name || '',
-          vehiclePrice: bookingDetails.vehicleDetails?.price || 0,
           customerName: bookingDetails.customerName || '',
           customerEmail: currentUser?.email || bookingDetails.customerEmail || '',
           userEmail: currentUser?.email || bookingDetails.customerEmail || '',
           userId: currentUser?.uid || '',
           customerPhone: bookingDetails.customerPhone || '',
-          status: 'searching_driver',
           expiresAt,
-          paymentStatus: 'pending',
           waitingForLocation: true,
           _source: 'find_driver_page',
+        };
+
+        const vehicleDetails = bookingDetails.vehicleDetails || {
+          type: bookingDetails.type || bookingDetails.vehicleType || 'Standard',
+          name: bookingDetails.name || bookingDetails.vehicleModel || '',
+          price: bookingDetails.price || bookingDetails.vehiclePrice || 0,
         };
 
         const response = await fetch(`${API_BASE}/api/airport-bookings`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(bookingData),
+          body: JSON.stringify({
+            transferDetails,
+            vehicleDetails,
+            userId: currentUser?.uid || '',
+            status: 'searching_driver',
+            paymentStatus: 'pending',
+          }),
         });
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
         const result = await response.json();
-        const newBookingId = result.bookingId;
-        setBookingId(newBookingId);
-        unsubscribe = setupBookingListener(newBookingId);
-
-        progressTimer.current = setInterval(() => {
-          setTimeRemaining((prev) => {
-            if (prev <= 1) {
-              clearInterval(progressTimer.current);
-              return 0;
-            }
-            return prev - 1;
-          });
-          setProgress((prev) => Math.min(100, prev + (100 / 120)));
-        }, 1000);
+        startBookingSearch(result.bookingId);
       } catch (error) {
         console.error('Error creating booking:', error);
         alert('Failed to create booking. Please try again.');
@@ -200,12 +235,10 @@ const FindDriverPage = () => {
     createBookingAndStartSearch();
 
     return () => {
-      isMounted = false;
-      clearInterval(announcementInterval);
       if (unsubscribe) unsubscribe();
       if (speechSynthesis) speechSynthesis.cancel();
     };
-  }, [navigate, setupBookingListener, speak, state?.bookingDetails, bookingStatus, speechSynthesis]);
+  }, [navigate, setupBookingListener, startSearchProgress, state?.bookingDetails, state?.bookingId, speechSynthesis]);
 
   useEffect(() => {
     if (!bookingId) return;
@@ -268,7 +301,7 @@ const FindDriverPage = () => {
           {bookingStatus === 'expired' ? (
             <div className="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
               <h3 className="text-lg font-medium text-red-800 mb-2">No Drivers Available</h3>
-              <p className="text-red-700 mb-4">We couldn't find a driver for your ride. Please try booking again.</p>
+              <p className="text-red-700 mb-4">We could not find a driver for your ride. Please try booking again.</p>
               <button
                 onClick={() => navigate('/local-pickup', { state: { bookingDetails: state?.bookingDetails, fromFindDriver: true } })}
                 className="w-full bg-orange-500 hover:bg-orange-600 text-white font-medium py-2 px-4 rounded-md transition-colors"

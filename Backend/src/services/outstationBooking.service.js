@@ -1,5 +1,9 @@
 import { FieldValue, firestore } from "./firebase.js";
 
+const logOutstation = (message, meta = {}) => {
+  console.log(`[OutstationBooking] ${message}`, meta);
+};
+
 const normalizeLocation = (location) => {
   if (!location) return "";
   if (typeof location === "string") return location.toLowerCase().trim();
@@ -11,29 +15,61 @@ const normalizeLocation = (location) => {
 const getDriversForRoute = async ({ pickupCity, destinationCity }) => {
   const driversSnapshot = await firestore.collection("drivers").get();
   const matches = [];
+  const pickupNorm = normalizeLocation(pickupCity);
+  const destinationNorm = normalizeLocation(destinationCity);
+
+  logOutstation("Finding drivers for route", {
+    pickupCity,
+    destinationCity,
+    pickupNorm,
+    destinationNorm,
+    totalDrivers: driversSnapshot.size,
+  });
 
   for (const driverDoc of driversSnapshot.docs) {
     const driverData = driverDoc.data();
     const status = String(driverData.status || "unknown").toLowerCase();
-    if (!["available", "online", "active"].includes(status)) continue;
+    const isEligibleStatus = driverData.isOnline || ["available", "online", "active"].includes(status);
 
-    const routesSnapshot = await firestore.collection("drivers").doc(driverDoc.id).collection("assignedRoutes").get();
-    const matched = routesSnapshot.docs.some((routeDoc) => {
-      const route = routeDoc.data();
+    // Query routes from top-level /routes collection for this driver
+    const driverRoutesSnapshot = await firestore.collection("routes").where("driverId", "==", driverDoc.id).get();
+    const allRoutes = driverRoutesSnapshot.docs.map((routeDoc) => routeDoc.data());
+
+    const matched = allRoutes.some((route) => {
       const routeFrom = normalizeLocation(route.from);
       const routeTo = normalizeLocation(route.to);
-      const pickupNorm = normalizeLocation(pickupCity);
-      const destinationNorm = normalizeLocation(destinationCity);
       return (
         (routeFrom === pickupNorm && routeTo === destinationNorm) ||
         (routeFrom === destinationNorm && routeTo === pickupNorm)
       );
     });
 
+    logOutstation("Driver route scan", {
+      driverId: driverDoc.id,
+      status,
+      isOnline: Boolean(driverData.isOnline),
+      driverRoutes: allRoutes.length,
+      matched,
+      routes: allRoutes.map((route) => ({ from: route.from, to: route.to })),
+    });
+
     if (matched) {
+      if (!isEligibleStatus) {
+        logOutstation("Driver route matched but status is not online/active; notifying anyway", {
+          driverId: driverDoc.id,
+          status,
+          isOnline: Boolean(driverData.isOnline),
+        });
+      }
+
       matches.push({ id: driverDoc.id, ...driverData });
     }
   }
+
+  logOutstation("Driver lookup complete", {
+    matchedDrivers: matches.length,
+    driverIds: matches.map((driver) => driver.id),
+  });
 
   return matches;
 };
@@ -86,6 +122,17 @@ const buildDriverRequest = ({ bookingId, rideData, driver }) => {
 };
 
 export const createOutstationBooking = async ({ user, body }) => {
+  logOutstation("Create booking requested", {
+    authenticatedUserId: user?.uid || null,
+    bodyUserId: body?.userId || null,
+    pickupCity: body?.pickupCity,
+    pickupCityForDriver: body?.pickupCityForDriver,
+    destinationCity: body?.destinationCity,
+    destinationCityForDriver: body?.destinationCityForDriver,
+    rideType: body?.rideType,
+    status: body?.status,
+  });
+
   const payload = {
     ...body,
     userId: user?.uid || body?.userId || "guest",
@@ -98,6 +145,11 @@ export const createOutstationBooking = async ({ user, body }) => {
   };
 
   const bookingRef = await firestore.collection("bookings").add(payload);
+  logOutstation("Created bookings document", {
+    bookingId: bookingRef.id,
+    status: payload.status,
+  });
+
   const assignedDrivers = await getDriversForRoute({
     pickupCity: payload.pickupCityForDriver || payload.pickupCity,
     destinationCity: payload.destinationCityForDriver || payload.destinationCity,
@@ -107,6 +159,12 @@ export const createOutstationBooking = async ({ user, body }) => {
     assignedDrivers.map(async (driver) => {
       const requestData = buildDriverRequest({ bookingId: bookingRef.id, rideData: payload, driver });
       await firestore.collection("drivers").doc(driver.id).collection("incomingRequests").doc(bookingRef.id).set(requestData);
+      logOutstation("Incoming request written", {
+        bookingId: bookingRef.id,
+        driverId: driver.id,
+        targetPath: `drivers/${driver.id}/incomingRequests/${bookingRef.id}`,
+        requestStatus: requestData.status,
+      });
     })
   );
 
@@ -118,6 +176,11 @@ export const createOutstationBooking = async ({ user, body }) => {
     },
     { merge: true }
   );
+
+  logOutstation("Create booking flow complete", {
+    bookingId: bookingRef.id,
+    assignedDrivers: assignedDrivers.map((driver) => driver.id),
+  });
 
   return {
     success: true,

@@ -1,7 +1,5 @@
 import { firebaseAdmin, firestore, FieldValue } from "./firebase.js";
-
-const DEFAULT_HOLIDAY_INVOICE_URL =
-  "https://us-central1-carzi-holidays-f4be3.cloudfunctions.net/sendHolidayInvoice";
+import { sendEmailThroughBackend } from "./emailProxy.service.js";
 
 const CITY_TO_STATE = {
   shimla: "himachal pradesh",
@@ -53,6 +51,10 @@ const CITY_TO_STATE = {
 
 const normalizeText = (value) => String(value || "").toLowerCase().trim();
 
+const logHolidayBooking = (message, meta = {}) => {
+  console.log(`[HolidayBooking] ${message}`, meta);
+};
+
 const getStateVariants = (pkgState, pkgName = "") => {
   const variants = new Set();
   const stateLower = normalizeText(pkgState);
@@ -76,13 +78,19 @@ const getStateVariants = (pkgState, pkgName = "") => {
   return [...variants];
 };
 
-const routeMatchesState = (route, stateVariants) => {
+const routeMatchesState = (route, stateVariants, pkgName = "") => {
   const fromCity = normalizeText(route.from);
   const toCity = normalizeText(route.to);
   const routeState = normalizeText(route.state);
+  const routePackageName = normalizeText(route.packageName);
+  const requestedPackageName = normalizeText(pkgName);
 
   for (const sv of stateVariants) {
     if (routeState && (routeState.includes(sv) || sv.includes(routeState))) return true;
+    if (routePackageName && requestedPackageName && (
+      routePackageName.includes(requestedPackageName) ||
+      requestedPackageName.includes(routePackageName)
+    )) return true;
 
     if (fromCity.includes(sv) || toCity.includes(sv)) return true;
     if (sv.includes(fromCity) || sv.includes(toCity)) return true;
@@ -101,6 +109,10 @@ const getDriverRoutesSnapshot = async () => {
   return firestore.collection("routes").where("isActive", "==", true).get();
 };
 
+const getHolidayRoutesSnapshot = async () => {
+  return firestore.collection("holidayRoutes").where("isActive", "==", true).get();
+};
+
 export const getHolidayBookingById = async (bookingId) => {
   const snapshot = await firestore.collection("holidayBookings").doc(bookingId).get();
 
@@ -116,15 +128,53 @@ export const findDriversForHoliday = async (pkgState, pkgName = "") => {
   const stateVariants = getStateVariants(pkgState, pkgName);
   const driverMap = new Map();
 
+  logHolidayBooking("Finding drivers for holiday", {
+    pkgState,
+    pkgName,
+    stateVariants,
+  });
+
+  try {
+    const holidayRoutesSnap = await getHolidayRoutesSnapshot();
+
+    logHolidayBooking("Scanned holidayRoutes", {
+      activeHolidayRoutes: holidayRoutesSnap.size,
+    });
+
+    holidayRoutesSnap.forEach((docSnap) => {
+      const route = { id: docSnap.id, ...docSnap.data() };
+
+      if (!route.driverId) return;
+
+      if (routeMatchesState(route, stateVariants, pkgName)) {
+        if (!driverMap.has(route.driverId)) {
+          driverMap.set(route.driverId, {
+            driverId: route.driverId,
+            driverName: route.driverName || "Driver",
+            matchedRoute: `${route.state || ""}:${route.packageName || ""}`,
+            matchedCollection: "holidayRoutes",
+          });
+        }
+      }
+    });
+  } catch (error) {
+    console.error("[holidayBooking] holidayRoutes lookup failed:", error);
+  }
+
   try {
     const routesSnap = await getDriverRoutesSnapshot();
+
+    logHolidayBooking("Scanned routes fallback", {
+      activeRoutes: routesSnap.size,
+      alreadyMatchedDrivers: driverMap.size,
+    });
 
     routesSnap.forEach((docSnap) => {
       const route = { id: docSnap.id, ...docSnap.data() };
 
       if (!route.driverId) return;
 
-      if (routeMatchesState(route, stateVariants)) {
+      if (routeMatchesState(route, stateVariants, pkgName)) {
         if (!driverMap.has(route.driverId)) {
           driverMap.set(route.driverId, {
             driverId: route.driverId,
@@ -140,7 +190,11 @@ export const findDriversForHoliday = async (pkgState, pkgName = "") => {
 
   if (driverMap.size === 0) {
     try {
-      const routesSnap = await firestore.collection("routes").where("isActive", "==", true).limit(20).get();
+      const routesSnap = await firestore.collection("holidayRoutes").where("isActive", "==", true).limit(20).get();
+
+      logHolidayBooking("No exact holiday match, falling back to active holidayRoutes", {
+        fallbackRoutes: routesSnap.size,
+      });
 
       routesSnap.forEach((docSnap) => {
         const route = { id: docSnap.id, ...docSnap.data() };
@@ -158,13 +212,33 @@ export const findDriversForHoliday = async (pkgState, pkgName = "") => {
     }
   }
 
-  return [...driverMap.values()];
+  const result = [...driverMap.values()];
+
+  logHolidayBooking("Driver lookup complete", {
+    matchedDrivers: result.length,
+    driverIds: result.map((driver) => driver.driverId),
+    matches: result,
+  });
+
+  return result;
 };
 
 export const sendHolidayRideRequests = async (bookingId, drivers, bookingData) => {
   if (!drivers || drivers.length === 0) {
+    logHolidayBooking("No drivers supplied for holiday notification fan-out", {
+      bookingId,
+    });
     return { success: false, notified: 0, total: 0, error: "No drivers to notify" };
   }
+
+  logHolidayBooking("Writing holiday requests to drivers", {
+    bookingId,
+    driverCount: drivers.length,
+    driverIds: drivers.map((driver) => driver.driverId || driver.id).filter(Boolean),
+    targetPath: "users/{driverId}/holidayRequests/{autoId}",
+    packageName: bookingData.package?.name || "",
+    state: bookingData.state || "",
+  });
 
   const results = await Promise.allSettled(
     drivers.map(async (driver) => {
@@ -199,6 +273,12 @@ export const sendHolidayRideRequests = async (bookingId, drivers, bookingData) =
       };
 
       const ref = await firestore.collection("users").doc(driverId).collection("holidayRequests").add(payload);
+
+      logHolidayBooking("Holiday request written", {
+        bookingId,
+        driverId,
+        requestDocId: ref.id,
+      });
 
       return { driverId, docId: ref.id };
     })
@@ -268,6 +348,16 @@ export const createHolidayBooking = async ({ user, body }) => {
   const price = Number(body?.price || 0);
   const state = String(body?.state || packageData.state || packageData.location?.state || "").trim();
 
+  logHolidayBooking("Create holiday booking requested", {
+    userId: user?.uid || null,
+    packageName: packageData?.name || "",
+    state,
+    travelDate,
+    vehicleName: vehicleData?.name || vehicleData?.type || "",
+    guests,
+    price,
+  });
+
   if (!user?.uid) {
     const error = new Error("Authentication required");
     error.statusCode = 401;
@@ -311,6 +401,12 @@ export const createHolidayBooking = async ({ user, body }) => {
   const bookingRef = await firestore.collection("holidayBookings").add(bookingData);
   const bookingId = bookingRef.id;
 
+  logHolidayBooking("Created holidayBookings document", {
+    bookingId,
+    state,
+    packageName: packageData?.name || "",
+  });
+
   const pkgName = packageData?.name || "";
   const drivers = await findDriversForHoliday(state, pkgName);
 
@@ -340,6 +436,14 @@ export const createHolidayBooking = async ({ user, body }) => {
     driverSearchStartedAt: FieldValue.serverTimestamp(),
     updatedAt: FieldValue.serverTimestamp(),
     ...(notificationResult.error ? { notificationError: notificationResult.error } : {}),
+  });
+
+  logHolidayBooking("Holiday booking create flow complete", {
+    bookingId,
+    finalStatus,
+    notified: notificationResult.notified,
+    totalDrivers: drivers.length,
+    failedDrivers: notificationResult.failed || [],
   });
 
   return {
@@ -381,10 +485,9 @@ export const sendHolidayInvoiceForBooking = async ({ user, bookingId, body }) =>
     throw error;
   }
 
-  const invoiceUrl = process.env.HOLIDAY_INVOICE_FUNCTION_URL || DEFAULT_HOLIDAY_INVOICE_URL;
-
   const payload = {
     to: body?.to || user.email || booking.userEmail || "",
+    customerEmail: body?.to || user.email || booking.userEmail || "",
     customerName: body?.customerName || booking.userName || "",
     customerPhone: body?.customerPhone || booking.userPhone || "",
     bookingId,
@@ -416,25 +519,11 @@ export const sendHolidayInvoiceForBooking = async ({ user, bookingId, body }) =>
     updatedAt: FieldValue.serverTimestamp(),
   });
 
-  const response = await fetch(invoiceUrl, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload),
+  const result = await sendEmailThroughBackend({
+    ...payload,
+    subject: `Holiday Booking Invoice - ${bookingId}`,
+    template: "holidayInvoice",
   });
-
-  const result = await response.json().catch(() => ({}));
-
-  if (!response.ok) {
-    const error = new Error(result?.error || result?.message || `HTTP ${response.status}`);
-    error.statusCode = response.status;
-    throw error;
-  }
-
-  if (!result.success) {
-    const error = new Error(result?.error || "Invoice function failed");
-    error.statusCode = 502;
-    throw error;
-  }
 
   return {
     success: true,
